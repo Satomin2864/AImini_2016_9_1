@@ -1,0 +1,2851 @@
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"main.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.isr_int,"ax",%progbits
+  19              		.align	2
+  20              		.global	isr_int
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	isr_int, %function
+  24              	isr_int:
+  25              	.LFB63:
+  26              		.file 1 ".\\main.c"
+   1:.\main.c      **** /* ========================================
+   2:.\main.c      ****  *
+   3:.\main.c      ****  * Copyright YOUR COMPANY, THE YEAR
+   4:.\main.c      ****  * All Rights Reserved
+   5:.\main.c      ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\main.c      ****  *
+   7:.\main.c      ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\main.c      ****  * WHICH IS THE PROPERTY OF your company.
+   9:.\main.c      ****  *
+  10:.\main.c      ****  * ========================================
+  11:.\main.c      **** */
+  12:.\main.c      **** #include <project.h>
+  13:.\main.c      **** #include <math.h>
+  14:.\main.c      **** #include <stdint.h>
+  15:.\main.c      **** #include <stdio.h>
+  16:.\main.c      **** #include "MPU6050/MPU6050.h"
+  17:.\main.c      **** // duty 下は310？
+  18:.\main.c      **** #define duty 380
+  19:.\main.c      **** #define Buffer_size 1000
+  20:.\main.c      **** #define Range_a 2
+  21:.\main.c      **** #define Range_g 0
+  22:.\main.c      **** int isr_flag = 0;
+  23:.\main.c      **** CY_ISR(isr_int){
+  27              		.loc 1 23 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  24:.\main.c      ****     isr_flag = 1;
+  32              		.loc 1 24 0
+  33 0000 0122     		movs	r2, #1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 2
+
+
+  34 0002 014B     		ldr	r3, .L2
+  35 0004 1A60     		str	r2, [r3]
+  36 0006 7047     		bx	lr
+  37              	.L3:
+  38              		.align	2
+  39              	.L2:
+  40 0008 00000000 		.word	.LANCHOR0
+  41              		.cfi_endproc
+  42              	.LFE63:
+  43              		.size	isr_int, .-isr_int
+  44              		.section	.text.main,"ax",%progbits
+  45              		.align	2
+  46              		.global	main
+  47              		.thumb
+  48              		.thumb_func
+  49              		.type	main, %function
+  50              	main:
+  51              	.LFB64:
+  25:.\main.c      **** }
+  26:.\main.c      **** int main()
+  27:.\main.c      **** {
+  52              		.loc 1 27 0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 14048
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+  56 0000 70B5     		push	{r4, r5, r6, lr}
+  57              		.cfi_def_cfa_offset 16
+  58              		.cfi_offset 4, -16
+  59              		.cfi_offset 5, -12
+  60              		.cfi_offset 6, -8
+  61              		.cfi_offset 14, -4
+  62 0002 ADF55B5D 		sub	sp, sp, #14016
+  63              		.cfi_def_cfa_offset 14032
+  64 0006 8AB0     		sub	sp, sp, #40
+  65              		.cfi_def_cfa_offset 14072
+  66              	.LVL0:
+  28:.\main.c      ****     // 変数
+  29:.\main.c      ****     // uint16 pwr=130;
+  30:.\main.c      **** 	uint8_t finish = 0;
+  31:.\main.c      **** 	uint16_t i = 0,count = 0;
+  32:.\main.c      **** 	int16_t buf_a[3][Buffer_size];
+  33:.\main.c      **** 	int16_t buf_g[3][Buffer_size];
+  34:.\main.c      **** 	int16_t difference_a[3][Buffer_size];
+  35:.\main.c      **** 	int16_t difference_g[3][Buffer_size];
+  36:.\main.c      **** 	int16_t filter_buf_a[3][Buffer_size];
+  37:.\main.c      **** 	int16_t filter_buf_g[3][Buffer_size];
+  38:.\main.c      ****     int16_t kyori[Buffer_size];
+  39:.\main.c      ****     int16_t ax, ay, az, gx, gy, gz;
+  40:.\main.c      ****     int16_t distance1, distance2, sub_distance;
+  41:.\main.c      ****     int16_t rori[Buffer_size];
+  42:.\main.c      ****     int16 cou = 0;
+  43:.\main.c      ****     int16 SetValue = 0;  
+  44:.\main.c      **** 	char rd[30];
+  45:.\main.c      ****     
+  46:.\main.c      ****     CyGlobalIntEnable; /* Enable global interrupts. */
+  67              		.loc 1 46 0
+  68              	@ 46 ".\main.c" 1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 3
+
+
+  69 0008 62B6     		CPSIE   i
+  70              	@ 0 "" 2
+  47:.\main.c      ****     // コンポーネット初期化
+  48:.\main.c      ****     QuadDec_1_Start();
+  71              		.loc 1 48 0
+  72              		.thumb
+  73 000a FFF7FEFF 		bl	QuadDec_1_Start
+  74              	.LVL1:
+  49:.\main.c      ****     I2C_Start();
+  75              		.loc 1 49 0
+  76 000e FFF7FEFF 		bl	I2C_Start
+  77              	.LVL2:
+  50:.\main.c      **** 	CyDelay(3000);
+  78              		.loc 1 50 0
+  79 0012 40F6B830 		movw	r0, #3000
+  80 0016 FFF7FEFF 		bl	CyDelay
+  81              	.LVL3:
+  51:.\main.c      ****     PWM_motor_Start();
+  82              		.loc 1 51 0
+  83 001a FFF7FEFF 		bl	PWM_motor_Start
+  84              	.LVL4:
+  52:.\main.c      **** 	UART_1_Start();
+  85              		.loc 1 52 0
+  86 001e FFF7FEFF 		bl	UART_1_Start
+  87              	.LVL5:
+  53:.\main.c      ****     MPU6050(0x68);
+  88              		.loc 1 53 0
+  89 0022 6820     		movs	r0, #104
+  90 0024 FFF7FEFF 		bl	MPU6050
+  91              	.LVL6:
+  54:.\main.c      ****     MPU6050_initialize();
+  92              		.loc 1 54 0
+  93 0028 FFF7FEFF 		bl	MPU6050_initialize
+  94              	.LVL7:
+  55:.\main.c      **** 	isr_flag_Start();
+  95              		.loc 1 55 0
+  96 002c FFF7FEFF 		bl	isr_flag_Start
+  97              	.LVL8:
+  56:.\main.c      ****     isr_flag_StartEx(isr_int);
+  98              		.loc 1 56 0
+  99 0030 7448     		ldr	r0, .L26
+ 100 0032 FFF7FEFF 		bl	isr_flag_StartEx
+ 101              	.LVL9:
+  57:.\main.c      **** 	MPU6050_setFullScaleAccelRange(Range_a);
+ 102              		.loc 1 57 0
+ 103 0036 0220     		movs	r0, #2
+ 104 0038 FFF7FEFF 		bl	MPU6050_setFullScaleAccelRange
+ 105              	.LVL10:
+  58:.\main.c      **** 	MPU6050_setFullScaleGyroRange(Range_g);
+ 106              		.loc 1 58 0
+ 107 003c 0020     		movs	r0, #0
+ 108 003e FFF7FEFF 		bl	MPU6050_setFullScaleGyroRange
+ 109              	.LVL11:
+  59:.\main.c      ****     MPU6050_getXAccelOffset();
+ 110              		.loc 1 59 0
+ 111 0042 FFF7FEFF 		bl	MPU6050_getXAccelOffset
+ 112              	.LVL12:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 4
+
+
+  60:.\main.c      ****     MPU6050_getYAccelOffset();
+ 113              		.loc 1 60 0
+ 114 0046 FFF7FEFF 		bl	MPU6050_getYAccelOffset
+ 115              	.LVL13:
+  61:.\main.c      ****     MPU6050_getZAccelOffset();
+ 116              		.loc 1 61 0
+ 117 004a FFF7FEFF 		bl	MPU6050_getZAccelOffset
+ 118              	.LVL14:
+  62:.\main.c      ****     MPU6050_getXGyroOffset();
+ 119              		.loc 1 62 0
+ 120 004e FFF7FEFF 		bl	MPU6050_getXGyroOffset
+ 121              	.LVL15:
+  63:.\main.c      ****     MPU6050_getYGyroOffset();
+ 122              		.loc 1 63 0
+ 123 0052 FFF7FEFF 		bl	MPU6050_getYGyroOffset
+ 124              	.LVL16:
+  64:.\main.c      ****     MPU6050_getZGyroOffset();
+ 125              		.loc 1 64 0
+ 126 0056 FFF7FEFF 		bl	MPU6050_getZGyroOffset
+ 127              	.LVL17:
+  65:.\main.c      ****     ADC_SAR_Seq_Start();
+ 128              		.loc 1 65 0
+ 129 005a FFF7FEFF 		bl	ADC_SAR_Seq_Start
+ 130              	.LVL18:
+  66:.\main.c      ****     PWM_motor_WriteCompare1(duty);
+ 131              		.loc 1 66 0
+ 132 005e 4FF4BE70 		mov	r0, #380
+ 133 0062 FFF7FEFF 		bl	PWM_motor_WriteCompare1
+ 134              	.LVL19:
+  31:.\main.c      **** 	int16_t buf_a[3][Buffer_size];
+ 135              		.loc 1 31 0
+ 136 0066 0025     		movs	r5, #0
+  67:.\main.c      ****     // main
+  68:.\main.c      **** 	while(count != Buffer_size)
+ 137              		.loc 1 68 0
+ 138 0068 4AE0     		b	.L6
+ 139              	.LVL20:
+ 140              	.L8:
+  69:.\main.c      ****     //while(true)
+  70:.\main.c      ****     {
+  71:.\main.c      ****         
+  72:.\main.c      ****         
+  73:.\main.c      **** 		if(isr_flag == 1)
+ 141              		.loc 1 73 0
+ 142 006a 674B     		ldr	r3, .L26+4
+ 143 006c 1B68     		ldr	r3, [r3]
+ 144 006e A4B2     		uxth	r4, r4
+ 145 0070 012B     		cmp	r3, #1
+ 146 0072 45D1     		bne	.L6
+  74:.\main.c      **** 		{
+  75:.\main.c      ****             // MPU6050の処理
+  76:.\main.c      ****             // データゲット
+  77:.\main.c      **** 		    MPU6050_getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+ 147              		.loc 1 77 0
+ 148 0074 0DF12E03 		add	r3, sp, #46
+ 149 0078 0093     		str	r3, [sp]
+ 150 007a 0BAB     		add	r3, sp, #44
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 5
+
+
+ 151 007c 0193     		str	r3, [sp, #4]
+ 152 007e 1AAB     		add	r3, sp, #104
+ 153 0080 0DF13600 		add	r0, sp, #54
+ 154 0084 A3F13401 		sub	r1, r3, #52
+ 155 0088 A3F13602 		sub	r2, r3, #54
+ 156 008c 383B     		subs	r3, r3, #56
+ 157 008e FFF7FEFF 		bl	MPU6050_getMotion6
+ 158              	.LVL21:
+  78:.\main.c      **** 			
+  79:.\main.c      ****             // データの格納 
+  80:.\main.c      **** 			buf_a[0][count] = ax;
+ 159              		.loc 1 80 0
+ 160 0092 0DF5FB51 		add	r1, sp, #8032
+ 161 0096 1831     		adds	r1, r1, #24
+ 162 0098 BDF83630 		ldrh	r3, [sp, #54]
+ 163 009c 21F81530 		strh	r3, [r1, r5, lsl #1]	@ movhi
+  81:.\main.c      **** 			buf_a[1][count] = ay;
+ 164              		.loc 1 81 0
+ 165 00a0 05F57A72 		add	r2, r5, #1000
+ 166 00a4 BDF83430 		ldrh	r3, [sp, #52]
+ 167 00a8 21F81230 		strh	r3, [r1, r2, lsl #1]	@ movhi
+  82:.\main.c      **** 			buf_a[2][count] = az;
+ 168              		.loc 1 82 0
+ 169 00ac 05F5FA63 		add	r3, r5, #2000
+ 170 00b0 BDF83200 		ldrh	r0, [sp, #50]
+ 171 00b4 21F81300 		strh	r0, [r1, r3, lsl #1]	@ movhi
+  83:.\main.c      **** 			
+  84:.\main.c      **** 			buf_g[0][count] = gx;
+ 172              		.loc 1 84 0
+ 173 00b8 0DF60801 		addw	r1, sp, #2056
+ 174 00bc BDF83000 		ldrh	r0, [sp, #48]
+ 175 00c0 21F81500 		strh	r0, [r1, r5, lsl #1]	@ movhi
+  85:.\main.c      **** 			buf_g[1][count] = gy;
+ 176              		.loc 1 85 0
+ 177 00c4 BDF82E00 		ldrh	r0, [sp, #46]
+ 178 00c8 21F81200 		strh	r0, [r1, r2, lsl #1]	@ movhi
+  86:.\main.c      **** 			buf_g[2][count] = gz;
+ 179              		.loc 1 86 0
+ 180 00cc BDF82C20 		ldrh	r2, [sp, #44]
+ 181 00d0 21F81320 		strh	r2, [r1, r3, lsl #1]	@ movhi
+  87:.\main.c      **** 			
+  88:.\main.c      ****             // 差分データの確保
+  89:.\main.c      **** 			/*
+  90:.\main.c      ****             if(count>0)
+  91:.\main.c      **** 			{
+  92:.\main.c      **** 				difference_a[0][count] = buf_a[0][count] - buf_a[0][count-1];
+  93:.\main.c      **** 				difference_a[1][count] = buf_a[1][count] - buf_a[1][count-1];
+  94:.\main.c      **** 				difference_a[2][count] = buf_a[2][count] - buf_a[2][count-1];
+  95:.\main.c      **** 				difference_g[0][count] = buf_g[0][count] - buf_g[0][count-1];
+  96:.\main.c      **** 				difference_g[1][count] = buf_g[1][count] - buf_g[1][count-1];
+  97:.\main.c      **** 				difference_g[2][count] = buf_g[2][count] - buf_g[2][count-1];
+  98:.\main.c      **** 			}
+  99:.\main.c      **** 			*/
+ 100:.\main.c      **** 			
+ 101:.\main.c      **** 			// 出力
+ 102:.\main.c      **** 			//sprintf(rd,"%d,%d,%d,%d, %d ,%d \n",ax, ay, az, gx, gy, gz);			
+ 103:.\main.c      **** 			//UART_1_PutString(rd);
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 6
+
+
+ 104:.\main.c      ****             
+ 105:.\main.c      ****             
+ 106:.\main.c      ****             // 距離センサ
+ 107:.\main.c      ****            
+ 108:.\main.c      ****             //sub_distance = ADC_SAR_Seq_IsEndConversion(ADC_SAR_Seq_RETURN_STATUS);
+ 109:.\main.c      ****             
+ 110:.\main.c      ****             ADC_SAR_Seq_StartConvert();
+ 182              		.loc 1 110 0
+ 183 00d4 FFF7FEFF 		bl	ADC_SAR_Seq_StartConvert
+ 184              	.LVL22:
+ 111:.\main.c      **** 			//kyori[count] = ADC_SAR_Seq_GetResult16();
+ 112:.\main.c      ****             distance2 = distance1;
+ 113:.\main.c      ****             distance1 = ADC_SAR_Seq_GetResult16();
+ 185              		.loc 1 113 0
+ 186 00d8 FFF7FEFF 		bl	ADC_SAR_Seq_GetResult16
+ 187              	.LVL23:
+ 188 00dc 0646     		mov	r6, r0
+ 189              	.LVL24:
+ 114:.\main.c      ****             sub_distance = distance2 - distance1;
+ 190              		.loc 1 114 0
+ 191 00de 241A     		subs	r4, r4, r0
+ 192              	.LVL25:
+ 115:.\main.c      ****             kyori[count] = sub_distance;
+ 193              		.loc 1 115 0
+ 194 00e0 0EAB     		add	r3, sp, #56
+ 195 00e2 23F81540 		strh	r4, [r3, r5, lsl #1]	@ movhi
+ 116:.\main.c      ****             //sprintf(rd,"%d\n",sub_distance);			
+ 117:.\main.c      **** 			//UART_1_PutString(rd);
+ 118:.\main.c      ****             
+ 119:.\main.c      ****             
+ 120:.\main.c      ****             // ロータリーエンコーダー
+ 121:.\main.c      ****             
+ 122:.\main.c      ****             cou = QuadDec_1_GetCounter();
+ 196              		.loc 1 122 0
+ 197 00e6 FFF7FEFF 		bl	QuadDec_1_GetCounter
+ 198              	.LVL26:
+ 123:.\main.c      ****             if(count == 10)  QuadDec_1_SetCounter(SetValue);
+ 199              		.loc 1 123 0
+ 200 00ea 0A2D     		cmp	r5, #10
+ 201 00ec 02D1     		bne	.L7
+ 202              		.loc 1 123 0 is_stmt 0 discriminator 1
+ 203 00ee 0020     		movs	r0, #0
+ 204 00f0 FFF7FEFF 		bl	QuadDec_1_SetCounter
+ 205              	.LVL27:
+ 206              	.L7:
+ 124:.\main.c      ****             //sprintf(rd,"A = %d B = %d  count = %d\n",in_A_Read(), in_B_Read(),cou);
+ 125:.\main.c      ****             //UART_1_PutString(rd);
+ 126:.\main.c      ****             
+ 127:.\main.c      ****             
+ 128:.\main.c      ****             
+ 129:.\main.c      ****             
+ 130:.\main.c      ****             // flag
+ 131:.\main.c      **** 			count++;
+ 207              		.loc 1 131 0 is_stmt 1
+ 208 00f4 0135     		adds	r5, r5, #1
+ 209              	.LVL28:
+ 210 00f6 ADB2     		uxth	r5, r5
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 7
+
+
+ 211              	.LVL29:
+ 132:.\main.c      **** 			isr_flag = 0;
+ 212              		.loc 1 132 0
+ 213 00f8 0022     		movs	r2, #0
+ 214 00fa 434B     		ldr	r3, .L26+4
+ 215 00fc 1A60     		str	r2, [r3]
+ 113:.\main.c      ****             sub_distance = distance2 - distance1;
+ 216              		.loc 1 113 0
+ 217 00fe 3446     		mov	r4, r6
+ 218              	.LVL30:
+ 219              	.L6:
+  68:.\main.c      ****     //while(true)
+ 220              		.loc 1 68 0
+ 221 0100 B5F57A7F 		cmp	r5, #1000
+ 222 0104 B1D1     		bne	.L8
+ 133:.\main.c      **** 		}
+ 134:.\main.c      **** 	}
+ 135:.\main.c      ****     PWM_motor_WriteCompare1(0);
+ 223              		.loc 1 135 0
+ 224 0106 0020     		movs	r0, #0
+ 225 0108 FFF7FEFF 		bl	PWM_motor_WriteCompare1
+ 226              	.LVL31:
+ 227              	.L10:
+ 136:.\main.c      ****     // a
+ 137:.\main.c      ****     while(1)
+ 138:.\main.c      ****     {
+ 139:.\main.c      ****          if(SW_Read() == 0) 
+ 228              		.loc 1 139 0
+ 229 010c FFF7FEFF 		bl	SW_Read
+ 230              	.LVL32:
+ 231 0110 0028     		cmp	r0, #0
+ 232 0112 FBD1     		bne	.L10
+ 233 0114 16E0     		b	.L21
+ 234              	.LVL33:
+ 235              	.L11:
+ 236              	.LBB2:
+ 140:.\main.c      ****         {
+ 141:.\main.c      ****             int i;
+ 142:.\main.c      ****             int j;
+ 143:.\main.c      ****             
+ 144:.\main.c      ****         for(i = 0; i < Buffer_size; i++){
+ 145:.\main.c      ****             sprintf(rd,"%d \t %d \t %d \n", buf_a[0][i], buf_a[1][i], buf_a[2][i]);			
+ 237              		.loc 1 145 0 discriminator 3
+ 238 0116 0DF5FB51 		add	r1, sp, #8032
+ 239 011a 1831     		adds	r1, r1, #24
+ 240 011c 04F57A73 		add	r3, r4, #1000
+ 241 0120 04F5FA60 		add	r0, r4, #2000
+ 242 0124 31F91420 		ldrsh	r2, [r1, r4, lsl #1]
+ 243 0128 31F91330 		ldrsh	r3, [r1, r3, lsl #1]
+ 244 012c 31F91010 		ldrsh	r1, [r1, r0, lsl #1]
+ 245 0130 0091     		str	r1, [sp]
+ 246 0132 03A8     		add	r0, sp, #12
+ 247 0134 3549     		ldr	r1, .L26+8
+ 248 0136 FFF7FEFF 		bl	sprintf
+ 249              	.LVL34:
+ 146:.\main.c      **** 		    UART_1_PutString(rd);
+ 250              		.loc 1 146 0 discriminator 3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 8
+
+
+ 251 013a 03A8     		add	r0, sp, #12
+ 252 013c FFF7FEFF 		bl	UART_1_PutString
+ 253              	.LVL35:
+ 144:.\main.c      ****             sprintf(rd,"%d \t %d \t %d \n", buf_a[0][i], buf_a[1][i], buf_a[2][i]);			
+ 254              		.loc 1 144 0 discriminator 3
+ 255 0140 0134     		adds	r4, r4, #1
+ 256              	.LVL36:
+ 257 0142 00E0     		b	.L9
+ 258              	.LVL37:
+ 259              	.L21:
+ 260              	.LBE2:
+ 261 0144 0024     		movs	r4, #0
+ 262              	.LVL38:
+ 263              	.L9:
+ 264              	.LBB3:
+ 144:.\main.c      ****             sprintf(rd,"%d \t %d \t %d \n", buf_a[0][i], buf_a[1][i], buf_a[2][i]);			
+ 265              		.loc 1 144 0 is_stmt 0 discriminator 1
+ 266 0146 B4F57A7F 		cmp	r4, #1000
+ 267 014a E4DB     		blt	.L11
+ 147:.\main.c      ****         }
+ 148:.\main.c      ****         UART_1_PutString("\n");
+ 268              		.loc 1 148 0 is_stmt 1
+ 269 014c 304C     		ldr	r4, .L26+12
+ 270              	.LVL39:
+ 271 014e 2046     		mov	r0, r4
+ 272 0150 FFF7FEFF 		bl	UART_1_PutString
+ 273              	.LVL40:
+ 274              	.LBE3:
+ 149:.\main.c      ****         break;
+ 150:.\main.c      ****         }
+ 151:.\main.c      ****     }
+ 152:.\main.c      ****     
+ 153:.\main.c      ****     UART_1_PutString("\n");
+ 275              		.loc 1 153 0
+ 276 0154 2046     		mov	r0, r4
+ 277 0156 FFF7FEFF 		bl	UART_1_PutString
+ 278              	.LVL41:
+ 279              	.L13:
+ 154:.\main.c      ****     // g
+ 155:.\main.c      ****     while(1)
+ 156:.\main.c      ****     {
+ 157:.\main.c      ****          if(SW_Read() == 0) 
+ 280              		.loc 1 157 0
+ 281 015a FFF7FEFF 		bl	SW_Read
+ 282              	.LVL42:
+ 283 015e 0028     		cmp	r0, #0
+ 284 0160 FBD1     		bne	.L13
+ 285 0162 15E0     		b	.L22
+ 286              	.LVL43:
+ 287              	.L14:
+ 288              	.LBB4:
+ 158:.\main.c      ****         {
+ 159:.\main.c      ****             int i;
+ 160:.\main.c      ****             int j;    
+ 161:.\main.c      ****             for(i = 0; i < Buffer_size; i++){
+ 162:.\main.c      ****                 sprintf(rd,"%d \t %d \t %d \n", buf_g[0][i], buf_g[1][i], buf_g[2][i]);			
+ 289              		.loc 1 162 0 discriminator 3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 9
+
+
+ 290 0164 0DF60801 		addw	r1, sp, #2056
+ 291 0168 04F57A73 		add	r3, r4, #1000
+ 292 016c 04F5FA60 		add	r0, r4, #2000
+ 293 0170 31F91420 		ldrsh	r2, [r1, r4, lsl #1]
+ 294 0174 31F91330 		ldrsh	r3, [r1, r3, lsl #1]
+ 295 0178 31F91010 		ldrsh	r1, [r1, r0, lsl #1]
+ 296 017c 0091     		str	r1, [sp]
+ 297 017e 03A8     		add	r0, sp, #12
+ 298 0180 2249     		ldr	r1, .L26+8
+ 299 0182 FFF7FEFF 		bl	sprintf
+ 300              	.LVL44:
+ 163:.\main.c      ****     		    UART_1_PutString(rd);
+ 301              		.loc 1 163 0 discriminator 3
+ 302 0186 03A8     		add	r0, sp, #12
+ 303 0188 FFF7FEFF 		bl	UART_1_PutString
+ 304              	.LVL45:
+ 161:.\main.c      ****                 sprintf(rd,"%d \t %d \t %d \n", buf_g[0][i], buf_g[1][i], buf_g[2][i]);			
+ 305              		.loc 1 161 0 discriminator 3
+ 306 018c 0134     		adds	r4, r4, #1
+ 307              	.LVL46:
+ 308 018e 00E0     		b	.L12
+ 309              	.LVL47:
+ 310              	.L22:
+ 311              	.LBE4:
+ 312 0190 0024     		movs	r4, #0
+ 313              	.L12:
+ 314              	.LVL48:
+ 315              	.LBB5:
+ 161:.\main.c      ****                 sprintf(rd,"%d \t %d \t %d \n", buf_g[0][i], buf_g[1][i], buf_g[2][i]);			
+ 316              		.loc 1 161 0 is_stmt 0 discriminator 1
+ 317 0192 B4F57A7F 		cmp	r4, #1000
+ 318 0196 E5DB     		blt	.L14
+ 164:.\main.c      ****             }
+ 165:.\main.c      ****             UART_1_PutString("\n");
+ 319              		.loc 1 165 0 is_stmt 1
+ 320 0198 1D4C     		ldr	r4, .L26+12
+ 321              	.LVL49:
+ 322 019a 2046     		mov	r0, r4
+ 323 019c FFF7FEFF 		bl	UART_1_PutString
+ 324              	.LVL50:
+ 325              	.LBE5:
+ 166:.\main.c      ****             break;
+ 167:.\main.c      ****         }
+ 168:.\main.c      ****     }
+ 169:.\main.c      ****      UART_1_PutString("\n");
+ 326              		.loc 1 169 0
+ 327 01a0 2046     		mov	r0, r4
+ 328 01a2 FFF7FEFF 		bl	UART_1_PutString
+ 329              	.LVL51:
+ 330              	.L16:
+ 170:.\main.c      ****      // kyori
+ 171:.\main.c      ****      while(1)
+ 172:.\main.c      ****      {
+ 173:.\main.c      ****          if(SW_Read() == 0) 
+ 331              		.loc 1 173 0
+ 332 01a6 FFF7FEFF 		bl	SW_Read
+ 333              	.LVL52:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 10
+
+
+ 334 01aa 0028     		cmp	r0, #0
+ 335 01ac FBD1     		bne	.L16
+ 336 01ae 0BE0     		b	.L23
+ 337              	.LVL53:
+ 338              	.L17:
+ 339              	.LBB6:
+ 174:.\main.c      ****         {
+ 175:.\main.c      ****             int i;
+ 176:.\main.c      ****             int j;
+ 177:.\main.c      ****             for(i = 0; i < Buffer_size; i++){
+ 178:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 340              		.loc 1 178 0 discriminator 3
+ 341 01b0 03A8     		add	r0, sp, #12
+ 342 01b2 1849     		ldr	r1, .L26+16
+ 343 01b4 0EAB     		add	r3, sp, #56
+ 344 01b6 33F91420 		ldrsh	r2, [r3, r4, lsl #1]
+ 345 01ba FFF7FEFF 		bl	sprintf
+ 346              	.LVL54:
+ 179:.\main.c      ****     		    UART_1_PutString(rd);
+ 347              		.loc 1 179 0 discriminator 3
+ 348 01be 03A8     		add	r0, sp, #12
+ 349 01c0 FFF7FEFF 		bl	UART_1_PutString
+ 350              	.LVL55:
+ 177:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 351              		.loc 1 177 0 discriminator 3
+ 352 01c4 0134     		adds	r4, r4, #1
+ 353              	.LVL56:
+ 354 01c6 00E0     		b	.L15
+ 355              	.LVL57:
+ 356              	.L23:
+ 357              	.LBE6:
+ 358 01c8 0024     		movs	r4, #0
+ 359              	.L15:
+ 360              	.LVL58:
+ 361              	.LBB7:
+ 177:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 362              		.loc 1 177 0 is_stmt 0 discriminator 1
+ 363 01ca B4F57A7F 		cmp	r4, #1000
+ 364 01ce EFDB     		blt	.L17
+ 365              	.L19:
+ 366              	.LBE7:
+ 180:.\main.c      ****             }    
+ 181:.\main.c      ****             break;
+ 182:.\main.c      ****         }
+ 183:.\main.c      ****     }
+ 184:.\main.c      ****     
+ 185:.\main.c      ****     // rori
+ 186:.\main.c      ****      while(1)
+ 187:.\main.c      ****      {
+ 188:.\main.c      ****          if(SW_Read() == 0) 
+ 367              		.loc 1 188 0 is_stmt 1
+ 368 01d0 FFF7FEFF 		bl	SW_Read
+ 369              	.LVL59:
+ 370 01d4 0028     		cmp	r0, #0
+ 371 01d6 FBD1     		bne	.L19
+ 372 01d8 0BE0     		b	.L24
+ 373              	.LVL60:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 11
+
+
+ 374              	.L20:
+ 375              	.LBB8:
+ 189:.\main.c      ****         {
+ 190:.\main.c      ****             int i;
+ 191:.\main.c      ****             int j;
+ 192:.\main.c      ****             for(i = 0; i < Buffer_size; i++){
+ 193:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 376              		.loc 1 193 0 discriminator 3
+ 377 01da 03A8     		add	r0, sp, #12
+ 378 01dc 0D49     		ldr	r1, .L26+16
+ 379 01de 0EAB     		add	r3, sp, #56
+ 380 01e0 33F91420 		ldrsh	r2, [r3, r4, lsl #1]
+ 381 01e4 FFF7FEFF 		bl	sprintf
+ 382              	.LVL61:
+ 194:.\main.c      ****     		    UART_1_PutString(rd);
+ 383              		.loc 1 194 0 discriminator 3
+ 384 01e8 03A8     		add	r0, sp, #12
+ 385 01ea FFF7FEFF 		bl	UART_1_PutString
+ 386              	.LVL62:
+ 192:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 387              		.loc 1 192 0 discriminator 3
+ 388 01ee 0134     		adds	r4, r4, #1
+ 389              	.LVL63:
+ 390 01f0 00E0     		b	.L18
+ 391              	.LVL64:
+ 392              	.L24:
+ 393              	.LBE8:
+ 394 01f2 0024     		movs	r4, #0
+ 395              	.LVL65:
+ 396              	.L18:
+ 397              	.LBB9:
+ 192:.\main.c      ****                 sprintf(rd,"%d\n", kyori[i]);			
+ 398              		.loc 1 192 0 is_stmt 0 discriminator 1
+ 399 01f4 B4F57A7F 		cmp	r4, #1000
+ 400 01f8 EFDB     		blt	.L20
+ 401              	.LBE9:
+ 195:.\main.c      ****             }    
+ 196:.\main.c      ****             break;
+ 197:.\main.c      ****         }
+ 198:.\main.c      ****     }
+ 199:.\main.c      ****     
+ 200:.\main.c      **** }
+ 402              		.loc 1 200 0 is_stmt 1 discriminator 1
+ 403 01fa 0020     		movs	r0, #0
+ 404 01fc 0DF55B5D 		add	sp, sp, #14016
+ 405 0200 0AB0     		add	sp, sp, #40
+ 406              		.cfi_def_cfa_offset 16
+ 407              		@ sp needed
+ 408 0202 70BD     		pop	{r4, r5, r6, pc}
+ 409              	.LVL66:
+ 410              	.L27:
+ 411              		.align	2
+ 412              	.L26:
+ 413 0204 00000000 		.word	isr_int
+ 414 0208 00000000 		.word	.LANCHOR0
+ 415 020c 00000000 		.word	.LC0
+ 416 0210 10000000 		.word	.LC1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 12
+
+
+ 417 0214 14000000 		.word	.LC2
+ 418              		.cfi_endproc
+ 419              	.LFE64:
+ 420              		.size	main, .-main
+ 421              		.global	isr_flag
+ 422              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 423              		.align	2
+ 424              	.LC0:
+ 425 0000 25642009 		.ascii	"%d \011 %d \011 %d \012\000"
+ 425      20256420 
+ 425      09202564 
+ 425      200A00
+ 426 000f 00       		.space	1
+ 427              	.LC1:
+ 428 0010 0A00     		.ascii	"\012\000"
+ 429 0012 0000     		.space	2
+ 430              	.LC2:
+ 431 0014 25640A00 		.ascii	"%d\012\000"
+ 432              		.bss
+ 433              		.align	2
+ 434              		.set	.LANCHOR0,. + 0
+ 435              		.type	isr_flag, %object
+ 436              		.size	isr_flag, 4
+ 437              	isr_flag:
+ 438 0000 00000000 		.space	4
+ 439              		.text
+ 440              	.Letext0:
+ 441              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 442              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 443              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 444              		.file 5 "Generated_Source\\PSoC5/core_cm3.h"
+ 445              		.file 6 "Generated_Source\\PSoC5/QuadDec_1.h"
+ 446              		.file 7 "Generated_Source\\PSoC5/I2C.h"
+ 447              		.file 8 "Generated_Source\\PSoC5/UART_1.h"
+ 448              		.file 9 "Generated_Source\\PSoC5/CyLib.h"
+ 449              		.file 10 "Generated_Source\\PSoC5/PWM_motor.h"
+ 450              		.file 11 ".\\MPU6050/MPU6050.h"
+ 451              		.file 12 "Generated_Source\\PSoC5/isr_flag.h"
+ 452              		.file 13 "Generated_Source\\PSoC5/ADC_SAR_Seq.h"
+ 453              		.file 14 "Generated_Source\\PSoC5/SW.h"
+ 454              		.file 15 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9
+ 455              		.section	.debug_info,"",%progbits
+ 456              	.Ldebug_info0:
+ 457 0000 05080000 		.4byte	0x805
+ 458 0004 0400     		.2byte	0x4
+ 459 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 460 000a 04       		.byte	0x4
+ 461 000b 01       		.uleb128 0x1
+ 462 000c D5020000 		.4byte	.LASF69
+ 463 0010 01       		.byte	0x1
+ 464 0011 3B040000 		.4byte	.LASF70
+ 465 0015 DD030000 		.4byte	.LASF71
+ 466 0019 60000000 		.4byte	.Ldebug_ranges0+0x60
+ 467 001d 00000000 		.4byte	0
+ 468 0021 00000000 		.4byte	.Ldebug_line0
+ 469 0025 02       		.uleb128 0x2
+ 470 0026 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 13
+
+
+ 471 0027 06       		.byte	0x6
+ 472 0028 EE010000 		.4byte	.LASF0
+ 473 002c 03       		.uleb128 0x3
+ 474 002d 77010000 		.4byte	.LASF2
+ 475 0031 02       		.byte	0x2
+ 476 0032 1D       		.byte	0x1d
+ 477 0033 37000000 		.4byte	0x37
+ 478 0037 02       		.uleb128 0x2
+ 479 0038 01       		.byte	0x1
+ 480 0039 08       		.byte	0x8
+ 481 003a B7010000 		.4byte	.LASF1
+ 482 003e 03       		.uleb128 0x3
+ 483 003f 56040000 		.4byte	.LASF3
+ 484 0043 02       		.byte	0x2
+ 485 0044 29       		.byte	0x29
+ 486 0045 49000000 		.4byte	0x49
+ 487 0049 02       		.uleb128 0x2
+ 488 004a 02       		.byte	0x2
+ 489 004b 05       		.byte	0x5
+ 490 004c 62000000 		.4byte	.LASF4
+ 491 0050 03       		.uleb128 0x3
+ 492 0051 B0000000 		.4byte	.LASF5
+ 493 0055 02       		.byte	0x2
+ 494 0056 2B       		.byte	0x2b
+ 495 0057 5B000000 		.4byte	0x5b
+ 496 005b 02       		.uleb128 0x2
+ 497 005c 02       		.byte	0x2
+ 498 005d 07       		.byte	0x7
+ 499 005e 87030000 		.4byte	.LASF6
+ 500 0062 03       		.uleb128 0x3
+ 501 0063 44040000 		.4byte	.LASF7
+ 502 0067 02       		.byte	0x2
+ 503 0068 3F       		.byte	0x3f
+ 504 0069 6D000000 		.4byte	0x6d
+ 505 006d 02       		.uleb128 0x2
+ 506 006e 04       		.byte	0x4
+ 507 006f 05       		.byte	0x5
+ 508 0070 61010000 		.4byte	.LASF8
+ 509 0074 02       		.uleb128 0x2
+ 510 0075 04       		.byte	0x4
+ 511 0076 07       		.byte	0x7
+ 512 0077 B3030000 		.4byte	.LASF9
+ 513 007b 02       		.uleb128 0x2
+ 514 007c 08       		.byte	0x8
+ 515 007d 05       		.byte	0x5
+ 516 007e 46010000 		.4byte	.LASF10
+ 517 0082 02       		.uleb128 0x2
+ 518 0083 08       		.byte	0x8
+ 519 0084 07       		.byte	0x7
+ 520 0085 FA010000 		.4byte	.LASF11
+ 521 0089 04       		.uleb128 0x4
+ 522 008a 04       		.byte	0x4
+ 523 008b 05       		.byte	0x5
+ 524 008c 696E7400 		.ascii	"int\000"
+ 525 0090 02       		.uleb128 0x2
+ 526 0091 04       		.byte	0x4
+ 527 0092 07       		.byte	0x7
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 14
+
+
+ 528 0093 11020000 		.4byte	.LASF12
+ 529 0097 03       		.uleb128 0x3
+ 530 0098 D2000000 		.4byte	.LASF13
+ 531 009c 03       		.byte	0x3
+ 532 009d 15       		.byte	0x15
+ 533 009e 2C000000 		.4byte	0x2c
+ 534 00a2 03       		.uleb128 0x3
+ 535 00a3 93020000 		.4byte	.LASF14
+ 536 00a7 03       		.byte	0x3
+ 537 00a8 20       		.byte	0x20
+ 538 00a9 3E000000 		.4byte	0x3e
+ 539 00ad 03       		.uleb128 0x3
+ 540 00ae 1E020000 		.4byte	.LASF15
+ 541 00b2 03       		.byte	0x3
+ 542 00b3 21       		.byte	0x21
+ 543 00b4 50000000 		.4byte	0x50
+ 544 00b8 03       		.uleb128 0x3
+ 545 00b9 73020000 		.4byte	.LASF16
+ 546 00bd 03       		.byte	0x3
+ 547 00be 2C       		.byte	0x2c
+ 548 00bf 62000000 		.4byte	0x62
+ 549 00c3 05       		.uleb128 0x5
+ 550 00c4 9B020000 		.4byte	.LASF17
+ 551 00c8 04       		.byte	0x4
+ 552 00c9 3801     		.2byte	0x138
+ 553 00cb 37000000 		.4byte	0x37
+ 554 00cf 05       		.uleb128 0x5
+ 555 00d0 7B030000 		.4byte	.LASF18
+ 556 00d4 04       		.byte	0x4
+ 557 00d5 3901     		.2byte	0x139
+ 558 00d7 5B000000 		.4byte	0x5b
+ 559 00db 05       		.uleb128 0x5
+ 560 00dc C5030000 		.4byte	.LASF19
+ 561 00e0 04       		.byte	0x4
+ 562 00e1 3A01     		.2byte	0x13a
+ 563 00e3 74000000 		.4byte	0x74
+ 564 00e7 05       		.uleb128 0x5
+ 565 00e8 DA000000 		.4byte	.LASF20
+ 566 00ec 04       		.byte	0x4
+ 567 00ed 3C01     		.2byte	0x13c
+ 568 00ef 49000000 		.4byte	0x49
+ 569 00f3 02       		.uleb128 0x2
+ 570 00f4 04       		.byte	0x4
+ 571 00f5 04       		.byte	0x4
+ 572 00f6 29010000 		.4byte	.LASF21
+ 573 00fa 02       		.uleb128 0x2
+ 574 00fb 08       		.byte	0x8
+ 575 00fc 04       		.byte	0x4
+ 576 00fd 74040000 		.4byte	.LASF22
+ 577 0101 05       		.uleb128 0x5
+ 578 0102 95000000 		.4byte	.LASF23
+ 579 0106 04       		.byte	0x4
+ 580 0107 4901     		.2byte	0x149
+ 581 0109 0D010000 		.4byte	0x10d
+ 582 010d 02       		.uleb128 0x2
+ 583 010e 01       		.byte	0x1
+ 584 010f 08       		.byte	0x8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 15
+
+
+ 585 0110 4C020000 		.4byte	.LASF24
+ 586 0114 05       		.uleb128 0x5
+ 587 0115 D9010000 		.4byte	.LASF25
+ 588 0119 04       		.byte	0x4
+ 589 011a F401     		.2byte	0x1f4
+ 590 011c 20010000 		.4byte	0x120
+ 591 0120 06       		.uleb128 0x6
+ 592 0121 04       		.byte	0x4
+ 593 0122 26010000 		.4byte	0x126
+ 594 0126 07       		.uleb128 0x7
+ 595 0127 02       		.uleb128 0x2
+ 596 0128 04       		.byte	0x4
+ 597 0129 07       		.byte	0x7
+ 598 012a 6C000000 		.4byte	.LASF26
+ 599 012e 06       		.uleb128 0x6
+ 600 012f 04       		.byte	0x4
+ 601 0130 0D010000 		.4byte	0x10d
+ 602 0134 06       		.uleb128 0x6
+ 603 0135 04       		.byte	0x4
+ 604 0136 3A010000 		.4byte	0x13a
+ 605 013a 08       		.uleb128 0x8
+ 606 013b 0D010000 		.4byte	0x10d
+ 607 013f 02       		.uleb128 0x2
+ 608 0140 08       		.byte	0x8
+ 609 0141 04       		.byte	0x4
+ 610 0142 C5010000 		.4byte	.LASF27
+ 611 0146 09       		.uleb128 0x9
+ 612 0147 D1010000 		.4byte	.LASF72
+ 613 014b 01       		.byte	0x1
+ 614 014c 17       		.byte	0x17
+ 615 014d 00000000 		.4byte	.LFB63
+ 616 0151 0C000000 		.4byte	.LFE63-.LFB63
+ 617 0155 01       		.uleb128 0x1
+ 618 0156 9C       		.byte	0x9c
+ 619 0157 0A       		.uleb128 0xa
+ 620 0158 9B000000 		.4byte	.LASF73
+ 621 015c 01       		.byte	0x1
+ 622 015d 1A       		.byte	0x1a
+ 623 015e 89000000 		.4byte	0x89
+ 624 0162 00000000 		.4byte	.LFB64
+ 625 0166 18020000 		.4byte	.LFE64-.LFB64
+ 626 016a 01       		.uleb128 0x1
+ 627 016b 9C       		.byte	0x9c
+ 628 016c 00060000 		.4byte	0x600
+ 629 0170 0B       		.uleb128 0xb
+ 630 0171 81010000 		.4byte	.LASF28
+ 631 0175 01       		.byte	0x1
+ 632 0176 1E       		.byte	0x1e
+ 633 0177 97000000 		.4byte	0x97
+ 634 017b 00       		.byte	0
+ 635 017c 0C       		.uleb128 0xc
+ 636 017d 6900     		.ascii	"i\000"
+ 637 017f 01       		.byte	0x1
+ 638 0180 1F       		.byte	0x1f
+ 639 0181 AD000000 		.4byte	0xad
+ 640 0185 00       		.byte	0
+ 641 0186 0D       		.uleb128 0xd
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 16
+
+
+ 642 0187 35040000 		.4byte	.LASF29
+ 643 018b 01       		.byte	0x1
+ 644 018c 1F       		.byte	0x1f
+ 645 018d AD000000 		.4byte	0xad
+ 646 0191 00000000 		.4byte	.LLST0
+ 647 0195 0E       		.uleb128 0xe
+ 648 0196 8D020000 		.4byte	.LASF30
+ 649 019a 01       		.byte	0x1
+ 650 019b 20       		.byte	0x20
+ 651 019c 00060000 		.4byte	0x600
+ 652 01a0 03       		.uleb128 0x3
+ 653 01a1 91       		.byte	0x91
+ 654 01a2 8051     		.sleb128 -6016
+ 655 01a4 0E       		.uleb128 0xe
+ 656 01a5 A1020000 		.4byte	.LASF31
+ 657 01a9 01       		.byte	0x1
+ 658 01aa 21       		.byte	0x21
+ 659 01ab 00060000 		.4byte	0x600
+ 660 01af 04       		.uleb128 0x4
+ 661 01b0 91       		.byte	0x91
+ 662 01b1 90A27F   		.sleb128 -12016
+ 663 01b4 0F       		.uleb128 0xf
+ 664 01b5 54010000 		.4byte	.LASF32
+ 665 01b9 01       		.byte	0x1
+ 666 01ba 22       		.byte	0x22
+ 667 01bb 00060000 		.4byte	0x600
+ 668 01bf 0F       		.uleb128 0xf
+ 669 01c0 6A010000 		.4byte	.LASF33
+ 670 01c4 01       		.byte	0x1
+ 671 01c5 23       		.byte	0x23
+ 672 01c6 00060000 		.4byte	0x600
+ 673 01ca 0F       		.uleb128 0xf
+ 674 01cb 6E030000 		.4byte	.LASF34
+ 675 01cf 01       		.byte	0x1
+ 676 01d0 24       		.byte	0x24
+ 677 01d1 00060000 		.4byte	0x600
+ 678 01d5 0F       		.uleb128 0xf
+ 679 01d6 27020000 		.4byte	.LASF35
+ 680 01da 01       		.byte	0x1
+ 681 01db 25       		.byte	0x25
+ 682 01dc 00060000 		.4byte	0x600
+ 683 01e0 0E       		.uleb128 0xe
+ 684 01e1 7B040000 		.4byte	.LASF36
+ 685 01e5 01       		.byte	0x1
+ 686 01e6 26       		.byte	0x26
+ 687 01e7 17060000 		.4byte	0x617
+ 688 01eb 04       		.uleb128 0x4
+ 689 01ec 91       		.byte	0x91
+ 690 01ed C0927F   		.sleb128 -14016
+ 691 01f0 10       		.uleb128 0x10
+ 692 01f1 617800   		.ascii	"ax\000"
+ 693 01f4 01       		.byte	0x1
+ 694 01f5 27       		.byte	0x27
+ 695 01f6 A2000000 		.4byte	0xa2
+ 696 01fa 04       		.uleb128 0x4
+ 697 01fb 91       		.byte	0x91
+ 698 01fc BE927F   		.sleb128 -14018
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 17
+
+
+ 699 01ff 10       		.uleb128 0x10
+ 700 0200 617900   		.ascii	"ay\000"
+ 701 0203 01       		.byte	0x1
+ 702 0204 27       		.byte	0x27
+ 703 0205 A2000000 		.4byte	0xa2
+ 704 0209 04       		.uleb128 0x4
+ 705 020a 91       		.byte	0x91
+ 706 020b BC927F   		.sleb128 -14020
+ 707 020e 10       		.uleb128 0x10
+ 708 020f 617A00   		.ascii	"az\000"
+ 709 0212 01       		.byte	0x1
+ 710 0213 27       		.byte	0x27
+ 711 0214 A2000000 		.4byte	0xa2
+ 712 0218 04       		.uleb128 0x4
+ 713 0219 91       		.byte	0x91
+ 714 021a BA927F   		.sleb128 -14022
+ 715 021d 10       		.uleb128 0x10
+ 716 021e 677800   		.ascii	"gx\000"
+ 717 0221 01       		.byte	0x1
+ 718 0222 27       		.byte	0x27
+ 719 0223 A2000000 		.4byte	0xa2
+ 720 0227 04       		.uleb128 0x4
+ 721 0228 91       		.byte	0x91
+ 722 0229 B8927F   		.sleb128 -14024
+ 723 022c 10       		.uleb128 0x10
+ 724 022d 677900   		.ascii	"gy\000"
+ 725 0230 01       		.byte	0x1
+ 726 0231 27       		.byte	0x27
+ 727 0232 A2000000 		.4byte	0xa2
+ 728 0236 04       		.uleb128 0x4
+ 729 0237 91       		.byte	0x91
+ 730 0238 B6927F   		.sleb128 -14026
+ 731 023b 10       		.uleb128 0x10
+ 732 023c 677A00   		.ascii	"gz\000"
+ 733 023f 01       		.byte	0x1
+ 734 0240 27       		.byte	0x27
+ 735 0241 A2000000 		.4byte	0xa2
+ 736 0245 04       		.uleb128 0x4
+ 737 0246 91       		.byte	0x91
+ 738 0247 B4927F   		.sleb128 -14028
+ 739 024a 0D       		.uleb128 0xd
+ 740 024b 60040000 		.4byte	.LASF37
+ 741 024f 01       		.byte	0x1
+ 742 0250 28       		.byte	0x28
+ 743 0251 A2000000 		.4byte	0xa2
+ 744 0255 2A000000 		.4byte	.LLST1
+ 745 0259 0D       		.uleb128 0xd
+ 746 025a 6A040000 		.4byte	.LASF38
+ 747 025e 01       		.byte	0x1
+ 748 025f 28       		.byte	0x28
+ 749 0260 A2000000 		.4byte	0xa2
+ 750 0264 5E000000 		.4byte	.LLST2
+ 751 0268 0D       		.uleb128 0xd
+ 752 0269 66020000 		.4byte	.LASF39
+ 753 026d 01       		.byte	0x1
+ 754 026e 28       		.byte	0x28
+ 755 026f A2000000 		.4byte	0xa2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 18
+
+
+ 756 0273 71000000 		.4byte	.LLST3
+ 757 0277 0F       		.uleb128 0xf
+ 758 0278 82030000 		.4byte	.LASF40
+ 759 027c 01       		.byte	0x1
+ 760 027d 29       		.byte	0x29
+ 761 027e 17060000 		.4byte	0x617
+ 762 0282 11       		.uleb128 0x11
+ 763 0283 636F7500 		.ascii	"cou\000"
+ 764 0287 01       		.byte	0x1
+ 765 0288 2A       		.byte	0x2a
+ 766 0289 E7000000 		.4byte	0xe7
+ 767 028d 84000000 		.4byte	.LLST4
+ 768 0291 0B       		.uleb128 0xb
+ 769 0292 2C040000 		.4byte	.LASF41
+ 770 0296 01       		.byte	0x1
+ 771 0297 2B       		.byte	0x2b
+ 772 0298 E7000000 		.4byte	0xe7
+ 773 029c 00       		.byte	0
+ 774 029d 10       		.uleb128 0x10
+ 775 029e 726400   		.ascii	"rd\000"
+ 776 02a1 01       		.byte	0x1
+ 777 02a2 2C       		.byte	0x2c
+ 778 02a3 28060000 		.4byte	0x628
+ 779 02a7 04       		.uleb128 0x4
+ 780 02a8 91       		.byte	0x91
+ 781 02a9 94927F   		.sleb128 -14060
+ 782 02ac 12       		.uleb128 0x12
+ 783 02ad 00000000 		.4byte	.Ldebug_ranges0+0
+ 784 02b1 11030000 		.4byte	0x311
+ 785 02b5 11       		.uleb128 0x11
+ 786 02b6 6900     		.ascii	"i\000"
+ 787 02b8 01       		.byte	0x1
+ 788 02b9 8D       		.byte	0x8d
+ 789 02ba 89000000 		.4byte	0x89
+ 790 02be 98000000 		.4byte	.LLST5
+ 791 02c2 13       		.uleb128 0x13
+ 792 02c3 6A00     		.ascii	"j\000"
+ 793 02c5 01       		.byte	0x1
+ 794 02c6 8E       		.byte	0x8e
+ 795 02c7 89000000 		.4byte	0x89
+ 796 02cb 14       		.uleb128 0x14
+ 797 02cc 3A010000 		.4byte	.LVL34
+ 798 02d0 5A060000 		.4byte	0x65a
+ 799 02d4 EA020000 		.4byte	0x2ea
+ 800 02d8 15       		.uleb128 0x15
+ 801 02d9 01       		.uleb128 0x1
+ 802 02da 51       		.byte	0x51
+ 803 02db 05       		.uleb128 0x5
+ 804 02dc 03       		.byte	0x3
+ 805 02dd 00000000 		.4byte	.LC0
+ 806 02e1 15       		.uleb128 0x15
+ 807 02e2 01       		.uleb128 0x1
+ 808 02e3 50       		.byte	0x50
+ 809 02e4 04       		.uleb128 0x4
+ 810 02e5 91       		.byte	0x91
+ 811 02e6 94927F   		.sleb128 -14060
+ 812 02e9 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 19
+
+
+ 813 02ea 14       		.uleb128 0x14
+ 814 02eb 40010000 		.4byte	.LVL35
+ 815 02ef 75060000 		.4byte	0x675
+ 816 02f3 00030000 		.4byte	0x300
+ 817 02f7 15       		.uleb128 0x15
+ 818 02f8 01       		.uleb128 0x1
+ 819 02f9 50       		.byte	0x50
+ 820 02fa 04       		.uleb128 0x4
+ 821 02fb 91       		.byte	0x91
+ 822 02fc 94927F   		.sleb128 -14060
+ 823 02ff 00       		.byte	0
+ 824 0300 16       		.uleb128 0x16
+ 825 0301 54010000 		.4byte	.LVL40
+ 826 0305 75060000 		.4byte	0x675
+ 827 0309 15       		.uleb128 0x15
+ 828 030a 01       		.uleb128 0x1
+ 829 030b 50       		.byte	0x50
+ 830 030c 02       		.uleb128 0x2
+ 831 030d 74       		.byte	0x74
+ 832 030e 00       		.sleb128 0
+ 833 030f 00       		.byte	0
+ 834 0310 00       		.byte	0
+ 835 0311 12       		.uleb128 0x12
+ 836 0312 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 837 0316 76030000 		.4byte	0x376
+ 838 031a 11       		.uleb128 0x11
+ 839 031b 6900     		.ascii	"i\000"
+ 840 031d 01       		.byte	0x1
+ 841 031e 9F       		.byte	0x9f
+ 842 031f 89000000 		.4byte	0x89
+ 843 0323 B6000000 		.4byte	.LLST6
+ 844 0327 13       		.uleb128 0x13
+ 845 0328 6A00     		.ascii	"j\000"
+ 846 032a 01       		.byte	0x1
+ 847 032b A0       		.byte	0xa0
+ 848 032c 89000000 		.4byte	0x89
+ 849 0330 14       		.uleb128 0x14
+ 850 0331 86010000 		.4byte	.LVL44
+ 851 0335 5A060000 		.4byte	0x65a
+ 852 0339 4F030000 		.4byte	0x34f
+ 853 033d 15       		.uleb128 0x15
+ 854 033e 01       		.uleb128 0x1
+ 855 033f 51       		.byte	0x51
+ 856 0340 05       		.uleb128 0x5
+ 857 0341 03       		.byte	0x3
+ 858 0342 00000000 		.4byte	.LC0
+ 859 0346 15       		.uleb128 0x15
+ 860 0347 01       		.uleb128 0x1
+ 861 0348 50       		.byte	0x50
+ 862 0349 04       		.uleb128 0x4
+ 863 034a 91       		.byte	0x91
+ 864 034b 94927F   		.sleb128 -14060
+ 865 034e 00       		.byte	0
+ 866 034f 14       		.uleb128 0x14
+ 867 0350 8C010000 		.4byte	.LVL45
+ 868 0354 75060000 		.4byte	0x675
+ 869 0358 65030000 		.4byte	0x365
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 20
+
+
+ 870 035c 15       		.uleb128 0x15
+ 871 035d 01       		.uleb128 0x1
+ 872 035e 50       		.byte	0x50
+ 873 035f 04       		.uleb128 0x4
+ 874 0360 91       		.byte	0x91
+ 875 0361 94927F   		.sleb128 -14060
+ 876 0364 00       		.byte	0
+ 877 0365 16       		.uleb128 0x16
+ 878 0366 A0010000 		.4byte	.LVL50
+ 879 036a 75060000 		.4byte	0x675
+ 880 036e 15       		.uleb128 0x15
+ 881 036f 01       		.uleb128 0x1
+ 882 0370 50       		.byte	0x50
+ 883 0371 02       		.uleb128 0x2
+ 884 0372 74       		.byte	0x74
+ 885 0373 00       		.sleb128 0
+ 886 0374 00       		.byte	0
+ 887 0375 00       		.byte	0
+ 888 0376 12       		.uleb128 0x12
+ 889 0377 30000000 		.4byte	.Ldebug_ranges0+0x30
+ 890 037b DC030000 		.4byte	0x3dc
+ 891 037f 11       		.uleb128 0x11
+ 892 0380 6900     		.ascii	"i\000"
+ 893 0382 01       		.byte	0x1
+ 894 0383 AF       		.byte	0xaf
+ 895 0384 89000000 		.4byte	0x89
+ 896 0388 D4000000 		.4byte	.LLST7
+ 897 038c 13       		.uleb128 0x13
+ 898 038d 6A00     		.ascii	"j\000"
+ 899 038f 01       		.byte	0x1
+ 900 0390 B0       		.byte	0xb0
+ 901 0391 89000000 		.4byte	0x89
+ 902 0395 14       		.uleb128 0x14
+ 903 0396 BE010000 		.4byte	.LVL54
+ 904 039a 5A060000 		.4byte	0x65a
+ 905 039e C9030000 		.4byte	0x3c9
+ 906 03a2 15       		.uleb128 0x15
+ 907 03a3 01       		.uleb128 0x1
+ 908 03a4 52       		.byte	0x52
+ 909 03a5 11       		.uleb128 0x11
+ 910 03a6 74       		.byte	0x74
+ 911 03a7 00       		.sleb128 0
+ 912 03a8 31       		.byte	0x31
+ 913 03a9 24       		.byte	0x24
+ 914 03aa 91       		.byte	0x91
+ 915 03ab 00       		.sleb128 0
+ 916 03ac 22       		.byte	0x22
+ 917 03ad 0A       		.byte	0xa
+ 918 03ae C036     		.2byte	0x36c0
+ 919 03b0 1C       		.byte	0x1c
+ 920 03b1 94       		.byte	0x94
+ 921 03b2 02       		.byte	0x2
+ 922 03b3 40       		.byte	0x40
+ 923 03b4 24       		.byte	0x24
+ 924 03b5 40       		.byte	0x40
+ 925 03b6 26       		.byte	0x26
+ 926 03b7 15       		.uleb128 0x15
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 21
+
+
+ 927 03b8 01       		.uleb128 0x1
+ 928 03b9 51       		.byte	0x51
+ 929 03ba 05       		.uleb128 0x5
+ 930 03bb 03       		.byte	0x3
+ 931 03bc 14000000 		.4byte	.LC2
+ 932 03c0 15       		.uleb128 0x15
+ 933 03c1 01       		.uleb128 0x1
+ 934 03c2 50       		.byte	0x50
+ 935 03c3 04       		.uleb128 0x4
+ 936 03c4 91       		.byte	0x91
+ 937 03c5 94927F   		.sleb128 -14060
+ 938 03c8 00       		.byte	0
+ 939 03c9 16       		.uleb128 0x16
+ 940 03ca C4010000 		.4byte	.LVL55
+ 941 03ce 75060000 		.4byte	0x675
+ 942 03d2 15       		.uleb128 0x15
+ 943 03d3 01       		.uleb128 0x1
+ 944 03d4 50       		.byte	0x50
+ 945 03d5 04       		.uleb128 0x4
+ 946 03d6 91       		.byte	0x91
+ 947 03d7 94927F   		.sleb128 -14060
+ 948 03da 00       		.byte	0
+ 949 03db 00       		.byte	0
+ 950 03dc 12       		.uleb128 0x12
+ 951 03dd 48000000 		.4byte	.Ldebug_ranges0+0x48
+ 952 03e1 42040000 		.4byte	0x442
+ 953 03e5 11       		.uleb128 0x11
+ 954 03e6 6900     		.ascii	"i\000"
+ 955 03e8 01       		.byte	0x1
+ 956 03e9 BE       		.byte	0xbe
+ 957 03ea 89000000 		.4byte	0x89
+ 958 03ee FD000000 		.4byte	.LLST8
+ 959 03f2 13       		.uleb128 0x13
+ 960 03f3 6A00     		.ascii	"j\000"
+ 961 03f5 01       		.byte	0x1
+ 962 03f6 BF       		.byte	0xbf
+ 963 03f7 89000000 		.4byte	0x89
+ 964 03fb 14       		.uleb128 0x14
+ 965 03fc E8010000 		.4byte	.LVL61
+ 966 0400 5A060000 		.4byte	0x65a
+ 967 0404 2F040000 		.4byte	0x42f
+ 968 0408 15       		.uleb128 0x15
+ 969 0409 01       		.uleb128 0x1
+ 970 040a 52       		.byte	0x52
+ 971 040b 11       		.uleb128 0x11
+ 972 040c 74       		.byte	0x74
+ 973 040d 00       		.sleb128 0
+ 974 040e 31       		.byte	0x31
+ 975 040f 24       		.byte	0x24
+ 976 0410 91       		.byte	0x91
+ 977 0411 00       		.sleb128 0
+ 978 0412 22       		.byte	0x22
+ 979 0413 0A       		.byte	0xa
+ 980 0414 C036     		.2byte	0x36c0
+ 981 0416 1C       		.byte	0x1c
+ 982 0417 94       		.byte	0x94
+ 983 0418 02       		.byte	0x2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 22
+
+
+ 984 0419 40       		.byte	0x40
+ 985 041a 24       		.byte	0x24
+ 986 041b 40       		.byte	0x40
+ 987 041c 26       		.byte	0x26
+ 988 041d 15       		.uleb128 0x15
+ 989 041e 01       		.uleb128 0x1
+ 990 041f 51       		.byte	0x51
+ 991 0420 05       		.uleb128 0x5
+ 992 0421 03       		.byte	0x3
+ 993 0422 14000000 		.4byte	.LC2
+ 994 0426 15       		.uleb128 0x15
+ 995 0427 01       		.uleb128 0x1
+ 996 0428 50       		.byte	0x50
+ 997 0429 04       		.uleb128 0x4
+ 998 042a 91       		.byte	0x91
+ 999 042b 94927F   		.sleb128 -14060
+ 1000 042e 00       		.byte	0
+ 1001 042f 16       		.uleb128 0x16
+ 1002 0430 EE010000 		.4byte	.LVL62
+ 1003 0434 75060000 		.4byte	0x675
+ 1004 0438 15       		.uleb128 0x15
+ 1005 0439 01       		.uleb128 0x1
+ 1006 043a 50       		.byte	0x50
+ 1007 043b 04       		.uleb128 0x4
+ 1008 043c 91       		.byte	0x91
+ 1009 043d 94927F   		.sleb128 -14060
+ 1010 0440 00       		.byte	0
+ 1011 0441 00       		.byte	0
+ 1012 0442 17       		.uleb128 0x17
+ 1013 0443 0E000000 		.4byte	.LVL1
+ 1014 0447 91060000 		.4byte	0x691
+ 1015 044b 17       		.uleb128 0x17
+ 1016 044c 12000000 		.4byte	.LVL2
+ 1017 0450 98060000 		.4byte	0x698
+ 1018 0454 14       		.uleb128 0x14
+ 1019 0455 1A000000 		.4byte	.LVL3
+ 1020 0459 9F060000 		.4byte	0x69f
+ 1021 045d 69040000 		.4byte	0x469
+ 1022 0461 15       		.uleb128 0x15
+ 1023 0462 01       		.uleb128 0x1
+ 1024 0463 50       		.byte	0x50
+ 1025 0464 03       		.uleb128 0x3
+ 1026 0465 0A       		.byte	0xa
+ 1027 0466 B80B     		.2byte	0xbb8
+ 1028 0468 00       		.byte	0
+ 1029 0469 17       		.uleb128 0x17
+ 1030 046a 1E000000 		.4byte	.LVL4
+ 1031 046e B0060000 		.4byte	0x6b0
+ 1032 0472 17       		.uleb128 0x17
+ 1033 0473 22000000 		.4byte	.LVL5
+ 1034 0477 B7060000 		.4byte	0x6b7
+ 1035 047b 14       		.uleb128 0x14
+ 1036 047c 28000000 		.4byte	.LVL6
+ 1037 0480 BE060000 		.4byte	0x6be
+ 1038 0484 8F040000 		.4byte	0x48f
+ 1039 0488 15       		.uleb128 0x15
+ 1040 0489 01       		.uleb128 0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 23
+
+
+ 1041 048a 50       		.byte	0x50
+ 1042 048b 02       		.uleb128 0x2
+ 1043 048c 08       		.byte	0x8
+ 1044 048d 68       		.byte	0x68
+ 1045 048e 00       		.byte	0
+ 1046 048f 17       		.uleb128 0x17
+ 1047 0490 2C000000 		.4byte	.LVL7
+ 1048 0494 D0060000 		.4byte	0x6d0
+ 1049 0498 17       		.uleb128 0x17
+ 1050 0499 30000000 		.4byte	.LVL8
+ 1051 049d DE060000 		.4byte	0x6de
+ 1052 04a1 14       		.uleb128 0x14
+ 1053 04a2 36000000 		.4byte	.LVL9
+ 1054 04a6 E5060000 		.4byte	0x6e5
+ 1055 04aa B8040000 		.4byte	0x4b8
+ 1056 04ae 15       		.uleb128 0x15
+ 1057 04af 01       		.uleb128 0x1
+ 1058 04b0 50       		.byte	0x50
+ 1059 04b1 05       		.uleb128 0x5
+ 1060 04b2 03       		.byte	0x3
+ 1061 04b3 00000000 		.4byte	isr_int
+ 1062 04b7 00       		.byte	0
+ 1063 04b8 14       		.uleb128 0x14
+ 1064 04b9 3C000000 		.4byte	.LVL10
+ 1065 04bd F6060000 		.4byte	0x6f6
+ 1066 04c1 CB040000 		.4byte	0x4cb
+ 1067 04c5 15       		.uleb128 0x15
+ 1068 04c6 01       		.uleb128 0x1
+ 1069 04c7 50       		.byte	0x50
+ 1070 04c8 01       		.uleb128 0x1
+ 1071 04c9 32       		.byte	0x32
+ 1072 04ca 00       		.byte	0
+ 1073 04cb 14       		.uleb128 0x14
+ 1074 04cc 42000000 		.4byte	.LVL11
+ 1075 04d0 08070000 		.4byte	0x708
+ 1076 04d4 DE040000 		.4byte	0x4de
+ 1077 04d8 15       		.uleb128 0x15
+ 1078 04d9 01       		.uleb128 0x1
+ 1079 04da 50       		.byte	0x50
+ 1080 04db 01       		.uleb128 0x1
+ 1081 04dc 30       		.byte	0x30
+ 1082 04dd 00       		.byte	0
+ 1083 04de 17       		.uleb128 0x17
+ 1084 04df 46000000 		.4byte	.LVL12
+ 1085 04e3 1A070000 		.4byte	0x71a
+ 1086 04e7 17       		.uleb128 0x17
+ 1087 04e8 4A000000 		.4byte	.LVL13
+ 1088 04ec 2C070000 		.4byte	0x72c
+ 1089 04f0 17       		.uleb128 0x17
+ 1090 04f1 4E000000 		.4byte	.LVL14
+ 1091 04f5 3E070000 		.4byte	0x73e
+ 1092 04f9 17       		.uleb128 0x17
+ 1093 04fa 52000000 		.4byte	.LVL15
+ 1094 04fe 50070000 		.4byte	0x750
+ 1095 0502 17       		.uleb128 0x17
+ 1096 0503 56000000 		.4byte	.LVL16
+ 1097 0507 62070000 		.4byte	0x762
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 24
+
+
+ 1098 050b 17       		.uleb128 0x17
+ 1099 050c 5A000000 		.4byte	.LVL17
+ 1100 0510 74070000 		.4byte	0x774
+ 1101 0514 17       		.uleb128 0x17
+ 1102 0515 5E000000 		.4byte	.LVL18
+ 1103 0519 86070000 		.4byte	0x786
+ 1104 051d 14       		.uleb128 0x14
+ 1105 051e 66000000 		.4byte	.LVL19
+ 1106 0522 8D070000 		.4byte	0x78d
+ 1107 0526 32050000 		.4byte	0x532
+ 1108 052a 15       		.uleb128 0x15
+ 1109 052b 01       		.uleb128 0x1
+ 1110 052c 50       		.byte	0x50
+ 1111 052d 03       		.uleb128 0x3
+ 1112 052e 0A       		.byte	0xa
+ 1113 052f 7C01     		.2byte	0x17c
+ 1114 0531 00       		.byte	0
+ 1115 0532 14       		.uleb128 0x14
+ 1116 0533 92000000 		.4byte	.LVL21
+ 1117 0537 9E070000 		.4byte	0x79e
+ 1118 053b 72050000 		.4byte	0x572
+ 1119 053f 15       		.uleb128 0x15
+ 1120 0540 01       		.uleb128 0x1
+ 1121 0541 53       		.byte	0x53
+ 1122 0542 04       		.uleb128 0x4
+ 1123 0543 91       		.byte	0x91
+ 1124 0544 B8927F   		.sleb128 -14024
+ 1125 0547 15       		.uleb128 0x15
+ 1126 0548 01       		.uleb128 0x1
+ 1127 0549 52       		.byte	0x52
+ 1128 054a 04       		.uleb128 0x4
+ 1129 054b 91       		.byte	0x91
+ 1130 054c BA927F   		.sleb128 -14022
+ 1131 054f 15       		.uleb128 0x15
+ 1132 0550 01       		.uleb128 0x1
+ 1133 0551 51       		.byte	0x51
+ 1134 0552 04       		.uleb128 0x4
+ 1135 0553 91       		.byte	0x91
+ 1136 0554 BC927F   		.sleb128 -14020
+ 1137 0557 15       		.uleb128 0x15
+ 1138 0558 01       		.uleb128 0x1
+ 1139 0559 50       		.byte	0x50
+ 1140 055a 04       		.uleb128 0x4
+ 1141 055b 91       		.byte	0x91
+ 1142 055c BE927F   		.sleb128 -14018
+ 1143 055f 15       		.uleb128 0x15
+ 1144 0560 02       		.uleb128 0x2
+ 1145 0561 7D       		.byte	0x7d
+ 1146 0562 04       		.sleb128 4
+ 1147 0563 04       		.uleb128 0x4
+ 1148 0564 91       		.byte	0x91
+ 1149 0565 B4927F   		.sleb128 -14028
+ 1150 0568 15       		.uleb128 0x15
+ 1151 0569 02       		.uleb128 0x2
+ 1152 056a 7D       		.byte	0x7d
+ 1153 056b 00       		.sleb128 0
+ 1154 056c 04       		.uleb128 0x4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 25
+
+
+ 1155 056d 91       		.byte	0x91
+ 1156 056e B6927F   		.sleb128 -14026
+ 1157 0571 00       		.byte	0
+ 1158 0572 17       		.uleb128 0x17
+ 1159 0573 D8000000 		.4byte	.LVL22
+ 1160 0577 CF070000 		.4byte	0x7cf
+ 1161 057b 17       		.uleb128 0x17
+ 1162 057c DC000000 		.4byte	.LVL23
+ 1163 0580 D6070000 		.4byte	0x7d6
+ 1164 0584 17       		.uleb128 0x17
+ 1165 0585 EA000000 		.4byte	.LVL26
+ 1166 0589 E1070000 		.4byte	0x7e1
+ 1167 058d 14       		.uleb128 0x14
+ 1168 058e F4000000 		.4byte	.LVL27
+ 1169 0592 EC070000 		.4byte	0x7ec
+ 1170 0596 A0050000 		.4byte	0x5a0
+ 1171 059a 15       		.uleb128 0x15
+ 1172 059b 01       		.uleb128 0x1
+ 1173 059c 50       		.byte	0x50
+ 1174 059d 01       		.uleb128 0x1
+ 1175 059e 30       		.byte	0x30
+ 1176 059f 00       		.byte	0
+ 1177 05a0 14       		.uleb128 0x14
+ 1178 05a1 0C010000 		.4byte	.LVL31
+ 1179 05a5 8D070000 		.4byte	0x78d
+ 1180 05a9 B3050000 		.4byte	0x5b3
+ 1181 05ad 15       		.uleb128 0x15
+ 1182 05ae 01       		.uleb128 0x1
+ 1183 05af 50       		.byte	0x50
+ 1184 05b0 01       		.uleb128 0x1
+ 1185 05b1 30       		.byte	0x30
+ 1186 05b2 00       		.byte	0
+ 1187 05b3 17       		.uleb128 0x17
+ 1188 05b4 10010000 		.4byte	.LVL32
+ 1189 05b8 FD070000 		.4byte	0x7fd
+ 1190 05bc 14       		.uleb128 0x14
+ 1191 05bd 5A010000 		.4byte	.LVL41
+ 1192 05c1 75060000 		.4byte	0x675
+ 1193 05c5 D0050000 		.4byte	0x5d0
+ 1194 05c9 15       		.uleb128 0x15
+ 1195 05ca 01       		.uleb128 0x1
+ 1196 05cb 50       		.byte	0x50
+ 1197 05cc 02       		.uleb128 0x2
+ 1198 05cd 74       		.byte	0x74
+ 1199 05ce 00       		.sleb128 0
+ 1200 05cf 00       		.byte	0
+ 1201 05d0 17       		.uleb128 0x17
+ 1202 05d1 5E010000 		.4byte	.LVL42
+ 1203 05d5 FD070000 		.4byte	0x7fd
+ 1204 05d9 14       		.uleb128 0x14
+ 1205 05da A6010000 		.4byte	.LVL51
+ 1206 05de 75060000 		.4byte	0x675
+ 1207 05e2 ED050000 		.4byte	0x5ed
+ 1208 05e6 15       		.uleb128 0x15
+ 1209 05e7 01       		.uleb128 0x1
+ 1210 05e8 50       		.byte	0x50
+ 1211 05e9 02       		.uleb128 0x2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 26
+
+
+ 1212 05ea 74       		.byte	0x74
+ 1213 05eb 00       		.sleb128 0
+ 1214 05ec 00       		.byte	0
+ 1215 05ed 17       		.uleb128 0x17
+ 1216 05ee AA010000 		.4byte	.LVL52
+ 1217 05f2 FD070000 		.4byte	0x7fd
+ 1218 05f6 17       		.uleb128 0x17
+ 1219 05f7 D4010000 		.4byte	.LVL59
+ 1220 05fb FD070000 		.4byte	0x7fd
+ 1221 05ff 00       		.byte	0
+ 1222 0600 18       		.uleb128 0x18
+ 1223 0601 A2000000 		.4byte	0xa2
+ 1224 0605 17060000 		.4byte	0x617
+ 1225 0609 19       		.uleb128 0x19
+ 1226 060a 27010000 		.4byte	0x127
+ 1227 060e 02       		.byte	0x2
+ 1228 060f 1A       		.uleb128 0x1a
+ 1229 0610 27010000 		.4byte	0x127
+ 1230 0614 E703     		.2byte	0x3e7
+ 1231 0616 00       		.byte	0
+ 1232 0617 18       		.uleb128 0x18
+ 1233 0618 A2000000 		.4byte	0xa2
+ 1234 061c 28060000 		.4byte	0x628
+ 1235 0620 1A       		.uleb128 0x1a
+ 1236 0621 27010000 		.4byte	0x127
+ 1237 0625 E703     		.2byte	0x3e7
+ 1238 0627 00       		.byte	0
+ 1239 0628 18       		.uleb128 0x18
+ 1240 0629 0D010000 		.4byte	0x10d
+ 1241 062d 38060000 		.4byte	0x638
+ 1242 0631 19       		.uleb128 0x19
+ 1243 0632 27010000 		.4byte	0x127
+ 1244 0636 1D       		.byte	0x1d
+ 1245 0637 00       		.byte	0
+ 1246 0638 1B       		.uleb128 0x1b
+ 1247 0639 81040000 		.4byte	.LASF42
+ 1248 063d 05       		.byte	0x5
+ 1249 063e 5506     		.2byte	0x655
+ 1250 0640 44060000 		.4byte	0x644
+ 1251 0644 1C       		.uleb128 0x1c
+ 1252 0645 B8000000 		.4byte	0xb8
+ 1253 0649 1D       		.uleb128 0x1d
+ 1254 064a AE010000 		.4byte	.LASF43
+ 1255 064e 01       		.byte	0x1
+ 1256 064f 16       		.byte	0x16
+ 1257 0650 89000000 		.4byte	0x89
+ 1258 0654 05       		.uleb128 0x5
+ 1259 0655 03       		.byte	0x3
+ 1260 0656 00000000 		.4byte	isr_flag
+ 1261 065a 1E       		.uleb128 0x1e
+ 1262 065b E6010000 		.4byte	.LASF74
+ 1263 065f 0F       		.byte	0xf
+ 1264 0660 DE       		.byte	0xde
+ 1265 0661 89000000 		.4byte	0x89
+ 1266 0665 75060000 		.4byte	0x675
+ 1267 0669 1F       		.uleb128 0x1f
+ 1268 066a 2E010000 		.4byte	0x12e
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 27
+
+
+ 1269 066e 1F       		.uleb128 0x1f
+ 1270 066f 34010000 		.4byte	0x134
+ 1271 0673 20       		.uleb128 0x20
+ 1272 0674 00       		.byte	0
+ 1273 0675 21       		.uleb128 0x21
+ 1274 0676 CC030000 		.4byte	.LASF46
+ 1275 067a 08       		.byte	0x8
+ 1276 067b 8B       		.byte	0x8b
+ 1277 067c 86060000 		.4byte	0x686
+ 1278 0680 1F       		.uleb128 0x1f
+ 1279 0681 86060000 		.4byte	0x686
+ 1280 0685 00       		.byte	0
+ 1281 0686 06       		.uleb128 0x6
+ 1282 0687 04       		.byte	0x4
+ 1283 0688 8C060000 		.4byte	0x68c
+ 1284 068c 08       		.uleb128 0x8
+ 1285 068d 01010000 		.4byte	0x101
+ 1286 0691 22       		.uleb128 0x22
+ 1287 0692 A0000000 		.4byte	.LASF44
+ 1288 0696 06       		.byte	0x6
+ 1289 0697 48       		.byte	0x48
+ 1290 0698 22       		.uleb128 0x22
+ 1291 0699 96040000 		.4byte	.LASF45
+ 1292 069d 07       		.byte	0x7
+ 1293 069e 93       		.byte	0x93
+ 1294 069f 21       		.uleb128 0x21
+ 1295 06a0 8E040000 		.4byte	.LASF47
+ 1296 06a4 09       		.byte	0x9
+ 1297 06a5 77       		.byte	0x77
+ 1298 06a6 B0060000 		.4byte	0x6b0
+ 1299 06aa 1F       		.uleb128 0x1f
+ 1300 06ab DB000000 		.4byte	0xdb
+ 1301 06af 00       		.byte	0
+ 1302 06b0 22       		.uleb128 0x22
+ 1303 06b1 C5020000 		.4byte	.LASF48
+ 1304 06b5 0A       		.byte	0xa
+ 1305 06b6 92       		.byte	0x92
+ 1306 06b7 22       		.uleb128 0x22
+ 1307 06b8 04010000 		.4byte	.LASF49
+ 1308 06bc 08       		.byte	0x8
+ 1309 06bd 54       		.byte	0x54
+ 1310 06be 23       		.uleb128 0x23
+ 1311 06bf 4E040000 		.4byte	.LASF50
+ 1312 06c3 0B       		.byte	0xb
+ 1313 06c4 9B01     		.2byte	0x19b
+ 1314 06c6 D0060000 		.4byte	0x6d0
+ 1315 06ca 1F       		.uleb128 0x1f
+ 1316 06cb 97000000 		.4byte	0x97
+ 1317 06cf 00       		.byte	0
+ 1318 06d0 24       		.uleb128 0x24
+ 1319 06d1 F1000000 		.4byte	.LASF75
+ 1320 06d5 0B       		.byte	0xb
+ 1321 06d6 9D01     		.2byte	0x19d
+ 1322 06d8 DE060000 		.4byte	0x6de
+ 1323 06dc 20       		.uleb128 0x20
+ 1324 06dd 00       		.byte	0
+ 1325 06de 22       		.uleb128 0x22
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 28
+
+
+ 1326 06df 88010000 		.4byte	.LASF51
+ 1327 06e3 0C       		.byte	0xc
+ 1328 06e4 17       		.byte	0x17
+ 1329 06e5 21       		.uleb128 0x21
+ 1330 06e6 E0000000 		.4byte	.LASF52
+ 1331 06ea 0C       		.byte	0xc
+ 1332 06eb 18       		.byte	0x18
+ 1333 06ec F6060000 		.4byte	0x6f6
+ 1334 06f0 1F       		.uleb128 0x1f
+ 1335 06f1 14010000 		.4byte	0x114
+ 1336 06f5 00       		.byte	0
+ 1337 06f6 23       		.uleb128 0x23
+ 1338 06f7 2B000000 		.4byte	.LASF53
+ 1339 06fb 0B       		.byte	0xb
+ 1340 06fc BA01     		.2byte	0x1ba
+ 1341 06fe 08070000 		.4byte	0x708
+ 1342 0702 1F       		.uleb128 0x1f
+ 1343 0703 97000000 		.4byte	0x97
+ 1344 0707 00       		.byte	0
+ 1345 0708 23       		.uleb128 0x23
+ 1346 0709 A7020000 		.4byte	.LASF54
+ 1347 070d 0B       		.byte	0xb
+ 1348 070e B001     		.2byte	0x1b0
+ 1349 0710 1A070000 		.4byte	0x71a
+ 1350 0714 1F       		.uleb128 0x1f
+ 1351 0715 97000000 		.4byte	0x97
+ 1352 0719 00       		.byte	0
+ 1353 071a 25       		.uleb128 0x25
+ 1354 071b 13000000 		.4byte	.LASF55
+ 1355 071f 0B       		.byte	0xb
+ 1356 0720 CC02     		.2byte	0x2cc
+ 1357 0722 A2000000 		.4byte	0xa2
+ 1358 0726 2C070000 		.4byte	0x72c
+ 1359 072a 20       		.uleb128 0x20
+ 1360 072b 00       		.byte	0
+ 1361 072c 25       		.uleb128 0x25
+ 1362 072d 4A000000 		.4byte	.LASF56
+ 1363 0731 0B       		.byte	0xb
+ 1364 0732 D002     		.2byte	0x2d0
+ 1365 0734 A2000000 		.4byte	0xa2
+ 1366 0738 3E070000 		.4byte	0x73e
+ 1367 073c 20       		.uleb128 0x20
+ 1368 073d 00       		.byte	0
+ 1369 073e 25       		.uleb128 0x25
+ 1370 073f 7D000000 		.4byte	.LASF57
+ 1371 0743 0B       		.byte	0xb
+ 1372 0744 D402     		.2byte	0x2d4
+ 1373 0746 A2000000 		.4byte	0xa2
+ 1374 074a 50070000 		.4byte	0x750
+ 1375 074e 20       		.uleb128 0x20
+ 1376 074f 00       		.byte	0
+ 1377 0750 25       		.uleb128 0x25
+ 1378 0751 97010000 		.4byte	.LASF58
+ 1379 0755 0B       		.byte	0xb
+ 1380 0756 D802     		.2byte	0x2d8
+ 1381 0758 A2000000 		.4byte	0xa2
+ 1382 075c 62070000 		.4byte	0x762
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 29
+
+
+ 1383 0760 20       		.uleb128 0x20
+ 1384 0761 00       		.byte	0
+ 1385 0762 25       		.uleb128 0x25
+ 1386 0763 2F010000 		.4byte	.LASF59
+ 1387 0767 0B       		.byte	0xb
+ 1388 0768 DC02     		.2byte	0x2dc
+ 1389 076a A2000000 		.4byte	0xa2
+ 1390 076e 74070000 		.4byte	0x774
+ 1391 0772 20       		.uleb128 0x20
+ 1392 0773 00       		.byte	0
+ 1393 0774 25       		.uleb128 0x25
+ 1394 0775 BB000000 		.4byte	.LASF60
+ 1395 0779 0B       		.byte	0xb
+ 1396 077a E002     		.2byte	0x2e0
+ 1397 077c A2000000 		.4byte	0xa2
+ 1398 0780 86070000 		.4byte	0x786
+ 1399 0784 20       		.uleb128 0x20
+ 1400 0785 00       		.byte	0
+ 1401 0786 22       		.uleb128 0x22
+ 1402 0787 7B020000 		.4byte	.LASF61
+ 1403 078b 0D       		.byte	0xd
+ 1404 078c 34       		.byte	0x34
+ 1405 078d 21       		.uleb128 0x21
+ 1406 078e 11010000 		.4byte	.LASF62
+ 1407 0792 0A       		.byte	0xa
+ 1408 0793 C7       		.byte	0xc7
+ 1409 0794 9E070000 		.4byte	0x79e
+ 1410 0798 1F       		.uleb128 0x1f
+ 1411 0799 CF000000 		.4byte	0xcf
+ 1412 079d 00       		.byte	0
+ 1413 079e 23       		.uleb128 0x23
+ 1414 079f 00000000 		.4byte	.LASF63
+ 1415 07a3 0B       		.byte	0xb
+ 1416 07a4 4B02     		.2byte	0x24b
+ 1417 07a6 C9070000 		.4byte	0x7c9
+ 1418 07aa 1F       		.uleb128 0x1f
+ 1419 07ab C9070000 		.4byte	0x7c9
+ 1420 07af 1F       		.uleb128 0x1f
+ 1421 07b0 C9070000 		.4byte	0x7c9
+ 1422 07b4 1F       		.uleb128 0x1f
+ 1423 07b5 C9070000 		.4byte	0x7c9
+ 1424 07b9 1F       		.uleb128 0x1f
+ 1425 07ba C9070000 		.4byte	0x7c9
+ 1426 07be 1F       		.uleb128 0x1f
+ 1427 07bf C9070000 		.4byte	0x7c9
+ 1428 07c3 1F       		.uleb128 0x1f
+ 1429 07c4 C9070000 		.4byte	0x7c9
+ 1430 07c8 00       		.byte	0
+ 1431 07c9 06       		.uleb128 0x6
+ 1432 07ca 04       		.byte	0x4
+ 1433 07cb A2000000 		.4byte	0xa2
+ 1434 07cf 22       		.uleb128 0x22
+ 1435 07d0 9A030000 		.4byte	.LASF64
+ 1436 07d4 0D       		.byte	0xd
+ 1437 07d5 D1       		.byte	0xd1
+ 1438 07d6 26       		.uleb128 0x26
+ 1439 07d7 34020000 		.4byte	.LASF65
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 30
+
+
+ 1440 07db 0D       		.byte	0xd
+ 1441 07dc 3B       		.byte	0x3b
+ 1442 07dd E7000000 		.4byte	0xe7
+ 1443 07e1 26       		.uleb128 0x26
+ 1444 07e2 51020000 		.4byte	.LASF66
+ 1445 07e6 06       		.byte	0x6
+ 1446 07e7 4E       		.byte	0x4e
+ 1447 07e8 E7000000 		.4byte	0xe7
+ 1448 07ec 21       		.uleb128 0x21
+ 1449 07ed A0040000 		.4byte	.LASF67
+ 1450 07f1 06       		.byte	0x6
+ 1451 07f2 4F       		.byte	0x4f
+ 1452 07f3 FD070000 		.4byte	0x7fd
+ 1453 07f7 1F       		.uleb128 0x1f
+ 1454 07f8 E7000000 		.4byte	0xe7
+ 1455 07fc 00       		.byte	0
+ 1456 07fd 26       		.uleb128 0x26
+ 1457 07fe 75000000 		.4byte	.LASF68
+ 1458 0802 0E       		.byte	0xe
+ 1459 0803 2B       		.byte	0x2b
+ 1460 0804 C3000000 		.4byte	0xc3
+ 1461 0808 00       		.byte	0
+ 1462              		.section	.debug_abbrev,"",%progbits
+ 1463              	.Ldebug_abbrev0:
+ 1464 0000 01       		.uleb128 0x1
+ 1465 0001 11       		.uleb128 0x11
+ 1466 0002 01       		.byte	0x1
+ 1467 0003 25       		.uleb128 0x25
+ 1468 0004 0E       		.uleb128 0xe
+ 1469 0005 13       		.uleb128 0x13
+ 1470 0006 0B       		.uleb128 0xb
+ 1471 0007 03       		.uleb128 0x3
+ 1472 0008 0E       		.uleb128 0xe
+ 1473 0009 1B       		.uleb128 0x1b
+ 1474 000a 0E       		.uleb128 0xe
+ 1475 000b 55       		.uleb128 0x55
+ 1476 000c 17       		.uleb128 0x17
+ 1477 000d 11       		.uleb128 0x11
+ 1478 000e 01       		.uleb128 0x1
+ 1479 000f 10       		.uleb128 0x10
+ 1480 0010 17       		.uleb128 0x17
+ 1481 0011 00       		.byte	0
+ 1482 0012 00       		.byte	0
+ 1483 0013 02       		.uleb128 0x2
+ 1484 0014 24       		.uleb128 0x24
+ 1485 0015 00       		.byte	0
+ 1486 0016 0B       		.uleb128 0xb
+ 1487 0017 0B       		.uleb128 0xb
+ 1488 0018 3E       		.uleb128 0x3e
+ 1489 0019 0B       		.uleb128 0xb
+ 1490 001a 03       		.uleb128 0x3
+ 1491 001b 0E       		.uleb128 0xe
+ 1492 001c 00       		.byte	0
+ 1493 001d 00       		.byte	0
+ 1494 001e 03       		.uleb128 0x3
+ 1495 001f 16       		.uleb128 0x16
+ 1496 0020 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 31
+
+
+ 1497 0021 03       		.uleb128 0x3
+ 1498 0022 0E       		.uleb128 0xe
+ 1499 0023 3A       		.uleb128 0x3a
+ 1500 0024 0B       		.uleb128 0xb
+ 1501 0025 3B       		.uleb128 0x3b
+ 1502 0026 0B       		.uleb128 0xb
+ 1503 0027 49       		.uleb128 0x49
+ 1504 0028 13       		.uleb128 0x13
+ 1505 0029 00       		.byte	0
+ 1506 002a 00       		.byte	0
+ 1507 002b 04       		.uleb128 0x4
+ 1508 002c 24       		.uleb128 0x24
+ 1509 002d 00       		.byte	0
+ 1510 002e 0B       		.uleb128 0xb
+ 1511 002f 0B       		.uleb128 0xb
+ 1512 0030 3E       		.uleb128 0x3e
+ 1513 0031 0B       		.uleb128 0xb
+ 1514 0032 03       		.uleb128 0x3
+ 1515 0033 08       		.uleb128 0x8
+ 1516 0034 00       		.byte	0
+ 1517 0035 00       		.byte	0
+ 1518 0036 05       		.uleb128 0x5
+ 1519 0037 16       		.uleb128 0x16
+ 1520 0038 00       		.byte	0
+ 1521 0039 03       		.uleb128 0x3
+ 1522 003a 0E       		.uleb128 0xe
+ 1523 003b 3A       		.uleb128 0x3a
+ 1524 003c 0B       		.uleb128 0xb
+ 1525 003d 3B       		.uleb128 0x3b
+ 1526 003e 05       		.uleb128 0x5
+ 1527 003f 49       		.uleb128 0x49
+ 1528 0040 13       		.uleb128 0x13
+ 1529 0041 00       		.byte	0
+ 1530 0042 00       		.byte	0
+ 1531 0043 06       		.uleb128 0x6
+ 1532 0044 0F       		.uleb128 0xf
+ 1533 0045 00       		.byte	0
+ 1534 0046 0B       		.uleb128 0xb
+ 1535 0047 0B       		.uleb128 0xb
+ 1536 0048 49       		.uleb128 0x49
+ 1537 0049 13       		.uleb128 0x13
+ 1538 004a 00       		.byte	0
+ 1539 004b 00       		.byte	0
+ 1540 004c 07       		.uleb128 0x7
+ 1541 004d 15       		.uleb128 0x15
+ 1542 004e 00       		.byte	0
+ 1543 004f 27       		.uleb128 0x27
+ 1544 0050 19       		.uleb128 0x19
+ 1545 0051 00       		.byte	0
+ 1546 0052 00       		.byte	0
+ 1547 0053 08       		.uleb128 0x8
+ 1548 0054 26       		.uleb128 0x26
+ 1549 0055 00       		.byte	0
+ 1550 0056 49       		.uleb128 0x49
+ 1551 0057 13       		.uleb128 0x13
+ 1552 0058 00       		.byte	0
+ 1553 0059 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 32
+
+
+ 1554 005a 09       		.uleb128 0x9
+ 1555 005b 2E       		.uleb128 0x2e
+ 1556 005c 00       		.byte	0
+ 1557 005d 3F       		.uleb128 0x3f
+ 1558 005e 19       		.uleb128 0x19
+ 1559 005f 03       		.uleb128 0x3
+ 1560 0060 0E       		.uleb128 0xe
+ 1561 0061 3A       		.uleb128 0x3a
+ 1562 0062 0B       		.uleb128 0xb
+ 1563 0063 3B       		.uleb128 0x3b
+ 1564 0064 0B       		.uleb128 0xb
+ 1565 0065 27       		.uleb128 0x27
+ 1566 0066 19       		.uleb128 0x19
+ 1567 0067 11       		.uleb128 0x11
+ 1568 0068 01       		.uleb128 0x1
+ 1569 0069 12       		.uleb128 0x12
+ 1570 006a 06       		.uleb128 0x6
+ 1571 006b 40       		.uleb128 0x40
+ 1572 006c 18       		.uleb128 0x18
+ 1573 006d 9742     		.uleb128 0x2117
+ 1574 006f 19       		.uleb128 0x19
+ 1575 0070 00       		.byte	0
+ 1576 0071 00       		.byte	0
+ 1577 0072 0A       		.uleb128 0xa
+ 1578 0073 2E       		.uleb128 0x2e
+ 1579 0074 01       		.byte	0x1
+ 1580 0075 3F       		.uleb128 0x3f
+ 1581 0076 19       		.uleb128 0x19
+ 1582 0077 03       		.uleb128 0x3
+ 1583 0078 0E       		.uleb128 0xe
+ 1584 0079 3A       		.uleb128 0x3a
+ 1585 007a 0B       		.uleb128 0xb
+ 1586 007b 3B       		.uleb128 0x3b
+ 1587 007c 0B       		.uleb128 0xb
+ 1588 007d 49       		.uleb128 0x49
+ 1589 007e 13       		.uleb128 0x13
+ 1590 007f 11       		.uleb128 0x11
+ 1591 0080 01       		.uleb128 0x1
+ 1592 0081 12       		.uleb128 0x12
+ 1593 0082 06       		.uleb128 0x6
+ 1594 0083 40       		.uleb128 0x40
+ 1595 0084 18       		.uleb128 0x18
+ 1596 0085 9742     		.uleb128 0x2117
+ 1597 0087 19       		.uleb128 0x19
+ 1598 0088 01       		.uleb128 0x1
+ 1599 0089 13       		.uleb128 0x13
+ 1600 008a 00       		.byte	0
+ 1601 008b 00       		.byte	0
+ 1602 008c 0B       		.uleb128 0xb
+ 1603 008d 34       		.uleb128 0x34
+ 1604 008e 00       		.byte	0
+ 1605 008f 03       		.uleb128 0x3
+ 1606 0090 0E       		.uleb128 0xe
+ 1607 0091 3A       		.uleb128 0x3a
+ 1608 0092 0B       		.uleb128 0xb
+ 1609 0093 3B       		.uleb128 0x3b
+ 1610 0094 0B       		.uleb128 0xb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 33
+
+
+ 1611 0095 49       		.uleb128 0x49
+ 1612 0096 13       		.uleb128 0x13
+ 1613 0097 1C       		.uleb128 0x1c
+ 1614 0098 0B       		.uleb128 0xb
+ 1615 0099 00       		.byte	0
+ 1616 009a 00       		.byte	0
+ 1617 009b 0C       		.uleb128 0xc
+ 1618 009c 34       		.uleb128 0x34
+ 1619 009d 00       		.byte	0
+ 1620 009e 03       		.uleb128 0x3
+ 1621 009f 08       		.uleb128 0x8
+ 1622 00a0 3A       		.uleb128 0x3a
+ 1623 00a1 0B       		.uleb128 0xb
+ 1624 00a2 3B       		.uleb128 0x3b
+ 1625 00a3 0B       		.uleb128 0xb
+ 1626 00a4 49       		.uleb128 0x49
+ 1627 00a5 13       		.uleb128 0x13
+ 1628 00a6 1C       		.uleb128 0x1c
+ 1629 00a7 0B       		.uleb128 0xb
+ 1630 00a8 00       		.byte	0
+ 1631 00a9 00       		.byte	0
+ 1632 00aa 0D       		.uleb128 0xd
+ 1633 00ab 34       		.uleb128 0x34
+ 1634 00ac 00       		.byte	0
+ 1635 00ad 03       		.uleb128 0x3
+ 1636 00ae 0E       		.uleb128 0xe
+ 1637 00af 3A       		.uleb128 0x3a
+ 1638 00b0 0B       		.uleb128 0xb
+ 1639 00b1 3B       		.uleb128 0x3b
+ 1640 00b2 0B       		.uleb128 0xb
+ 1641 00b3 49       		.uleb128 0x49
+ 1642 00b4 13       		.uleb128 0x13
+ 1643 00b5 02       		.uleb128 0x2
+ 1644 00b6 17       		.uleb128 0x17
+ 1645 00b7 00       		.byte	0
+ 1646 00b8 00       		.byte	0
+ 1647 00b9 0E       		.uleb128 0xe
+ 1648 00ba 34       		.uleb128 0x34
+ 1649 00bb 00       		.byte	0
+ 1650 00bc 03       		.uleb128 0x3
+ 1651 00bd 0E       		.uleb128 0xe
+ 1652 00be 3A       		.uleb128 0x3a
+ 1653 00bf 0B       		.uleb128 0xb
+ 1654 00c0 3B       		.uleb128 0x3b
+ 1655 00c1 0B       		.uleb128 0xb
+ 1656 00c2 49       		.uleb128 0x49
+ 1657 00c3 13       		.uleb128 0x13
+ 1658 00c4 02       		.uleb128 0x2
+ 1659 00c5 18       		.uleb128 0x18
+ 1660 00c6 00       		.byte	0
+ 1661 00c7 00       		.byte	0
+ 1662 00c8 0F       		.uleb128 0xf
+ 1663 00c9 34       		.uleb128 0x34
+ 1664 00ca 00       		.byte	0
+ 1665 00cb 03       		.uleb128 0x3
+ 1666 00cc 0E       		.uleb128 0xe
+ 1667 00cd 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 34
+
+
+ 1668 00ce 0B       		.uleb128 0xb
+ 1669 00cf 3B       		.uleb128 0x3b
+ 1670 00d0 0B       		.uleb128 0xb
+ 1671 00d1 49       		.uleb128 0x49
+ 1672 00d2 13       		.uleb128 0x13
+ 1673 00d3 00       		.byte	0
+ 1674 00d4 00       		.byte	0
+ 1675 00d5 10       		.uleb128 0x10
+ 1676 00d6 34       		.uleb128 0x34
+ 1677 00d7 00       		.byte	0
+ 1678 00d8 03       		.uleb128 0x3
+ 1679 00d9 08       		.uleb128 0x8
+ 1680 00da 3A       		.uleb128 0x3a
+ 1681 00db 0B       		.uleb128 0xb
+ 1682 00dc 3B       		.uleb128 0x3b
+ 1683 00dd 0B       		.uleb128 0xb
+ 1684 00de 49       		.uleb128 0x49
+ 1685 00df 13       		.uleb128 0x13
+ 1686 00e0 02       		.uleb128 0x2
+ 1687 00e1 18       		.uleb128 0x18
+ 1688 00e2 00       		.byte	0
+ 1689 00e3 00       		.byte	0
+ 1690 00e4 11       		.uleb128 0x11
+ 1691 00e5 34       		.uleb128 0x34
+ 1692 00e6 00       		.byte	0
+ 1693 00e7 03       		.uleb128 0x3
+ 1694 00e8 08       		.uleb128 0x8
+ 1695 00e9 3A       		.uleb128 0x3a
+ 1696 00ea 0B       		.uleb128 0xb
+ 1697 00eb 3B       		.uleb128 0x3b
+ 1698 00ec 0B       		.uleb128 0xb
+ 1699 00ed 49       		.uleb128 0x49
+ 1700 00ee 13       		.uleb128 0x13
+ 1701 00ef 02       		.uleb128 0x2
+ 1702 00f0 17       		.uleb128 0x17
+ 1703 00f1 00       		.byte	0
+ 1704 00f2 00       		.byte	0
+ 1705 00f3 12       		.uleb128 0x12
+ 1706 00f4 0B       		.uleb128 0xb
+ 1707 00f5 01       		.byte	0x1
+ 1708 00f6 55       		.uleb128 0x55
+ 1709 00f7 17       		.uleb128 0x17
+ 1710 00f8 01       		.uleb128 0x1
+ 1711 00f9 13       		.uleb128 0x13
+ 1712 00fa 00       		.byte	0
+ 1713 00fb 00       		.byte	0
+ 1714 00fc 13       		.uleb128 0x13
+ 1715 00fd 34       		.uleb128 0x34
+ 1716 00fe 00       		.byte	0
+ 1717 00ff 03       		.uleb128 0x3
+ 1718 0100 08       		.uleb128 0x8
+ 1719 0101 3A       		.uleb128 0x3a
+ 1720 0102 0B       		.uleb128 0xb
+ 1721 0103 3B       		.uleb128 0x3b
+ 1722 0104 0B       		.uleb128 0xb
+ 1723 0105 49       		.uleb128 0x49
+ 1724 0106 13       		.uleb128 0x13
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 35
+
+
+ 1725 0107 00       		.byte	0
+ 1726 0108 00       		.byte	0
+ 1727 0109 14       		.uleb128 0x14
+ 1728 010a 898201   		.uleb128 0x4109
+ 1729 010d 01       		.byte	0x1
+ 1730 010e 11       		.uleb128 0x11
+ 1731 010f 01       		.uleb128 0x1
+ 1732 0110 31       		.uleb128 0x31
+ 1733 0111 13       		.uleb128 0x13
+ 1734 0112 01       		.uleb128 0x1
+ 1735 0113 13       		.uleb128 0x13
+ 1736 0114 00       		.byte	0
+ 1737 0115 00       		.byte	0
+ 1738 0116 15       		.uleb128 0x15
+ 1739 0117 8A8201   		.uleb128 0x410a
+ 1740 011a 00       		.byte	0
+ 1741 011b 02       		.uleb128 0x2
+ 1742 011c 18       		.uleb128 0x18
+ 1743 011d 9142     		.uleb128 0x2111
+ 1744 011f 18       		.uleb128 0x18
+ 1745 0120 00       		.byte	0
+ 1746 0121 00       		.byte	0
+ 1747 0122 16       		.uleb128 0x16
+ 1748 0123 898201   		.uleb128 0x4109
+ 1749 0126 01       		.byte	0x1
+ 1750 0127 11       		.uleb128 0x11
+ 1751 0128 01       		.uleb128 0x1
+ 1752 0129 31       		.uleb128 0x31
+ 1753 012a 13       		.uleb128 0x13
+ 1754 012b 00       		.byte	0
+ 1755 012c 00       		.byte	0
+ 1756 012d 17       		.uleb128 0x17
+ 1757 012e 898201   		.uleb128 0x4109
+ 1758 0131 00       		.byte	0
+ 1759 0132 11       		.uleb128 0x11
+ 1760 0133 01       		.uleb128 0x1
+ 1761 0134 31       		.uleb128 0x31
+ 1762 0135 13       		.uleb128 0x13
+ 1763 0136 00       		.byte	0
+ 1764 0137 00       		.byte	0
+ 1765 0138 18       		.uleb128 0x18
+ 1766 0139 01       		.uleb128 0x1
+ 1767 013a 01       		.byte	0x1
+ 1768 013b 49       		.uleb128 0x49
+ 1769 013c 13       		.uleb128 0x13
+ 1770 013d 01       		.uleb128 0x1
+ 1771 013e 13       		.uleb128 0x13
+ 1772 013f 00       		.byte	0
+ 1773 0140 00       		.byte	0
+ 1774 0141 19       		.uleb128 0x19
+ 1775 0142 21       		.uleb128 0x21
+ 1776 0143 00       		.byte	0
+ 1777 0144 49       		.uleb128 0x49
+ 1778 0145 13       		.uleb128 0x13
+ 1779 0146 2F       		.uleb128 0x2f
+ 1780 0147 0B       		.uleb128 0xb
+ 1781 0148 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 36
+
+
+ 1782 0149 00       		.byte	0
+ 1783 014a 1A       		.uleb128 0x1a
+ 1784 014b 21       		.uleb128 0x21
+ 1785 014c 00       		.byte	0
+ 1786 014d 49       		.uleb128 0x49
+ 1787 014e 13       		.uleb128 0x13
+ 1788 014f 2F       		.uleb128 0x2f
+ 1789 0150 05       		.uleb128 0x5
+ 1790 0151 00       		.byte	0
+ 1791 0152 00       		.byte	0
+ 1792 0153 1B       		.uleb128 0x1b
+ 1793 0154 34       		.uleb128 0x34
+ 1794 0155 00       		.byte	0
+ 1795 0156 03       		.uleb128 0x3
+ 1796 0157 0E       		.uleb128 0xe
+ 1797 0158 3A       		.uleb128 0x3a
+ 1798 0159 0B       		.uleb128 0xb
+ 1799 015a 3B       		.uleb128 0x3b
+ 1800 015b 05       		.uleb128 0x5
+ 1801 015c 49       		.uleb128 0x49
+ 1802 015d 13       		.uleb128 0x13
+ 1803 015e 3F       		.uleb128 0x3f
+ 1804 015f 19       		.uleb128 0x19
+ 1805 0160 3C       		.uleb128 0x3c
+ 1806 0161 19       		.uleb128 0x19
+ 1807 0162 00       		.byte	0
+ 1808 0163 00       		.byte	0
+ 1809 0164 1C       		.uleb128 0x1c
+ 1810 0165 35       		.uleb128 0x35
+ 1811 0166 00       		.byte	0
+ 1812 0167 49       		.uleb128 0x49
+ 1813 0168 13       		.uleb128 0x13
+ 1814 0169 00       		.byte	0
+ 1815 016a 00       		.byte	0
+ 1816 016b 1D       		.uleb128 0x1d
+ 1817 016c 34       		.uleb128 0x34
+ 1818 016d 00       		.byte	0
+ 1819 016e 03       		.uleb128 0x3
+ 1820 016f 0E       		.uleb128 0xe
+ 1821 0170 3A       		.uleb128 0x3a
+ 1822 0171 0B       		.uleb128 0xb
+ 1823 0172 3B       		.uleb128 0x3b
+ 1824 0173 0B       		.uleb128 0xb
+ 1825 0174 49       		.uleb128 0x49
+ 1826 0175 13       		.uleb128 0x13
+ 1827 0176 3F       		.uleb128 0x3f
+ 1828 0177 19       		.uleb128 0x19
+ 1829 0178 02       		.uleb128 0x2
+ 1830 0179 18       		.uleb128 0x18
+ 1831 017a 00       		.byte	0
+ 1832 017b 00       		.byte	0
+ 1833 017c 1E       		.uleb128 0x1e
+ 1834 017d 2E       		.uleb128 0x2e
+ 1835 017e 01       		.byte	0x1
+ 1836 017f 3F       		.uleb128 0x3f
+ 1837 0180 19       		.uleb128 0x19
+ 1838 0181 03       		.uleb128 0x3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 37
+
+
+ 1839 0182 0E       		.uleb128 0xe
+ 1840 0183 3A       		.uleb128 0x3a
+ 1841 0184 0B       		.uleb128 0xb
+ 1842 0185 3B       		.uleb128 0x3b
+ 1843 0186 0B       		.uleb128 0xb
+ 1844 0187 27       		.uleb128 0x27
+ 1845 0188 19       		.uleb128 0x19
+ 1846 0189 49       		.uleb128 0x49
+ 1847 018a 13       		.uleb128 0x13
+ 1848 018b 3C       		.uleb128 0x3c
+ 1849 018c 19       		.uleb128 0x19
+ 1850 018d 01       		.uleb128 0x1
+ 1851 018e 13       		.uleb128 0x13
+ 1852 018f 00       		.byte	0
+ 1853 0190 00       		.byte	0
+ 1854 0191 1F       		.uleb128 0x1f
+ 1855 0192 05       		.uleb128 0x5
+ 1856 0193 00       		.byte	0
+ 1857 0194 49       		.uleb128 0x49
+ 1858 0195 13       		.uleb128 0x13
+ 1859 0196 00       		.byte	0
+ 1860 0197 00       		.byte	0
+ 1861 0198 20       		.uleb128 0x20
+ 1862 0199 18       		.uleb128 0x18
+ 1863 019a 00       		.byte	0
+ 1864 019b 00       		.byte	0
+ 1865 019c 00       		.byte	0
+ 1866 019d 21       		.uleb128 0x21
+ 1867 019e 2E       		.uleb128 0x2e
+ 1868 019f 01       		.byte	0x1
+ 1869 01a0 3F       		.uleb128 0x3f
+ 1870 01a1 19       		.uleb128 0x19
+ 1871 01a2 03       		.uleb128 0x3
+ 1872 01a3 0E       		.uleb128 0xe
+ 1873 01a4 3A       		.uleb128 0x3a
+ 1874 01a5 0B       		.uleb128 0xb
+ 1875 01a6 3B       		.uleb128 0x3b
+ 1876 01a7 0B       		.uleb128 0xb
+ 1877 01a8 27       		.uleb128 0x27
+ 1878 01a9 19       		.uleb128 0x19
+ 1879 01aa 3C       		.uleb128 0x3c
+ 1880 01ab 19       		.uleb128 0x19
+ 1881 01ac 01       		.uleb128 0x1
+ 1882 01ad 13       		.uleb128 0x13
+ 1883 01ae 00       		.byte	0
+ 1884 01af 00       		.byte	0
+ 1885 01b0 22       		.uleb128 0x22
+ 1886 01b1 2E       		.uleb128 0x2e
+ 1887 01b2 00       		.byte	0
+ 1888 01b3 3F       		.uleb128 0x3f
+ 1889 01b4 19       		.uleb128 0x19
+ 1890 01b5 03       		.uleb128 0x3
+ 1891 01b6 0E       		.uleb128 0xe
+ 1892 01b7 3A       		.uleb128 0x3a
+ 1893 01b8 0B       		.uleb128 0xb
+ 1894 01b9 3B       		.uleb128 0x3b
+ 1895 01ba 0B       		.uleb128 0xb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 38
+
+
+ 1896 01bb 27       		.uleb128 0x27
+ 1897 01bc 19       		.uleb128 0x19
+ 1898 01bd 3C       		.uleb128 0x3c
+ 1899 01be 19       		.uleb128 0x19
+ 1900 01bf 00       		.byte	0
+ 1901 01c0 00       		.byte	0
+ 1902 01c1 23       		.uleb128 0x23
+ 1903 01c2 2E       		.uleb128 0x2e
+ 1904 01c3 01       		.byte	0x1
+ 1905 01c4 3F       		.uleb128 0x3f
+ 1906 01c5 19       		.uleb128 0x19
+ 1907 01c6 03       		.uleb128 0x3
+ 1908 01c7 0E       		.uleb128 0xe
+ 1909 01c8 3A       		.uleb128 0x3a
+ 1910 01c9 0B       		.uleb128 0xb
+ 1911 01ca 3B       		.uleb128 0x3b
+ 1912 01cb 05       		.uleb128 0x5
+ 1913 01cc 27       		.uleb128 0x27
+ 1914 01cd 19       		.uleb128 0x19
+ 1915 01ce 3C       		.uleb128 0x3c
+ 1916 01cf 19       		.uleb128 0x19
+ 1917 01d0 01       		.uleb128 0x1
+ 1918 01d1 13       		.uleb128 0x13
+ 1919 01d2 00       		.byte	0
+ 1920 01d3 00       		.byte	0
+ 1921 01d4 24       		.uleb128 0x24
+ 1922 01d5 2E       		.uleb128 0x2e
+ 1923 01d6 01       		.byte	0x1
+ 1924 01d7 3F       		.uleb128 0x3f
+ 1925 01d8 19       		.uleb128 0x19
+ 1926 01d9 03       		.uleb128 0x3
+ 1927 01da 0E       		.uleb128 0xe
+ 1928 01db 3A       		.uleb128 0x3a
+ 1929 01dc 0B       		.uleb128 0xb
+ 1930 01dd 3B       		.uleb128 0x3b
+ 1931 01de 05       		.uleb128 0x5
+ 1932 01df 3C       		.uleb128 0x3c
+ 1933 01e0 19       		.uleb128 0x19
+ 1934 01e1 01       		.uleb128 0x1
+ 1935 01e2 13       		.uleb128 0x13
+ 1936 01e3 00       		.byte	0
+ 1937 01e4 00       		.byte	0
+ 1938 01e5 25       		.uleb128 0x25
+ 1939 01e6 2E       		.uleb128 0x2e
+ 1940 01e7 01       		.byte	0x1
+ 1941 01e8 3F       		.uleb128 0x3f
+ 1942 01e9 19       		.uleb128 0x19
+ 1943 01ea 03       		.uleb128 0x3
+ 1944 01eb 0E       		.uleb128 0xe
+ 1945 01ec 3A       		.uleb128 0x3a
+ 1946 01ed 0B       		.uleb128 0xb
+ 1947 01ee 3B       		.uleb128 0x3b
+ 1948 01ef 05       		.uleb128 0x5
+ 1949 01f0 49       		.uleb128 0x49
+ 1950 01f1 13       		.uleb128 0x13
+ 1951 01f2 3C       		.uleb128 0x3c
+ 1952 01f3 19       		.uleb128 0x19
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 39
+
+
+ 1953 01f4 01       		.uleb128 0x1
+ 1954 01f5 13       		.uleb128 0x13
+ 1955 01f6 00       		.byte	0
+ 1956 01f7 00       		.byte	0
+ 1957 01f8 26       		.uleb128 0x26
+ 1958 01f9 2E       		.uleb128 0x2e
+ 1959 01fa 00       		.byte	0
+ 1960 01fb 3F       		.uleb128 0x3f
+ 1961 01fc 19       		.uleb128 0x19
+ 1962 01fd 03       		.uleb128 0x3
+ 1963 01fe 0E       		.uleb128 0xe
+ 1964 01ff 3A       		.uleb128 0x3a
+ 1965 0200 0B       		.uleb128 0xb
+ 1966 0201 3B       		.uleb128 0x3b
+ 1967 0202 0B       		.uleb128 0xb
+ 1968 0203 27       		.uleb128 0x27
+ 1969 0204 19       		.uleb128 0x19
+ 1970 0205 49       		.uleb128 0x49
+ 1971 0206 13       		.uleb128 0x13
+ 1972 0207 3C       		.uleb128 0x3c
+ 1973 0208 19       		.uleb128 0x19
+ 1974 0209 00       		.byte	0
+ 1975 020a 00       		.byte	0
+ 1976 020b 00       		.byte	0
+ 1977              		.section	.debug_loc,"",%progbits
+ 1978              	.Ldebug_loc0:
+ 1979              	.LLST0:
+ 1980 0000 08000000 		.4byte	.LVL0
+ 1981 0004 6A000000 		.4byte	.LVL20
+ 1982 0008 0200     		.2byte	0x2
+ 1983 000a 30       		.byte	0x30
+ 1984 000b 9F       		.byte	0x9f
+ 1985 000c 6A000000 		.4byte	.LVL20
+ 1986 0010 F6000000 		.4byte	.LVL28
+ 1987 0014 0100     		.2byte	0x1
+ 1988 0016 55       		.byte	0x55
+ 1989 0017 F8000000 		.4byte	.LVL29
+ 1990 001b 04020000 		.4byte	.LVL66
+ 1991 001f 0100     		.2byte	0x1
+ 1992 0021 55       		.byte	0x55
+ 1993 0022 00000000 		.4byte	0
+ 1994 0026 00000000 		.4byte	0
+ 1995              	.LLST1:
+ 1996 002a 6A000000 		.4byte	.LVL20
+ 1997 002e DE000000 		.4byte	.LVL24
+ 1998 0032 0100     		.2byte	0x1
+ 1999 0034 54       		.byte	0x54
+ 2000 0035 DE000000 		.4byte	.LVL24
+ 2001 0039 E9000000 		.4byte	.LVL26-1
+ 2002 003d 0100     		.2byte	0x1
+ 2003 003f 50       		.byte	0x50
+ 2004 0040 00010000 		.4byte	.LVL30
+ 2005 0044 16010000 		.4byte	.LVL33
+ 2006 0048 0100     		.2byte	0x1
+ 2007 004a 54       		.byte	0x54
+ 2008 004b 44010000 		.4byte	.LVL37
+ 2009 004f 46010000 		.4byte	.LVL38
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 40
+
+
+ 2010 0053 0100     		.2byte	0x1
+ 2011 0055 54       		.byte	0x54
+ 2012 0056 00000000 		.4byte	0
+ 2013 005a 00000000 		.4byte	0
+ 2014              	.LLST2:
+ 2015 005e D8000000 		.4byte	.LVL22
+ 2016 0062 E0000000 		.4byte	.LVL25
+ 2017 0066 0100     		.2byte	0x1
+ 2018 0068 54       		.byte	0x54
+ 2019 0069 00000000 		.4byte	0
+ 2020 006d 00000000 		.4byte	0
+ 2021              	.LLST3:
+ 2022 0071 E0000000 		.4byte	.LVL25
+ 2023 0075 00010000 		.4byte	.LVL30
+ 2024 0079 0100     		.2byte	0x1
+ 2025 007b 54       		.byte	0x54
+ 2026 007c 00000000 		.4byte	0
+ 2027 0080 00000000 		.4byte	0
+ 2028              	.LLST4:
+ 2029 0084 08000000 		.4byte	.LVL0
+ 2030 0088 6A000000 		.4byte	.LVL20
+ 2031 008c 0200     		.2byte	0x2
+ 2032 008e 30       		.byte	0x30
+ 2033 008f 9F       		.byte	0x9f
+ 2034 0090 00000000 		.4byte	0
+ 2035 0094 00000000 		.4byte	0
+ 2036              	.LLST5:
+ 2037 0098 16010000 		.4byte	.LVL33
+ 2038 009c 44010000 		.4byte	.LVL37
+ 2039 00a0 0100     		.2byte	0x1
+ 2040 00a2 54       		.byte	0x54
+ 2041 00a3 46010000 		.4byte	.LVL38
+ 2042 00a7 4E010000 		.4byte	.LVL39
+ 2043 00ab 0100     		.2byte	0x1
+ 2044 00ad 54       		.byte	0x54
+ 2045 00ae 00000000 		.4byte	0
+ 2046 00b2 00000000 		.4byte	0
+ 2047              	.LLST6:
+ 2048 00b6 64010000 		.4byte	.LVL43
+ 2049 00ba 90010000 		.4byte	.LVL47
+ 2050 00be 0100     		.2byte	0x1
+ 2051 00c0 54       		.byte	0x54
+ 2052 00c1 92010000 		.4byte	.LVL48
+ 2053 00c5 9A010000 		.4byte	.LVL49
+ 2054 00c9 0100     		.2byte	0x1
+ 2055 00cb 54       		.byte	0x54
+ 2056 00cc 00000000 		.4byte	0
+ 2057 00d0 00000000 		.4byte	0
+ 2058              	.LLST7:
+ 2059 00d4 B0010000 		.4byte	.LVL53
+ 2060 00d8 C8010000 		.4byte	.LVL57
+ 2061 00dc 0100     		.2byte	0x1
+ 2062 00de 54       		.byte	0x54
+ 2063 00df CA010000 		.4byte	.LVL58
+ 2064 00e3 DA010000 		.4byte	.LVL60
+ 2065 00e7 0100     		.2byte	0x1
+ 2066 00e9 54       		.byte	0x54
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 41
+
+
+ 2067 00ea F2010000 		.4byte	.LVL64
+ 2068 00ee F4010000 		.4byte	.LVL65
+ 2069 00f2 0100     		.2byte	0x1
+ 2070 00f4 54       		.byte	0x54
+ 2071 00f5 00000000 		.4byte	0
+ 2072 00f9 00000000 		.4byte	0
+ 2073              	.LLST8:
+ 2074 00fd DA010000 		.4byte	.LVL60
+ 2075 0101 F2010000 		.4byte	.LVL64
+ 2076 0105 0100     		.2byte	0x1
+ 2077 0107 54       		.byte	0x54
+ 2078 0108 F4010000 		.4byte	.LVL65
+ 2079 010c 04020000 		.4byte	.LVL66
+ 2080 0110 0100     		.2byte	0x1
+ 2081 0112 54       		.byte	0x54
+ 2082 0113 00000000 		.4byte	0
+ 2083 0117 00000000 		.4byte	0
+ 2084              		.section	.debug_aranges,"",%progbits
+ 2085 0000 24000000 		.4byte	0x24
+ 2086 0004 0200     		.2byte	0x2
+ 2087 0006 00000000 		.4byte	.Ldebug_info0
+ 2088 000a 04       		.byte	0x4
+ 2089 000b 00       		.byte	0
+ 2090 000c 0000     		.2byte	0
+ 2091 000e 0000     		.2byte	0
+ 2092 0010 00000000 		.4byte	.LFB63
+ 2093 0014 0C000000 		.4byte	.LFE63-.LFB63
+ 2094 0018 00000000 		.4byte	.LFB64
+ 2095 001c 18020000 		.4byte	.LFE64-.LFB64
+ 2096 0020 00000000 		.4byte	0
+ 2097 0024 00000000 		.4byte	0
+ 2098              		.section	.debug_ranges,"",%progbits
+ 2099              	.Ldebug_ranges0:
+ 2100 0000 16010000 		.4byte	.LBB2
+ 2101 0004 44010000 		.4byte	.LBE2
+ 2102 0008 46010000 		.4byte	.LBB3
+ 2103 000c 54010000 		.4byte	.LBE3
+ 2104 0010 00000000 		.4byte	0
+ 2105 0014 00000000 		.4byte	0
+ 2106 0018 64010000 		.4byte	.LBB4
+ 2107 001c 90010000 		.4byte	.LBE4
+ 2108 0020 92010000 		.4byte	.LBB5
+ 2109 0024 A0010000 		.4byte	.LBE5
+ 2110 0028 00000000 		.4byte	0
+ 2111 002c 00000000 		.4byte	0
+ 2112 0030 B0010000 		.4byte	.LBB6
+ 2113 0034 C8010000 		.4byte	.LBE6
+ 2114 0038 CA010000 		.4byte	.LBB7
+ 2115 003c D0010000 		.4byte	.LBE7
+ 2116 0040 00000000 		.4byte	0
+ 2117 0044 00000000 		.4byte	0
+ 2118 0048 DA010000 		.4byte	.LBB8
+ 2119 004c F2010000 		.4byte	.LBE8
+ 2120 0050 F4010000 		.4byte	.LBB9
+ 2121 0054 FA010000 		.4byte	.LBE9
+ 2122 0058 00000000 		.4byte	0
+ 2123 005c 00000000 		.4byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 42
+
+
+ 2124 0060 00000000 		.4byte	.LFB63
+ 2125 0064 0C000000 		.4byte	.LFE63
+ 2126 0068 00000000 		.4byte	.LFB64
+ 2127 006c 18020000 		.4byte	.LFE64
+ 2128 0070 00000000 		.4byte	0
+ 2129 0074 00000000 		.4byte	0
+ 2130              		.section	.debug_line,"",%progbits
+ 2131              	.Ldebug_line0:
+ 2132 0000 9D020000 		.section	.debug_str,"MS",%progbits,1
+ 2132      0200D001 
+ 2132      00000201 
+ 2132      FB0E0D00 
+ 2132      01010101 
+ 2133              	.LASF63:
+ 2134 0000 4D505536 		.ascii	"MPU6050_getMotion6\000"
+ 2134      3035305F 
+ 2134      6765744D 
+ 2134      6F74696F 
+ 2134      6E3600
+ 2135              	.LASF55:
+ 2136 0013 4D505536 		.ascii	"MPU6050_getXAccelOffset\000"
+ 2136      3035305F 
+ 2136      67657458 
+ 2136      41636365 
+ 2136      6C4F6666 
+ 2137              	.LASF53:
+ 2138 002b 4D505536 		.ascii	"MPU6050_setFullScaleAccelRange\000"
+ 2138      3035305F 
+ 2138      73657446 
+ 2138      756C6C53 
+ 2138      63616C65 
+ 2139              	.LASF56:
+ 2140 004a 4D505536 		.ascii	"MPU6050_getYAccelOffset\000"
+ 2140      3035305F 
+ 2140      67657459 
+ 2140      41636365 
+ 2140      6C4F6666 
+ 2141              	.LASF4:
+ 2142 0062 73686F72 		.ascii	"short int\000"
+ 2142      7420696E 
+ 2142      7400
+ 2143              	.LASF26:
+ 2144 006c 73697A65 		.ascii	"sizetype\000"
+ 2144      74797065 
+ 2144      00
+ 2145              	.LASF68:
+ 2146 0075 53575F52 		.ascii	"SW_Read\000"
+ 2146      65616400 
+ 2147              	.LASF57:
+ 2148 007d 4D505536 		.ascii	"MPU6050_getZAccelOffset\000"
+ 2148      3035305F 
+ 2148      6765745A 
+ 2148      41636365 
+ 2148      6C4F6666 
+ 2149              	.LASF23:
+ 2150 0095 63686172 		.ascii	"char8\000"
+ 2150      3800
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 43
+
+
+ 2151              	.LASF73:
+ 2152 009b 6D61696E 		.ascii	"main\000"
+ 2152      00
+ 2153              	.LASF44:
+ 2154 00a0 51756164 		.ascii	"QuadDec_1_Start\000"
+ 2154      4465635F 
+ 2154      315F5374 
+ 2154      61727400 
+ 2155              	.LASF5:
+ 2156 00b0 5F5F7569 		.ascii	"__uint16_t\000"
+ 2156      6E743136 
+ 2156      5F7400
+ 2157              	.LASF60:
+ 2158 00bb 4D505536 		.ascii	"MPU6050_getZGyroOffset\000"
+ 2158      3035305F 
+ 2158      6765745A 
+ 2158      4779726F 
+ 2158      4F666673 
+ 2159              	.LASF13:
+ 2160 00d2 75696E74 		.ascii	"uint8_t\000"
+ 2160      385F7400 
+ 2161              	.LASF20:
+ 2162 00da 696E7431 		.ascii	"int16\000"
+ 2162      3600
+ 2163              	.LASF52:
+ 2164 00e0 6973725F 		.ascii	"isr_flag_StartEx\000"
+ 2164      666C6167 
+ 2164      5F537461 
+ 2164      72744578 
+ 2164      00
+ 2165              	.LASF75:
+ 2166 00f1 4D505536 		.ascii	"MPU6050_initialize\000"
+ 2166      3035305F 
+ 2166      696E6974 
+ 2166      69616C69 
+ 2166      7A6500
+ 2167              	.LASF49:
+ 2168 0104 55415254 		.ascii	"UART_1_Start\000"
+ 2168      5F315F53 
+ 2168      74617274 
+ 2168      00
+ 2169              	.LASF62:
+ 2170 0111 50574D5F 		.ascii	"PWM_motor_WriteCompare1\000"
+ 2170      6D6F746F 
+ 2170      725F5772 
+ 2170      69746543 
+ 2170      6F6D7061 
+ 2171              	.LASF21:
+ 2172 0129 666C6F61 		.ascii	"float\000"
+ 2172      7400
+ 2173              	.LASF59:
+ 2174 012f 4D505536 		.ascii	"MPU6050_getYGyroOffset\000"
+ 2174      3035305F 
+ 2174      67657459 
+ 2174      4779726F 
+ 2174      4F666673 
+ 2175              	.LASF10:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 44
+
+
+ 2176 0146 6C6F6E67 		.ascii	"long long int\000"
+ 2176      206C6F6E 
+ 2176      6720696E 
+ 2176      7400
+ 2177              	.LASF32:
+ 2178 0154 64696666 		.ascii	"difference_a\000"
+ 2178      6572656E 
+ 2178      63655F61 
+ 2178      00
+ 2179              	.LASF8:
+ 2180 0161 6C6F6E67 		.ascii	"long int\000"
+ 2180      20696E74 
+ 2180      00
+ 2181              	.LASF33:
+ 2182 016a 64696666 		.ascii	"difference_g\000"
+ 2182      6572656E 
+ 2182      63655F67 
+ 2182      00
+ 2183              	.LASF2:
+ 2184 0177 5F5F7569 		.ascii	"__uint8_t\000"
+ 2184      6E74385F 
+ 2184      7400
+ 2185              	.LASF28:
+ 2186 0181 66696E69 		.ascii	"finish\000"
+ 2186      736800
+ 2187              	.LASF51:
+ 2188 0188 6973725F 		.ascii	"isr_flag_Start\000"
+ 2188      666C6167 
+ 2188      5F537461 
+ 2188      727400
+ 2189              	.LASF58:
+ 2190 0197 4D505536 		.ascii	"MPU6050_getXGyroOffset\000"
+ 2190      3035305F 
+ 2190      67657458 
+ 2190      4779726F 
+ 2190      4F666673 
+ 2191              	.LASF43:
+ 2192 01ae 6973725F 		.ascii	"isr_flag\000"
+ 2192      666C6167 
+ 2192      00
+ 2193              	.LASF1:
+ 2194 01b7 756E7369 		.ascii	"unsigned char\000"
+ 2194      676E6564 
+ 2194      20636861 
+ 2194      7200
+ 2195              	.LASF27:
+ 2196 01c5 6C6F6E67 		.ascii	"long double\000"
+ 2196      20646F75 
+ 2196      626C6500 
+ 2197              	.LASF72:
+ 2198 01d1 6973725F 		.ascii	"isr_int\000"
+ 2198      696E7400 
+ 2199              	.LASF25:
+ 2200 01d9 63796973 		.ascii	"cyisraddress\000"
+ 2200      72616464 
+ 2200      72657373 
+ 2200      00
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 45
+
+
+ 2201              	.LASF74:
+ 2202 01e6 73707269 		.ascii	"sprintf\000"
+ 2202      6E746600 
+ 2203              	.LASF0:
+ 2204 01ee 7369676E 		.ascii	"signed char\000"
+ 2204      65642063 
+ 2204      68617200 
+ 2205              	.LASF11:
+ 2206 01fa 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2206      206C6F6E 
+ 2206      6720756E 
+ 2206      7369676E 
+ 2206      65642069 
+ 2207              	.LASF12:
+ 2208 0211 756E7369 		.ascii	"unsigned int\000"
+ 2208      676E6564 
+ 2208      20696E74 
+ 2208      00
+ 2209              	.LASF15:
+ 2210 021e 75696E74 		.ascii	"uint16_t\000"
+ 2210      31365F74 
+ 2210      00
+ 2211              	.LASF35:
+ 2212 0227 66696C74 		.ascii	"filter_buf_g\000"
+ 2212      65725F62 
+ 2212      75665F67 
+ 2212      00
+ 2213              	.LASF65:
+ 2214 0234 4144435F 		.ascii	"ADC_SAR_Seq_GetResult16\000"
+ 2214      5341525F 
+ 2214      5365715F 
+ 2214      47657452 
+ 2214      6573756C 
+ 2215              	.LASF24:
+ 2216 024c 63686172 		.ascii	"char\000"
+ 2216      00
+ 2217              	.LASF66:
+ 2218 0251 51756164 		.ascii	"QuadDec_1_GetCounter\000"
+ 2218      4465635F 
+ 2218      315F4765 
+ 2218      74436F75 
+ 2218      6E746572 
+ 2219              	.LASF39:
+ 2220 0266 7375625F 		.ascii	"sub_distance\000"
+ 2220      64697374 
+ 2220      616E6365 
+ 2220      00
+ 2221              	.LASF16:
+ 2222 0273 696E7433 		.ascii	"int32_t\000"
+ 2222      325F7400 
+ 2223              	.LASF61:
+ 2224 027b 4144435F 		.ascii	"ADC_SAR_Seq_Start\000"
+ 2224      5341525F 
+ 2224      5365715F 
+ 2224      53746172 
+ 2224      7400
+ 2225              	.LASF30:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 46
+
+
+ 2226 028d 6275665F 		.ascii	"buf_a\000"
+ 2226      6100
+ 2227              	.LASF14:
+ 2228 0293 696E7431 		.ascii	"int16_t\000"
+ 2228      365F7400 
+ 2229              	.LASF17:
+ 2230 029b 75696E74 		.ascii	"uint8\000"
+ 2230      3800
+ 2231              	.LASF31:
+ 2232 02a1 6275665F 		.ascii	"buf_g\000"
+ 2232      6700
+ 2233              	.LASF54:
+ 2234 02a7 4D505536 		.ascii	"MPU6050_setFullScaleGyroRange\000"
+ 2234      3035305F 
+ 2234      73657446 
+ 2234      756C6C53 
+ 2234      63616C65 
+ 2235              	.LASF48:
+ 2236 02c5 50574D5F 		.ascii	"PWM_motor_Start\000"
+ 2236      6D6F746F 
+ 2236      725F5374 
+ 2236      61727400 
+ 2237              	.LASF69:
+ 2238 02d5 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2238      4320342E 
+ 2238      392E3320 
+ 2238      32303135 
+ 2238      30333033 
+ 2239 0308 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2239      20726576 
+ 2239      6973696F 
+ 2239      6E203232 
+ 2239      31323230 
+ 2240 033b 67202D73 		.ascii	"g -std=gnu99 -ffunction-sections -ffat-lto-objects\000"
+ 2240      74643D67 
+ 2240      6E753939 
+ 2240      202D6666 
+ 2240      756E6374 
+ 2241              	.LASF34:
+ 2242 036e 66696C74 		.ascii	"filter_buf_a\000"
+ 2242      65725F62 
+ 2242      75665F61 
+ 2242      00
+ 2243              	.LASF18:
+ 2244 037b 75696E74 		.ascii	"uint16\000"
+ 2244      313600
+ 2245              	.LASF40:
+ 2246 0382 726F7269 		.ascii	"rori\000"
+ 2246      00
+ 2247              	.LASF6:
+ 2248 0387 73686F72 		.ascii	"short unsigned int\000"
+ 2248      7420756E 
+ 2248      7369676E 
+ 2248      65642069 
+ 2248      6E7400
+ 2249              	.LASF64:
+ 2250 039a 4144435F 		.ascii	"ADC_SAR_Seq_StartConvert\000"
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 47
+
+
+ 2250      5341525F 
+ 2250      5365715F 
+ 2250      53746172 
+ 2250      74436F6E 
+ 2251              	.LASF9:
+ 2252 03b3 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2252      20756E73 
+ 2252      69676E65 
+ 2252      6420696E 
+ 2252      7400
+ 2253              	.LASF19:
+ 2254 03c5 75696E74 		.ascii	"uint32\000"
+ 2254      333200
+ 2255              	.LASF46:
+ 2256 03cc 55415254 		.ascii	"UART_1_PutString\000"
+ 2256      5F315F50 
+ 2256      75745374 
+ 2256      72696E67 
+ 2256      00
+ 2257              	.LASF71:
+ 2258 03dd 433A5C55 		.ascii	"C:\\Users\\satomin\\Documents\\PSoC Creator\\AI_min"
+ 2258      73657273 
+ 2258      5C736174 
+ 2258      6F6D696E 
+ 2258      5C446F63 
+ 2259 040b 695F3230 		.ascii	"i_2016_9_1\\AI_mini_gatData.cydsn\000"
+ 2259      31365F39 
+ 2259      5F315C41 
+ 2259      495F6D69 
+ 2259      6E695F67 
+ 2260              	.LASF41:
+ 2261 042c 53657456 		.ascii	"SetValue\000"
+ 2261      616C7565 
+ 2261      00
+ 2262              	.LASF29:
+ 2263 0435 636F756E 		.ascii	"count\000"
+ 2263      7400
+ 2264              	.LASF70:
+ 2265 043b 2E5C6D61 		.ascii	".\\main.c\000"
+ 2265      696E2E63 
+ 2265      00
+ 2266              	.LASF7:
+ 2267 0444 5F5F696E 		.ascii	"__int32_t\000"
+ 2267      7433325F 
+ 2267      7400
+ 2268              	.LASF50:
+ 2269 044e 4D505536 		.ascii	"MPU6050\000"
+ 2269      30353000 
+ 2270              	.LASF3:
+ 2271 0456 5F5F696E 		.ascii	"__int16_t\000"
+ 2271      7431365F 
+ 2271      7400
+ 2272              	.LASF37:
+ 2273 0460 64697374 		.ascii	"distance1\000"
+ 2273      616E6365 
+ 2273      3100
+ 2274              	.LASF38:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\cc6CMNA3.s 			page 48
+
+
+ 2275 046a 64697374 		.ascii	"distance2\000"
+ 2275      616E6365 
+ 2275      3200
+ 2276              	.LASF22:
+ 2277 0474 646F7562 		.ascii	"double\000"
+ 2277      6C6500
+ 2278              	.LASF36:
+ 2279 047b 6B796F72 		.ascii	"kyori\000"
+ 2279      6900
+ 2280              	.LASF42:
+ 2281 0481 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2281      52784275 
+ 2281      66666572 
+ 2281      00
+ 2282              	.LASF47:
+ 2283 048e 43794465 		.ascii	"CyDelay\000"
+ 2283      6C617900 
+ 2284              	.LASF45:
+ 2285 0496 4932435F 		.ascii	"I2C_Start\000"
+ 2285      53746172 
+ 2285      7400
+ 2286              	.LASF67:
+ 2287 04a0 51756164 		.ascii	"QuadDec_1_SetCounter\000"
+ 2287      4465635F 
+ 2287      315F5365 
+ 2287      74436F75 
+ 2287      6E746572 
+ 2288              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

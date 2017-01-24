@@ -1,0 +1,57 @@
+--------------- Build Started: 09/01/2016 15:27:22 Project: AI_mini_main, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+The code generation step is up to date.
+arm-none-eabi-gcc.exe -mcpu=cortex-m3 -mthumb -Wno-main -I. -IGenerated_Source\PSoC5 -Wa,-alh=.\CortexM3\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -std=gnu99 -c .\main.c -o .\CortexM3\ARM_GCC_493\Debug\main.o
+.\main.c: In function 'main':
+.\main.c:45:7: warning: unused variable 'rd' [-Wunused-variable]
+  char rd[30];
+       ^
+.\main.c:44:42: warning: unused variable 'check_up_gz' [-Wunused-variable]
+     int check_gy = 0, check_down_gz = 0, check_up_gz = 0, check_gx = 0;
+                                          ^
+.\main.c:44:23: warning: unused variable 'check_down_gz' [-Wunused-variable]
+     int check_gy = 0, check_down_gz = 0, check_up_gz = 0, check_gx = 0;
+                       ^
+.\main.c:40:20: warning: unused variable 'down_gz' [-Wunused-variable]
+     int16_t up_gz, down_gz;
+                    ^
+.\main.c:40:13: warning: unused variable 'up_gz' [-Wunused-variable]
+     int16_t up_gz, down_gz;
+             ^
+.\main.c:37:10: warning: unused variable 'filter_buf_g' [-Wunused-variable]
+  int16_t filter_buf_g[3][Buffer_size];
+          ^
+.\main.c:36:10: warning: unused variable 'filter_buf_a' [-Wunused-variable]
+  int16_t filter_buf_a[3][Buffer_size];
+          ^
+.\main.c:35:10: warning: unused variable 'difference_g' [-Wunused-variable]
+  int16_t difference_g[3][Buffer_size];
+          ^
+.\main.c:34:10: warning: unused variable 'difference_a' [-Wunused-variable]
+  int16_t difference_a[3][Buffer_size];
+          ^
+.\main.c:33:10: warning: unused variable 'buf_g' [-Wunused-variable]
+  int16_t buf_g[3][Buffer_size];
+          ^
+.\main.c:32:10: warning: unused variable 'buf_a' [-Wunused-variable]
+  int16_t buf_a[3][Buffer_size];
+          ^
+.\main.c:31:17: warning: unused variable 'count' [-Wunused-variable]
+  uint16_t i = 0,count = 0;
+                 ^
+.\main.c:31:11: warning: unused variable 'i' [-Wunused-variable]
+  uint16_t i = 0,count = 0;
+           ^
+.\main.c:30:10: warning: unused variable 'finish' [-Wunused-variable]
+  uint8_t finish = 0;
+          ^
+.\main.c:90:26: warning: 'distance1' may be used uninitialized in this function [-Wmaybe-uninitialized]
+             sub_distance = distance2 - distance1;
+                          ^
+arm-none-eabi-ar.exe -rs .\CortexM3\ARM_GCC_493\Debug\AI_mini_main.a .\CortexM3\ARM_GCC_493\Debug\cyfitter_cfg.o .\CortexM3\ARM_GCC_493\Debug\IN_1.o .\CortexM3\ARM_GCC_493\Debug\IN_2.o .\CortexM3\ARM_GCC_493\Debug\PWM_motor.o .\CortexM3\ARM_GCC_493\Debug\PWM_motor_PM.o .\CortexM3\ARM_GCC_493\Debug\Clock_1.o .\CortexM3\ARM_GCC_493\Debug\SDA.o .\CortexM3\ARM_GCC_493\Debug\SCL.o .\CortexM3\ARM_GCC_493\Debug\I2C.o .\CortexM3\ARM_GCC_493\Debug\I2C_BOOT.o .\CortexM3\ARM_GCC_493\Debug\I2C_INT.o .\CortexM3\ARM_GCC_493\Debug\I2C_PM.o .\CortexM3\ARM_GCC_493\Debug\I2C_SLAVE.o .\CortexM3\ARM_GCC_493\Debug\I2C_MASTER.o .\CortexM3\ARM_GCC_493\Debug\Pin_2.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq_INT.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq_PM.o .\CortexM3\ARM_GCC_493\Debug\in_A.o .\CortexM3\ARM_GCC_493\Debug\in_B.o .\CortexM3\ARM_GCC_493\Debug\QuadDec_1.o .\CortexM3\ARM_GCC_493\Debug\QuadDec_1_PM.o .\CortexM3\ARM_GCC_493\Debug\Clock_3.o .\CortexM3\ARM_GCC_493\Debug\LED.o .\CortexM3\ARM_GCC_493\Debug\isr_flag.o .\CortexM3\ARM_GCC_493\Debug\Clock_2.o .\CortexM3\ARM_GCC_493\Debug\UART_1.o .\CortexM3\ARM_GCC_493\Debug\UART_1_PM.o .\CortexM3\ARM_GCC_493\Debug\UART_1_INT.o .\CortexM3\ARM_GCC_493\Debug\UART_1_BOOT.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq_IRQ.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq_theACLK.o .\CortexM3\ARM_GCC_493\Debug\ADC_SAR_Seq_Bypass.o .\CortexM3\ARM_GCC_493\Debug\QuadDec_1_Cnt16.o .\CortexM3\ARM_GCC_493\Debug\QuadDec_1_Cnt16_PM.o .\CortexM3\ARM_GCC_493\Debug\UART_1_IntClock.o .\CortexM3\ARM_GCC_493\Debug\CyBootAsmGnu.o .\CortexM3\ARM_GCC_493\Debug\CyDmac.o .\CortexM3\ARM_GCC_493\Debug\CyFlash.o .\CortexM3\ARM_GCC_493\Debug\CyLib.o .\CortexM3\ARM_GCC_493\Debug\cyPm.o .\CortexM3\ARM_GCC_493\Debug\CySpc.o .\CortexM3\ARM_GCC_493\Debug\cyutils.o .\CortexM3\ARM_GCC_493\Debug\IN_H.o .\CortexM3\ARM_GCC_493\Debug\SW.o .\CortexM3\ARM_GCC_493\Debug\in_Z.o
+arm-none-eabi-ar.exe: creating .\CortexM3\ARM_GCC_493\Debug\AI_mini_main.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o .\CortexM3\ARM_GCC_493\Debug\AI_mini_main.elf .\CortexM3\ARM_GCC_493\Debug\main.o .\CortexM3\ARM_GCC_493\Debug\MPU6050.o .\CortexM3\ARM_GCC_493\Debug\I2Cdev.o .\CortexM3\ARM_GCC_493\Debug\cymetadata.o .\CortexM3\ARM_GCC_493\Debug\Cm3Start.o .\CortexM3\ARM_GCC_493\Debug\AI_mini_main.a "C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM3\ARM_GCC_493\Debug\CyComponentLibrary.a" -mcpu=cortex-m3 -mthumb -g -ffunction-sections -Og -L Generated_Source\PSoC5 -Wl,-Map,.\CortexM3\ARM_GCC_493\Debug/AI_mini_main.map -T Generated_Source\PSoC5\cm3gcc.ld -specs=nano.specs -Wl,--gc-sections -Wl,--end-group
+cyelftool.exe -C "C:\Users\satomin\Documents\PSoC Creator\AI_mini_2016_9_1\AI_mini_main.cydsn\CortexM3\ARM_GCC_493\Debug\AI_mini_main.elf" --flash_row_size 256 --flash_size 262144
+cyelftool.exe -S "C:\Users\satomin\Documents\PSoC Creator\AI_mini_2016_9_1\AI_mini_main.cydsn\CortexM3\ARM_GCC_493\Debug\AI_mini_main.elf"
+Flash used: 5632 of 262144 bytes (2.1%).
+SRAM used: 2805 of 65536 bytes (4.3%). Stack: 2048 bytes. Heap: 128 bytes.
+--------------- Build Succeeded: 09/01/2016 15:27:23 ---------------

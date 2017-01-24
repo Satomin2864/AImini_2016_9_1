@@ -1,0 +1,5 @@
+C:\Users\satomin\Documents\PSoC Creator\AI_mini_2016_9_1\AI_mini_bace.cydsn\AI_mini_bace.cyprj|28437ab6-e5d7-4f0d-840c-d1d6848b55d8
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|2b0d62f1-edb2-4326-9051-0e0d76c08ff9
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|cdd48e97-97de-4660-920c-0ad9d4c2b633
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|9214cab4-e3e8-4002-9c47-caca7c120720
+C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|02b50559-e012-4906-b502-b4efc42f7f57

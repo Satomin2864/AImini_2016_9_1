@@ -1,0 +1,5063 @@
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"I2Cdev.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.I2Cdev_readBytes,"ax",%progbits
+  19              		.align	2
+  20              		.global	I2Cdev_readBytes
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	I2Cdev_readBytes, %function
+  24              	I2Cdev_readBytes:
+  25              	.LFB63:
+  26              		.file 1 ".\\I2Cdev\\I2Cdev.c"
+   1:.\I2Cdev/I2Cdev.c **** // I2Cdev library collection - Main I2C device class
+   2:.\I2Cdev/I2Cdev.c **** // Abstracts bit and byte I2C R/W functions into a convenient class
+   3:.\I2Cdev/I2Cdev.c **** // 6/9/2012 by Jeff Rowberg <jeff@rowberg.net>
+   4:.\I2Cdev/I2Cdev.c **** // 11/28/2014 by Marton Sebok <sebokmarton@gmail.com>
+   5:.\I2Cdev/I2Cdev.c **** //
+   6:.\I2Cdev/I2Cdev.c **** // Changelog:
+   7:.\I2Cdev/I2Cdev.c **** //     2014-11-28 - ported to PIC18 peripheral library from Arduino code
+   8:.\I2Cdev/I2Cdev.c **** 
+   9:.\I2Cdev/I2Cdev.c **** /* ============================================
+  10:.\I2Cdev/I2Cdev.c **** I2Cdev device library code is placed under the MIT license
+  11:.\I2Cdev/I2Cdev.c **** Copyright (c) 2013 Jeff Rowberg
+  12:.\I2Cdev/I2Cdev.c **** Copyright (c) 2014 Marton Sebok
+  13:.\I2Cdev/I2Cdev.c **** 
+  14:.\I2Cdev/I2Cdev.c **** Permission is hereby granted, free of charge, to any person obtaining a copy
+  15:.\I2Cdev/I2Cdev.c **** of this software and associated documentation files (the "Software"), to deal
+  16:.\I2Cdev/I2Cdev.c **** in the Software without restriction, including without limitation the rights
+  17:.\I2Cdev/I2Cdev.c **** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  18:.\I2Cdev/I2Cdev.c **** copies of the Software, and to permit persons to whom the Software is
+  19:.\I2Cdev/I2Cdev.c **** furnished to do so, subject to the following conditions:
+  20:.\I2Cdev/I2Cdev.c **** 
+  21:.\I2Cdev/I2Cdev.c **** The above copyright notice and this permission notice shall be included in
+  22:.\I2Cdev/I2Cdev.c **** all copies or substantial portions of the Software.
+  23:.\I2Cdev/I2Cdev.c **** 
+  24:.\I2Cdev/I2Cdev.c **** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  25:.\I2Cdev/I2Cdev.c **** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  26:.\I2Cdev/I2Cdev.c **** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  27:.\I2Cdev/I2Cdev.c **** AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  28:.\I2Cdev/I2Cdev.c **** LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  29:.\I2Cdev/I2Cdev.c **** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  30:.\I2Cdev/I2Cdev.c **** THE SOFTWARE.
+  31:.\I2Cdev/I2Cdev.c **** ===============================================
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 2
+
+
+  32:.\I2Cdev/I2Cdev.c **** */
+  33:.\I2Cdev/I2Cdev.c **** 
+  34:.\I2Cdev/I2Cdev.c **** #include "I2Cdev.h"
+  35:.\I2Cdev/I2Cdev.c **** 
+  36:.\I2Cdev/I2Cdev.c **** /** Read multiple bytes from an 8-bit device register.
+  37:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+  38:.\I2Cdev/I2Cdev.c ****  * @param regAddr First register regAddr to read from
+  39:.\I2Cdev/I2Cdev.c ****  * @param length Number of bytes to read
+  40:.\I2Cdev/I2Cdev.c ****  * @param data Buffer to store read data in
+  41:.\I2Cdev/I2Cdev.c ****  * @return Number of bytes read (-1 indicates failure)
+  42:.\I2Cdev/I2Cdev.c ****  */
+  43:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t *data) {
+  27              		.loc 1 43 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              	.LVL0:
+  32 0000 70B5     		push	{r4, r5, r6, lr}
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 4, -16
+  35              		.cfi_offset 5, -12
+  36              		.cfi_offset 6, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+  39              		.cfi_def_cfa_offset 24
+  40 0004 0646     		mov	r6, r0
+  41 0006 1446     		mov	r4, r2
+  42 0008 1D46     		mov	r5, r3
+  43 000a 02AB     		add	r3, sp, #8
+  44              	.LVL1:
+  45 000c 03F8011D 		strb	r1, [r3, #-1]!
+  44:.\I2Cdev/I2Cdev.c ****     /*
+  45:.\I2Cdev/I2Cdev.c ****     int8_t count = 0;
+  46:.\I2Cdev/I2Cdev.c **** 
+  47:.\I2Cdev/I2Cdev.c ****     // S
+  48:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  49:.\I2Cdev/I2Cdev.c ****     StartI2C();
+  50:.\I2Cdev/I2Cdev.c **** 
+  51:.\I2Cdev/I2Cdev.c ****     // Device write address
+  52:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  53:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x00);
+  54:.\I2Cdev/I2Cdev.c **** 
+  55:.\I2Cdev/I2Cdev.c ****     // Register address
+  56:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  57:.\I2Cdev/I2Cdev.c ****     WriteI2C(regAddr);
+  58:.\I2Cdev/I2Cdev.c **** 
+  59:.\I2Cdev/I2Cdev.c ****     // R
+  60:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  61:.\I2Cdev/I2Cdev.c ****     RestartI2C();
+  62:.\I2Cdev/I2Cdev.c **** 
+  63:.\I2Cdev/I2Cdev.c ****     // Device read address
+  64:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  65:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x01);
+  66:.\I2Cdev/I2Cdev.c **** 
+  67:.\I2Cdev/I2Cdev.c ****     for (count = 0; count < length; count++) {
+  68:.\I2Cdev/I2Cdev.c ****         // Data byte
+  69:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 3
+
+
+  70:.\I2Cdev/I2Cdev.c ****         data[count] = ReadI2C();
+  71:.\I2Cdev/I2Cdev.c **** 
+  72:.\I2Cdev/I2Cdev.c ****         if (count == length - 1) {
+  73:.\I2Cdev/I2Cdev.c ****             // NACK
+  74:.\I2Cdev/I2Cdev.c ****             IdleI2C();
+  75:.\I2Cdev/I2Cdev.c ****             NotAckI2C();
+  76:.\I2Cdev/I2Cdev.c ****         } else {
+  77:.\I2Cdev/I2Cdev.c ****             // ACK
+  78:.\I2Cdev/I2Cdev.c ****             IdleI2C();
+  79:.\I2Cdev/I2Cdev.c ****             AckI2C();
+  80:.\I2Cdev/I2Cdev.c ****         }
+  81:.\I2Cdev/I2Cdev.c ****     }
+  82:.\I2Cdev/I2Cdev.c **** 
+  83:.\I2Cdev/I2Cdev.c ****     // P
+  84:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+  85:.\I2Cdev/I2Cdev.c ****     StopI2C();
+  86:.\I2Cdev/I2Cdev.c **** 
+  87:.\I2Cdev/I2Cdev.c ****     return count;
+  88:.\I2Cdev/I2Cdev.c ****     */
+  89:.\I2Cdev/I2Cdev.c ****     I2C_MasterWriteBuf(devAddr,&regAddr, 1, I2C_MODE_NO_STOP);
+  46              		.loc 1 89 0
+  47 0010 1946     		mov	r1, r3
+  48              	.LVL2:
+  49 0012 0122     		movs	r2, #1
+  50              	.LVL3:
+  51 0014 0223     		movs	r3, #2
+  52 0016 FFF7FEFF 		bl	I2C_MasterWriteBuf
+  53              	.LVL4:
+  54              	.L2:
+  90:.\I2Cdev/I2Cdev.c ****     while((I2C_MSTAT_WR_CMPLT & I2C_MasterStatus()) == 0);
+  55              		.loc 1 90 0 discriminator 1
+  56 001a FFF7FEFF 		bl	I2C_MasterStatus
+  57              	.LVL5:
+  58 001e 10F0020F 		tst	r0, #2
+  59 0022 FAD0     		beq	.L2
+  91:.\I2Cdev/I2Cdev.c ****     I2C_MasterReadBuf(devAddr, data, length, I2C_MODE_REPEAT_START);
+  60              		.loc 1 91 0
+  61 0024 3046     		mov	r0, r6
+  62 0026 2946     		mov	r1, r5
+  63 0028 2246     		mov	r2, r4
+  64 002a 0123     		movs	r3, #1
+  65 002c FFF7FEFF 		bl	I2C_MasterReadBuf
+  66              	.LVL6:
+  67              	.L3:
+  92:.\I2Cdev/I2Cdev.c **** 	while((I2C_MSTAT_RD_CMPLT & I2C_MasterStatus()) == 0);
+  68              		.loc 1 92 0 discriminator 1
+  69 0030 FFF7FEFF 		bl	I2C_MasterStatus
+  70              	.LVL7:
+  71 0034 10F0010F 		tst	r0, #1
+  72 0038 FAD0     		beq	.L3
+  93:.\I2Cdev/I2Cdev.c ****     return length;
+  94:.\I2Cdev/I2Cdev.c **** }
+  73              		.loc 1 94 0
+  74 003a 60B2     		sxtb	r0, r4
+  75 003c 02B0     		add	sp, sp, #8
+  76              		.cfi_def_cfa_offset 16
+  77              	.LVL8:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 4
+
+
+  78              		@ sp needed
+  79 003e 70BD     		pop	{r4, r5, r6, pc}
+  80              		.cfi_endproc
+  81              	.LFE63:
+  82              		.size	I2Cdev_readBytes, .-I2Cdev_readBytes
+  83              		.section	.text.I2Cdev_readByte,"ax",%progbits
+  84              		.align	2
+  85              		.global	I2Cdev_readByte
+  86              		.thumb
+  87              		.thumb_func
+  88              		.type	I2Cdev_readByte, %function
+  89              	I2Cdev_readByte:
+  90              	.LFB64:
+  95:.\I2Cdev/I2Cdev.c **** 
+  96:.\I2Cdev/I2Cdev.c **** /** Read single byte from an 8-bit device register.
+  97:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+  98:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+  99:.\I2Cdev/I2Cdev.c ****  * @param data Container for byte value read from device
+ 100:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (true = success)
+ 101:.\I2Cdev/I2Cdev.c ****  */
+ 102:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data) {
+  91              		.loc 1 102 0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 0
+  94              		@ frame_needed = 0, uses_anonymous_args = 0
+  95              	.LVL9:
+  96 0000 08B5     		push	{r3, lr}
+  97              		.cfi_def_cfa_offset 8
+  98              		.cfi_offset 3, -8
+  99              		.cfi_offset 14, -4
+ 100 0002 1346     		mov	r3, r2
+ 103:.\I2Cdev/I2Cdev.c ****     return I2Cdev_readBytes(devAddr, regAddr, 1, data);
+ 101              		.loc 1 103 0
+ 102 0004 0122     		movs	r2, #1
+ 103              	.LVL10:
+ 104 0006 FFF7FEFF 		bl	I2Cdev_readBytes
+ 105              	.LVL11:
+ 104:.\I2Cdev/I2Cdev.c **** }
+ 106              		.loc 1 104 0
+ 107 000a 08BD     		pop	{r3, pc}
+ 108              		.cfi_endproc
+ 109              	.LFE64:
+ 110              		.size	I2Cdev_readByte, .-I2Cdev_readByte
+ 111              		.section	.text.I2Cdev_readWords,"ax",%progbits
+ 112              		.align	2
+ 113              		.global	I2Cdev_readWords
+ 114              		.thumb
+ 115              		.thumb_func
+ 116              		.type	I2Cdev_readWords, %function
+ 117              	I2Cdev_readWords:
+ 118              	.LFB65:
+ 105:.\I2Cdev/I2Cdev.c **** 
+ 106:.\I2Cdev/I2Cdev.c **** /** Read multiple words from a 16-bit device register.
+ 107:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 108:.\I2Cdev/I2Cdev.c ****  * @param regAddr First register regAddr to read from
+ 109:.\I2Cdev/I2Cdev.c ****  * @param length Number of words to read
+ 110:.\I2Cdev/I2Cdev.c ****  * @param data Buffer to store read data in
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 5
+
+
+ 111:.\I2Cdev/I2Cdev.c ****  * @return Number of words read (-1 indicates failure)
+ 112:.\I2Cdev/I2Cdev.c ****  */
+ 113:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t *data) {
+ 119              		.loc 1 113 0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 8
+ 122              		@ frame_needed = 1, uses_anonymous_args = 0
+ 123              	.LVL12:
+ 124 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 125              		.cfi_def_cfa_offset 24
+ 126              		.cfi_offset 4, -24
+ 127              		.cfi_offset 5, -20
+ 128              		.cfi_offset 6, -16
+ 129              		.cfi_offset 7, -12
+ 130              		.cfi_offset 8, -8
+ 131              		.cfi_offset 14, -4
+ 132 0004 82B0     		sub	sp, sp, #8
+ 133              		.cfi_def_cfa_offset 32
+ 134 0006 00AF     		add	r7, sp, #0
+ 135              		.cfi_def_cfa_register 7
+ 136 0008 8046     		mov	r8, r0
+ 137 000a 1546     		mov	r5, r2
+ 138 000c 1E46     		mov	r6, r3
+ 139 000e 07F10802 		add	r2, r7, #8
+ 140              	.LVL13:
+ 141 0012 02F8011D 		strb	r1, [r2, #-1]!
+ 114:.\I2Cdev/I2Cdev.c ****     uint8_t array[length * 2];
+ 142              		.loc 1 114 0
+ 143 0016 6B00     		lsls	r3, r5, #1
+ 144              	.LVL14:
+ 145 0018 0733     		adds	r3, r3, #7
+ 146              	.LVL15:
+ 147 001a 23F00703 		bic	r3, r3, #7
+ 148              	.LVL16:
+ 149 001e ADEB030D 		sub	sp, sp, r3
+ 150 0022 6C46     		mov	r4, sp
+ 151              	.LVL17:
+ 115:.\I2Cdev/I2Cdev.c ****     /*
+ 116:.\I2Cdev/I2Cdev.c ****     int8_t count = 0;
+ 117:.\I2Cdev/I2Cdev.c **** 
+ 118:.\I2Cdev/I2Cdev.c ****     // S
+ 119:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 120:.\I2Cdev/I2Cdev.c ****     StartI2C();
+ 121:.\I2Cdev/I2Cdev.c **** 
+ 122:.\I2Cdev/I2Cdev.c ****     // Device write address
+ 123:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 124:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x00);
+ 125:.\I2Cdev/I2Cdev.c **** 
+ 126:.\I2Cdev/I2Cdev.c ****     // Register address
+ 127:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 128:.\I2Cdev/I2Cdev.c ****     WriteI2C(regAddr);
+ 129:.\I2Cdev/I2Cdev.c **** 
+ 130:.\I2Cdev/I2Cdev.c ****     // R
+ 131:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 132:.\I2Cdev/I2Cdev.c ****     RestartI2C();
+ 133:.\I2Cdev/I2Cdev.c **** 
+ 134:.\I2Cdev/I2Cdev.c ****     // Device read address
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 6
+
+
+ 135:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 136:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x01);
+ 137:.\I2Cdev/I2Cdev.c **** 
+ 138:.\I2Cdev/I2Cdev.c ****     for (count = 0; count < length; count++) {
+ 139:.\I2Cdev/I2Cdev.c ****         // First byte is bits 15-8 (MSb=15)
+ 140:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 141:.\I2Cdev/I2Cdev.c ****         data[count] = ReadI2C() << 8;
+ 142:.\I2Cdev/I2Cdev.c **** 
+ 143:.\I2Cdev/I2Cdev.c ****         // NACK
+ 144:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 145:.\I2Cdev/I2Cdev.c ****         NotAckI2C();
+ 146:.\I2Cdev/I2Cdev.c **** 
+ 147:.\I2Cdev/I2Cdev.c ****         // Second byte is bits 7-0 (LSb=0)
+ 148:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 149:.\I2Cdev/I2Cdev.c ****         data[count] |= ReadI2C();
+ 150:.\I2Cdev/I2Cdev.c **** 
+ 151:.\I2Cdev/I2Cdev.c ****         if (count == length - 1) {
+ 152:.\I2Cdev/I2Cdev.c ****             // NACK
+ 153:.\I2Cdev/I2Cdev.c ****             IdleI2C();
+ 154:.\I2Cdev/I2Cdev.c ****             NotAckI2C();
+ 155:.\I2Cdev/I2Cdev.c ****         } else {
+ 156:.\I2Cdev/I2Cdev.c ****             // ACK
+ 157:.\I2Cdev/I2Cdev.c ****             IdleI2C();
+ 158:.\I2Cdev/I2Cdev.c ****             AckI2C();
+ 159:.\I2Cdev/I2Cdev.c ****         }
+ 160:.\I2Cdev/I2Cdev.c ****     }
+ 161:.\I2Cdev/I2Cdev.c **** 
+ 162:.\I2Cdev/I2Cdev.c ****     // P
+ 163:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 164:.\I2Cdev/I2Cdev.c ****     StopI2C();
+ 165:.\I2Cdev/I2Cdev.c **** 
+ 166:.\I2Cdev/I2Cdev.c ****     return count;
+ 167:.\I2Cdev/I2Cdev.c ****     */
+ 168:.\I2Cdev/I2Cdev.c ****     I2C_MasterWriteBuf(devAddr,&regAddr, 1, I2C_MODE_NO_STOP);
+ 152              		.loc 1 168 0
+ 153 0024 1146     		mov	r1, r2
+ 154              	.LVL18:
+ 155 0026 0122     		movs	r2, #1
+ 156 0028 0223     		movs	r3, #2
+ 157 002a FFF7FEFF 		bl	I2C_MasterWriteBuf
+ 158              	.LVL19:
+ 159              	.L8:
+ 169:.\I2Cdev/I2Cdev.c ****     while((I2C_MSTAT_WR_CMPLT & I2C_MasterStatus()) == 0);
+ 160              		.loc 1 169 0 discriminator 1
+ 161 002e FFF7FEFF 		bl	I2C_MasterStatus
+ 162              	.LVL20:
+ 163 0032 10F0020F 		tst	r0, #2
+ 164 0036 FAD0     		beq	.L8
+ 170:.\I2Cdev/I2Cdev.c ****     I2C_MasterReadBuf(devAddr, array, length*2, I2C_MODE_REPEAT_START);
+ 165              		.loc 1 170 0
+ 166 0038 6A00     		lsls	r2, r5, #1
+ 167 003a 4046     		mov	r0, r8
+ 168 003c 2146     		mov	r1, r4
+ 169 003e 02F0FE02 		and	r2, r2, #254
+ 170 0042 0123     		movs	r3, #1
+ 171 0044 FFF7FEFF 		bl	I2C_MasterReadBuf
+ 172              	.LVL21:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 7
+
+
+ 173              	.L9:
+ 171:.\I2Cdev/I2Cdev.c **** 	while((I2C_MSTAT_RD_CMPLT & I2C_MasterStatus()) == 0);
+ 174              		.loc 1 171 0 discriminator 1
+ 175 0048 FFF7FEFF 		bl	I2C_MasterStatus
+ 176              	.LVL22:
+ 177 004c 10F0010F 		tst	r0, #1
+ 178 0050 FAD0     		beq	.L9
+ 179 0052 0023     		movs	r3, #0
+ 180 0054 0AE0     		b	.L10
+ 181              	.LVL23:
+ 182              	.L11:
+ 183              	.LBB2:
+ 172:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 173:.\I2Cdev/I2Cdev.c ****         *(data+i) = ((array[i*2] << 8) & 0xff00) | (array[i*2+1] & 0xff);
+ 184              		.loc 1 173 0 discriminator 3
+ 185 0056 14F81310 		ldrb	r1, [r4, r3, lsl #1]	@ zero_extendqisi2
+ 186 005a 04EB4302 		add	r2, r4, r3, lsl #1
+ 187 005e 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 188 0060 42EA0122 		orr	r2, r2, r1, lsl #8
+ 189 0064 26F81320 		strh	r2, [r6, r3, lsl #1]	@ movhi
+ 172:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 190              		.loc 1 172 0 discriminator 3
+ 191 0068 0133     		adds	r3, r3, #1
+ 192              	.LVL24:
+ 193 006a DBB2     		uxtb	r3, r3
+ 194              	.LVL25:
+ 195              	.L10:
+ 172:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 196              		.loc 1 172 0 is_stmt 0 discriminator 1
+ 197 006c AB42     		cmp	r3, r5
+ 198 006e F2D3     		bcc	.L11
+ 199              	.LBE2:
+ 174:.\I2Cdev/I2Cdev.c ****     }
+ 175:.\I2Cdev/I2Cdev.c ****     return length;
+ 176:.\I2Cdev/I2Cdev.c **** }
+ 200              		.loc 1 176 0 is_stmt 1
+ 201 0070 68B2     		sxtb	r0, r5
+ 202 0072 0837     		adds	r7, r7, #8
+ 203              		.cfi_def_cfa_offset 24
+ 204              	.LVL26:
+ 205 0074 BD46     		mov	sp, r7
+ 206              		.cfi_def_cfa_register 13
+ 207              		@ sp needed
+ 208 0076 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 209              		.cfi_endproc
+ 210              	.LFE65:
+ 211              		.size	I2Cdev_readWords, .-I2Cdev_readWords
+ 212 007a 00BF     		.section	.text.I2Cdev_readWord,"ax",%progbits
+ 213              		.align	2
+ 214              		.global	I2Cdev_readWord
+ 215              		.thumb
+ 216              		.thumb_func
+ 217              		.type	I2Cdev_readWord, %function
+ 218              	I2Cdev_readWord:
+ 219              	.LFB66:
+ 177:.\I2Cdev/I2Cdev.c **** 
+ 178:.\I2Cdev/I2Cdev.c **** /** Read single word from a 16-bit device register.
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 8
+
+
+ 179:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 180:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+ 181:.\I2Cdev/I2Cdev.c ****  * @param data Container for word value read from device
+ 182:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (true = success)
+ 183:.\I2Cdev/I2Cdev.c ****  */
+ 184:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readWord(uint8_t devAddr, uint8_t regAddr, uint16_t *data) {
+ 220              		.loc 1 184 0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 0
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224              	.LVL27:
+ 225 0000 08B5     		push	{r3, lr}
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 3, -8
+ 228              		.cfi_offset 14, -4
+ 229 0002 1346     		mov	r3, r2
+ 185:.\I2Cdev/I2Cdev.c ****     return I2Cdev_readWords(devAddr, regAddr, 1, data);
+ 230              		.loc 1 185 0
+ 231 0004 0122     		movs	r2, #1
+ 232              	.LVL28:
+ 233 0006 FFF7FEFF 		bl	I2Cdev_readWords
+ 234              	.LVL29:
+ 186:.\I2Cdev/I2Cdev.c **** }
+ 235              		.loc 1 186 0
+ 236 000a 08BD     		pop	{r3, pc}
+ 237              		.cfi_endproc
+ 238              	.LFE66:
+ 239              		.size	I2Cdev_readWord, .-I2Cdev_readWord
+ 240              		.section	.text.I2Cdev_readBit,"ax",%progbits
+ 241              		.align	2
+ 242              		.global	I2Cdev_readBit
+ 243              		.thumb
+ 244              		.thumb_func
+ 245              		.type	I2Cdev_readBit, %function
+ 246              	I2Cdev_readBit:
+ 247              	.LFB67:
+ 187:.\I2Cdev/I2Cdev.c **** 
+ 188:.\I2Cdev/I2Cdev.c **** /** Read a single bit from an 8-bit device register.
+ 189:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 190:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+ 191:.\I2Cdev/I2Cdev.c ****  * @param bitNum Bit position to read (0-7)
+ 192:.\I2Cdev/I2Cdev.c ****  * @param data Container for single bit value
+ 193:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (true = success)
+ 194:.\I2Cdev/I2Cdev.c ****  */
+ 195:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t *data) {
+ 248              		.loc 1 195 0
+ 249              		.cfi_startproc
+ 250              		@ args = 0, pretend = 0, frame = 8
+ 251              		@ frame_needed = 0, uses_anonymous_args = 0
+ 252              	.LVL30:
+ 253 0000 30B5     		push	{r4, r5, lr}
+ 254              		.cfi_def_cfa_offset 12
+ 255              		.cfi_offset 4, -12
+ 256              		.cfi_offset 5, -8
+ 257              		.cfi_offset 14, -4
+ 258 0002 83B0     		sub	sp, sp, #12
+ 259              		.cfi_def_cfa_offset 24
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 9
+
+
+ 260 0004 1546     		mov	r5, r2
+ 261 0006 1C46     		mov	r4, r3
+ 196:.\I2Cdev/I2Cdev.c ****     uint8_t b;
+ 197:.\I2Cdev/I2Cdev.c ****     uint8_t count = I2Cdev_readByte(devAddr, regAddr, &b);
+ 262              		.loc 1 197 0
+ 263 0008 0DF10702 		add	r2, sp, #7
+ 264              	.LVL31:
+ 265 000c FFF7FEFF 		bl	I2Cdev_readByte
+ 266              	.LVL32:
+ 198:.\I2Cdev/I2Cdev.c ****     *data = b & (1 << bitNum);
+ 267              		.loc 1 198 0
+ 268 0010 0123     		movs	r3, #1
+ 269 0012 AB40     		lsls	r3, r3, r5
+ 270 0014 9DF80720 		ldrb	r2, [sp, #7]	@ zero_extendqisi2
+ 271 0018 1340     		ands	r3, r3, r2
+ 272 001a 2370     		strb	r3, [r4]
+ 199:.\I2Cdev/I2Cdev.c ****     return count;
+ 200:.\I2Cdev/I2Cdev.c **** }
+ 273              		.loc 1 200 0
+ 274 001c 03B0     		add	sp, sp, #12
+ 275              		.cfi_def_cfa_offset 12
+ 276              		@ sp needed
+ 277 001e 30BD     		pop	{r4, r5, pc}
+ 278              		.cfi_endproc
+ 279              	.LFE67:
+ 280              		.size	I2Cdev_readBit, .-I2Cdev_readBit
+ 281              		.section	.text.I2Cdev_readBitW,"ax",%progbits
+ 282              		.align	2
+ 283              		.global	I2Cdev_readBitW
+ 284              		.thumb
+ 285              		.thumb_func
+ 286              		.type	I2Cdev_readBitW, %function
+ 287              	I2Cdev_readBitW:
+ 288              	.LFB68:
+ 201:.\I2Cdev/I2Cdev.c **** 
+ 202:.\I2Cdev/I2Cdev.c **** /** Read a single bit from a 16-bit device register.
+ 203:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 204:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+ 205:.\I2Cdev/I2Cdev.c ****  * @param bitNum Bit position to read (0-15)
+ 206:.\I2Cdev/I2Cdev.c ****  * @param data Container for single bit value
+ 207:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (true = success)
+ 208:.\I2Cdev/I2Cdev.c ****  */
+ 209:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readBitW(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint16_t *data) {
+ 289              		.loc 1 209 0
+ 290              		.cfi_startproc
+ 291              		@ args = 0, pretend = 0, frame = 8
+ 292              		@ frame_needed = 0, uses_anonymous_args = 0
+ 293              	.LVL33:
+ 294 0000 30B5     		push	{r4, r5, lr}
+ 295              		.cfi_def_cfa_offset 12
+ 296              		.cfi_offset 4, -12
+ 297              		.cfi_offset 5, -8
+ 298              		.cfi_offset 14, -4
+ 299 0002 83B0     		sub	sp, sp, #12
+ 300              		.cfi_def_cfa_offset 24
+ 301 0004 1546     		mov	r5, r2
+ 302 0006 1C46     		mov	r4, r3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 10
+
+
+ 210:.\I2Cdev/I2Cdev.c ****     uint16_t b;
+ 211:.\I2Cdev/I2Cdev.c ****     uint8_t count = I2Cdev_readWord(devAddr, regAddr, &b);
+ 303              		.loc 1 211 0
+ 304 0008 0DF10602 		add	r2, sp, #6
+ 305              	.LVL34:
+ 306 000c FFF7FEFF 		bl	I2Cdev_readWord
+ 307              	.LVL35:
+ 212:.\I2Cdev/I2Cdev.c ****     *data = b & (1 << bitNum);
+ 308              		.loc 1 212 0
+ 309 0010 0123     		movs	r3, #1
+ 310 0012 AB40     		lsls	r3, r3, r5
+ 311 0014 BDF80620 		ldrh	r2, [sp, #6]
+ 312 0018 1340     		ands	r3, r3, r2
+ 313 001a 2380     		strh	r3, [r4]	@ movhi
+ 213:.\I2Cdev/I2Cdev.c ****     return count;
+ 214:.\I2Cdev/I2Cdev.c **** }
+ 314              		.loc 1 214 0
+ 315 001c 03B0     		add	sp, sp, #12
+ 316              		.cfi_def_cfa_offset 12
+ 317              		@ sp needed
+ 318 001e 30BD     		pop	{r4, r5, pc}
+ 319              		.cfi_endproc
+ 320              	.LFE68:
+ 321              		.size	I2Cdev_readBitW, .-I2Cdev_readBitW
+ 322              		.section	.text.I2Cdev_readBits,"ax",%progbits
+ 323              		.align	2
+ 324              		.global	I2Cdev_readBits
+ 325              		.thumb
+ 326              		.thumb_func
+ 327              		.type	I2Cdev_readBits, %function
+ 328              	I2Cdev_readBits:
+ 329              	.LFB69:
+ 215:.\I2Cdev/I2Cdev.c **** 
+ 216:.\I2Cdev/I2Cdev.c **** /** Read multiple bits from an 8-bit device register.
+ 217:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 218:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+ 219:.\I2Cdev/I2Cdev.c ****  * @param bitStart First bit position to read (0-7)
+ 220:.\I2Cdev/I2Cdev.c ****  * @param length Number of bits to read (not more than 8)
+ 221:.\I2Cdev/I2Cdev.c ****  * @param data Container for right-aligned value (i.e. '101' read from any bitStart position will e
+ 222:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (true = success)
+ 223:.\I2Cdev/I2Cdev.c ****  */
+ 224:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint8_t 
+ 330              		.loc 1 224 0
+ 331              		.cfi_startproc
+ 332              		@ args = 4, pretend = 0, frame = 8
+ 333              		@ frame_needed = 0, uses_anonymous_args = 0
+ 334              	.LVL36:
+ 335 0000 30B5     		push	{r4, r5, lr}
+ 336              		.cfi_def_cfa_offset 12
+ 337              		.cfi_offset 4, -12
+ 338              		.cfi_offset 5, -8
+ 339              		.cfi_offset 14, -4
+ 340 0002 83B0     		sub	sp, sp, #12
+ 341              		.cfi_def_cfa_offset 24
+ 342 0004 1446     		mov	r4, r2
+ 343 0006 1D46     		mov	r5, r3
+ 225:.\I2Cdev/I2Cdev.c ****     // 01101001 read byte
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 11
+
+
+ 226:.\I2Cdev/I2Cdev.c ****     // 76543210 bit numbers
+ 227:.\I2Cdev/I2Cdev.c ****     //    xxx   args: bitStart=4, length=3
+ 228:.\I2Cdev/I2Cdev.c ****     //    010   masked
+ 229:.\I2Cdev/I2Cdev.c ****     //   -> 010 shifted
+ 230:.\I2Cdev/I2Cdev.c ****     uint8_t count, b;
+ 231:.\I2Cdev/I2Cdev.c ****     if ((count = I2Cdev_readByte(devAddr, regAddr, &b)) != 0) {
+ 344              		.loc 1 231 0
+ 345 0008 0DF10702 		add	r2, sp, #7
+ 346              	.LVL37:
+ 347 000c FFF7FEFF 		bl	I2Cdev_readByte
+ 348              	.LVL38:
+ 349 0010 10F0FF0F 		tst	r0, #255
+ 350 0014 0BD0     		beq	.L20
+ 351              	.LBB3:
+ 232:.\I2Cdev/I2Cdev.c ****         uint8_t mask = ((1 << length) - 1) << (bitStart - length + 1);
+ 352              		.loc 1 232 0
+ 353 0016 0121     		movs	r1, #1
+ 354 0018 A940     		lsls	r1, r1, r5
+ 355 001a 0139     		subs	r1, r1, #1
+ 356 001c 621B     		subs	r2, r4, r5
+ 357 001e 0132     		adds	r2, r2, #1
+ 358 0020 9140     		lsls	r1, r1, r2
+ 359              	.LVL39:
+ 233:.\I2Cdev/I2Cdev.c ****         b &= mask;
+ 360              		.loc 1 233 0
+ 361 0022 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 362 0026 1940     		ands	r1, r1, r3
+ 363              	.LVL40:
+ 234:.\I2Cdev/I2Cdev.c ****         b >>= (bitStart - length + 1);
+ 364              		.loc 1 234 0
+ 365 0028 1141     		asrs	r1, r1, r2
+ 366              	.LVL41:
+ 235:.\I2Cdev/I2Cdev.c ****         *data = b;
+ 367              		.loc 1 235 0
+ 368 002a 069B     		ldr	r3, [sp, #24]
+ 369 002c 1970     		strb	r1, [r3]
+ 370              	.LVL42:
+ 371              	.L20:
+ 372              	.LBE3:
+ 236:.\I2Cdev/I2Cdev.c ****     }
+ 237:.\I2Cdev/I2Cdev.c ****     return count;
+ 238:.\I2Cdev/I2Cdev.c **** }
+ 373              		.loc 1 238 0
+ 374 002e 03B0     		add	sp, sp, #12
+ 375              		.cfi_def_cfa_offset 12
+ 376              		@ sp needed
+ 377 0030 30BD     		pop	{r4, r5, pc}
+ 378              		.cfi_endproc
+ 379              	.LFE69:
+ 380              		.size	I2Cdev_readBits, .-I2Cdev_readBits
+ 381 0032 00BF     		.section	.text.I2Cdev_readBitsW,"ax",%progbits
+ 382              		.align	2
+ 383              		.global	I2Cdev_readBitsW
+ 384              		.thumb
+ 385              		.thumb_func
+ 386              		.type	I2Cdev_readBitsW, %function
+ 387              	I2Cdev_readBitsW:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 12
+
+
+ 388              	.LFB70:
+ 239:.\I2Cdev/I2Cdev.c **** 
+ 240:.\I2Cdev/I2Cdev.c **** /** Read multiple bits from a 16-bit device register.
+ 241:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 242:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to read from
+ 243:.\I2Cdev/I2Cdev.c ****  * @param bitStart First bit position to read (0-15)
+ 244:.\I2Cdev/I2Cdev.c ****  * @param length Number of bits to read (not more than 16)
+ 245:.\I2Cdev/I2Cdev.c ****  * @param data Container for right-aligned value (i.e. '101' read from any bitStart position will e
+ 246:.\I2Cdev/I2Cdev.c ****  * @return Status of read operation (1 = success, 0 = failure, -1 = timeout)
+ 247:.\I2Cdev/I2Cdev.c ****  */
+ 248:.\I2Cdev/I2Cdev.c **** int8_t I2Cdev_readBitsW(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint16_
+ 389              		.loc 1 248 0
+ 390              		.cfi_startproc
+ 391              		@ args = 4, pretend = 0, frame = 8
+ 392              		@ frame_needed = 0, uses_anonymous_args = 0
+ 393              	.LVL43:
+ 394 0000 30B5     		push	{r4, r5, lr}
+ 395              		.cfi_def_cfa_offset 12
+ 396              		.cfi_offset 4, -12
+ 397              		.cfi_offset 5, -8
+ 398              		.cfi_offset 14, -4
+ 399 0002 83B0     		sub	sp, sp, #12
+ 400              		.cfi_def_cfa_offset 24
+ 401 0004 1446     		mov	r4, r2
+ 402 0006 1D46     		mov	r5, r3
+ 249:.\I2Cdev/I2Cdev.c ****     // 1101011001101001 read byte
+ 250:.\I2Cdev/I2Cdev.c ****     // fedcba9876543210 bit numbers
+ 251:.\I2Cdev/I2Cdev.c ****     //    xxx           args: bitStart=12, length=3
+ 252:.\I2Cdev/I2Cdev.c ****     //    010           masked
+ 253:.\I2Cdev/I2Cdev.c ****     //           -> 010 shifted
+ 254:.\I2Cdev/I2Cdev.c ****     uint8_t count;
+ 255:.\I2Cdev/I2Cdev.c ****     uint16_t w;
+ 256:.\I2Cdev/I2Cdev.c ****     if ((count = I2Cdev_readWord(devAddr, regAddr, &w)) != 0) {
+ 403              		.loc 1 256 0
+ 404 0008 0DF10602 		add	r2, sp, #6
+ 405              	.LVL44:
+ 406 000c FFF7FEFF 		bl	I2Cdev_readWord
+ 407              	.LVL45:
+ 408 0010 10F0FF0F 		tst	r0, #255
+ 409 0014 0BD0     		beq	.L23
+ 410              	.LBB4:
+ 257:.\I2Cdev/I2Cdev.c ****         uint16_t mask = ((1 << length) - 1) << (bitStart - length + 1);
+ 411              		.loc 1 257 0
+ 412 0016 0121     		movs	r1, #1
+ 413 0018 A940     		lsls	r1, r1, r5
+ 414 001a 0139     		subs	r1, r1, #1
+ 415 001c 621B     		subs	r2, r4, r5
+ 416 001e 0132     		adds	r2, r2, #1
+ 417 0020 9140     		lsls	r1, r1, r2
+ 418              	.LVL46:
+ 258:.\I2Cdev/I2Cdev.c ****         w &= mask;
+ 419              		.loc 1 258 0
+ 420 0022 BDF80630 		ldrh	r3, [sp, #6]
+ 421 0026 1940     		ands	r1, r1, r3
+ 422              	.LVL47:
+ 259:.\I2Cdev/I2Cdev.c ****         w >>= (bitStart - length + 1);
+ 423              		.loc 1 259 0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 13
+
+
+ 424 0028 1141     		asrs	r1, r1, r2
+ 425              	.LVL48:
+ 260:.\I2Cdev/I2Cdev.c ****         *data = w;
+ 426              		.loc 1 260 0
+ 427 002a 069B     		ldr	r3, [sp, #24]
+ 428 002c 1980     		strh	r1, [r3]	@ movhi
+ 429              	.LVL49:
+ 430              	.L23:
+ 431              	.LBE4:
+ 261:.\I2Cdev/I2Cdev.c ****     }
+ 262:.\I2Cdev/I2Cdev.c ****     return count;
+ 263:.\I2Cdev/I2Cdev.c **** }
+ 432              		.loc 1 263 0
+ 433 002e 03B0     		add	sp, sp, #12
+ 434              		.cfi_def_cfa_offset 12
+ 435              		@ sp needed
+ 436 0030 30BD     		pop	{r4, r5, pc}
+ 437              		.cfi_endproc
+ 438              	.LFE70:
+ 439              		.size	I2Cdev_readBitsW, .-I2Cdev_readBitsW
+ 440 0032 00BF     		.section	.text.I2Cdev_writeBytes,"ax",%progbits
+ 441              		.align	2
+ 442              		.global	I2Cdev_writeBytes
+ 443              		.thumb
+ 444              		.thumb_func
+ 445              		.type	I2Cdev_writeBytes, %function
+ 446              	I2Cdev_writeBytes:
+ 447              	.LFB71:
+ 264:.\I2Cdev/I2Cdev.c **** 
+ 265:.\I2Cdev/I2Cdev.c **** /** Write multiple bytes to an 8-bit device register.
+ 266:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 267:.\I2Cdev/I2Cdev.c ****  * @param regAddr First register address to write to
+ 268:.\I2Cdev/I2Cdev.c ****  * @param length Number of bytes to write
+ 269:.\I2Cdev/I2Cdev.c ****  * @param data Buffer to copy new data from
+ 270:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 271:.\I2Cdev/I2Cdev.c ****  */
+ 272:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t* data) {
+ 448              		.loc 1 272 0
+ 449              		.cfi_startproc
+ 450              		@ args = 0, pretend = 0, frame = 0
+ 451              		@ frame_needed = 1, uses_anonymous_args = 0
+ 452              	.LVL50:
+ 453 0000 B0B5     		push	{r4, r5, r7, lr}
+ 454              		.cfi_def_cfa_offset 16
+ 455              		.cfi_offset 4, -16
+ 456              		.cfi_offset 5, -12
+ 457              		.cfi_offset 7, -8
+ 458              		.cfi_offset 14, -4
+ 459 0002 00AF     		add	r7, sp, #0
+ 460              		.cfi_def_cfa_register 7
+ 461 0004 0546     		mov	r5, r0
+ 273:.\I2Cdev/I2Cdev.c ****     uint8_t array[length + 1];
+ 462              		.loc 1 273 0
+ 463 0006 541C     		adds	r4, r2, #1
+ 464              	.LVL51:
+ 465 0008 0832     		adds	r2, r2, #8
+ 466              	.LVL52:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 14
+
+
+ 467 000a 22F00702 		bic	r2, r2, #7
+ 468              	.LVL53:
+ 469 000e ADEB020D 		sub	sp, sp, r2
+ 470              	.LVL54:
+ 274:.\I2Cdev/I2Cdev.c ****     /*
+ 275:.\I2Cdev/I2Cdev.c ****     // S
+ 276:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 277:.\I2Cdev/I2Cdev.c ****     StartI2C();
+ 278:.\I2Cdev/I2Cdev.c **** 
+ 279:.\I2Cdev/I2Cdev.c ****     // Device write address
+ 280:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 281:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x00);
+ 282:.\I2Cdev/I2Cdev.c **** 
+ 283:.\I2Cdev/I2Cdev.c ****     // Register address
+ 284:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 285:.\I2Cdev/I2Cdev.c ****     WriteI2C(regAddr);
+ 286:.\I2Cdev/I2Cdev.c **** 
+ 287:.\I2Cdev/I2Cdev.c ****     for (uint8_t i = 0; i < length; i++) {
+ 288:.\I2Cdev/I2Cdev.c ****         // Data byte
+ 289:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 290:.\I2Cdev/I2Cdev.c ****         WriteI2C(data[i]);
+ 291:.\I2Cdev/I2Cdev.c ****     }
+ 292:.\I2Cdev/I2Cdev.c ****     
+ 293:.\I2Cdev/I2Cdev.c ****     // P
+ 294:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 295:.\I2Cdev/I2Cdev.c ****     StopI2C();
+ 296:.\I2Cdev/I2Cdev.c **** 
+ 297:.\I2Cdev/I2Cdev.c ****     return true;
+ 298:.\I2Cdev/I2Cdev.c ****     */
+ 299:.\I2Cdev/I2Cdev.c ****     array[0] = regAddr;
+ 471              		.loc 1 299 0
+ 472 0012 6846     		mov	r0, sp
+ 473              	.LVL55:
+ 474 0014 00F8011B 		strb	r1, [r0], #1
+ 300:.\I2Cdev/I2Cdev.c ****     strcpy((char*)(array + 1),(char*)data);
+ 475              		.loc 1 300 0
+ 476 0018 1946     		mov	r1, r3
+ 477              	.LVL56:
+ 478 001a FFF7FEFF 		bl	strcpy
+ 479              	.LVL57:
+ 301:.\I2Cdev/I2Cdev.c ****     I2C_MasterWriteBuf(devAddr, array, length+1, I2C_MODE_COMPLETE_XFER);
+ 480              		.loc 1 301 0
+ 481 001e 2846     		mov	r0, r5
+ 482 0020 6946     		mov	r1, sp
+ 483 0022 E2B2     		uxtb	r2, r4
+ 484 0024 0023     		movs	r3, #0
+ 485 0026 FFF7FEFF 		bl	I2C_MasterWriteBuf
+ 486              	.LVL58:
+ 487              	.L26:
+ 302:.\I2Cdev/I2Cdev.c ****     while((I2C_MSTAT_WR_CMPLT & I2C_MasterStatus()) == 0);
+ 488              		.loc 1 302 0 discriminator 1
+ 489 002a FFF7FEFF 		bl	I2C_MasterStatus
+ 490              	.LVL59:
+ 491 002e 10F0020F 		tst	r0, #2
+ 492 0032 FAD0     		beq	.L26
+ 303:.\I2Cdev/I2Cdev.c ****     return true;
+ 304:.\I2Cdev/I2Cdev.c **** }
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 15
+
+
+ 493              		.loc 1 304 0
+ 494 0034 0120     		movs	r0, #1
+ 495 0036 BD46     		mov	sp, r7
+ 496              		.cfi_def_cfa_register 13
+ 497              	.LVL60:
+ 498              		@ sp needed
+ 499 0038 B0BD     		pop	{r4, r5, r7, pc}
+ 500              		.cfi_endproc
+ 501              	.LFE71:
+ 502              		.size	I2Cdev_writeBytes, .-I2Cdev_writeBytes
+ 503 003a 00BF     		.section	.text.I2Cdev_writeByte,"ax",%progbits
+ 504              		.align	2
+ 505              		.global	I2Cdev_writeByte
+ 506              		.thumb
+ 507              		.thumb_func
+ 508              		.type	I2Cdev_writeByte, %function
+ 509              	I2Cdev_writeByte:
+ 510              	.LFB72:
+ 305:.\I2Cdev/I2Cdev.c **** 
+ 306:.\I2Cdev/I2Cdev.c **** /** Write single byte to an 8-bit device register.
+ 307:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 308:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register address to write to
+ 309:.\I2Cdev/I2Cdev.c ****  * @param data New byte value to write
+ 310:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 311:.\I2Cdev/I2Cdev.c ****  */
+ 312:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data) {
+ 511              		.loc 1 312 0
+ 512              		.cfi_startproc
+ 513              		@ args = 0, pretend = 0, frame = 8
+ 514              		@ frame_needed = 0, uses_anonymous_args = 0
+ 515              	.LVL61:
+ 516 0000 00B5     		push	{lr}
+ 517              		.cfi_def_cfa_offset 4
+ 518              		.cfi_offset 14, -4
+ 519 0002 83B0     		sub	sp, sp, #12
+ 520              		.cfi_def_cfa_offset 16
+ 521 0004 02AB     		add	r3, sp, #8
+ 522 0006 03F8012D 		strb	r2, [r3, #-1]!
+ 313:.\I2Cdev/I2Cdev.c ****     return I2Cdev_writeBytes(devAddr, regAddr, 1, &data);
+ 523              		.loc 1 313 0
+ 524 000a 0122     		movs	r2, #1
+ 525              	.LVL62:
+ 526 000c FFF7FEFF 		bl	I2Cdev_writeBytes
+ 527              	.LVL63:
+ 314:.\I2Cdev/I2Cdev.c **** }
+ 528              		.loc 1 314 0
+ 529 0010 03B0     		add	sp, sp, #12
+ 530              		.cfi_def_cfa_offset 4
+ 531              		@ sp needed
+ 532 0012 5DF804FB 		ldr	pc, [sp], #4
+ 533              		.cfi_endproc
+ 534              	.LFE72:
+ 535              		.size	I2Cdev_writeByte, .-I2Cdev_writeByte
+ 536 0016 00BF     		.section	.text.I2Cdev_writeWords,"ax",%progbits
+ 537              		.align	2
+ 538              		.global	I2Cdev_writeWords
+ 539              		.thumb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 16
+
+
+ 540              		.thumb_func
+ 541              		.type	I2Cdev_writeWords, %function
+ 542              	I2Cdev_writeWords:
+ 543              	.LFB73:
+ 315:.\I2Cdev/I2Cdev.c **** 
+ 316:.\I2Cdev/I2Cdev.c **** /** Write multiple words to a 16-bit device register.
+ 317:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 318:.\I2Cdev/I2Cdev.c ****  * @param regAddr First register address to write to
+ 319:.\I2Cdev/I2Cdev.c ****  * @param length Number of words to write
+ 320:.\I2Cdev/I2Cdev.c ****  * @param data Buffer to copy new data from
+ 321:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 322:.\I2Cdev/I2Cdev.c ****  */
+ 323:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t* data) {
+ 544              		.loc 1 323 0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 0
+ 547              		@ frame_needed = 1, uses_anonymous_args = 0
+ 548              	.LVL64:
+ 549 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 550              		.cfi_def_cfa_offset 24
+ 551              		.cfi_offset 3, -24
+ 552              		.cfi_offset 4, -20
+ 553              		.cfi_offset 5, -16
+ 554              		.cfi_offset 6, -12
+ 555              		.cfi_offset 7, -8
+ 556              		.cfi_offset 14, -4
+ 557 0002 00AF     		add	r7, sp, #0
+ 558              		.cfi_def_cfa_register 7
+ 324:.\I2Cdev/I2Cdev.c ****     uint8_t array[length * 2 + 1];
+ 559              		.loc 1 324 0
+ 560 0004 5400     		lsls	r4, r2, #1
+ 561              	.LVL65:
+ 562 0006 0834     		adds	r4, r4, #8
+ 563              	.LVL66:
+ 564 0008 24F00704 		bic	r4, r4, #7
+ 565              	.LVL67:
+ 566 000c ADEB040D 		sub	sp, sp, r4
+ 567 0010 6D46     		mov	r5, sp
+ 568              	.LVL68:
+ 325:.\I2Cdev/I2Cdev.c ****     /*
+ 326:.\I2Cdev/I2Cdev.c ****     // S
+ 327:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 328:.\I2Cdev/I2Cdev.c ****     StartI2C();
+ 329:.\I2Cdev/I2Cdev.c **** 
+ 330:.\I2Cdev/I2Cdev.c ****     // Device write address
+ 331:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 332:.\I2Cdev/I2Cdev.c ****     WriteI2C(devAddr << 1 | 0x00);
+ 333:.\I2Cdev/I2Cdev.c **** 
+ 334:.\I2Cdev/I2Cdev.c ****     // Register address
+ 335:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 336:.\I2Cdev/I2Cdev.c ****     WriteI2C(regAddr);
+ 337:.\I2Cdev/I2Cdev.c **** 
+ 338:.\I2Cdev/I2Cdev.c ****     for (uint8_t i = 0; i < length; i++) {
+ 339:.\I2Cdev/I2Cdev.c ****         // Send MSB
+ 340:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 341:.\I2Cdev/I2Cdev.c ****         WriteI2C(data[i] >> 8);
+ 342:.\I2Cdev/I2Cdev.c **** 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 17
+
+
+ 343:.\I2Cdev/I2Cdev.c ****         // Send LSB
+ 344:.\I2Cdev/I2Cdev.c ****         IdleI2C();
+ 345:.\I2Cdev/I2Cdev.c ****         WriteI2C(data[i] & 0xFF);
+ 346:.\I2Cdev/I2Cdev.c ****     }
+ 347:.\I2Cdev/I2Cdev.c **** 
+ 348:.\I2Cdev/I2Cdev.c ****     // P
+ 349:.\I2Cdev/I2Cdev.c ****     IdleI2C();
+ 350:.\I2Cdev/I2Cdev.c ****     StopI2C();
+ 351:.\I2Cdev/I2Cdev.c **** 
+ 352:.\I2Cdev/I2Cdev.c ****     return true;
+ 353:.\I2Cdev/I2Cdev.c ****     */
+ 354:.\I2Cdev/I2Cdev.c ****     
+ 355:.\I2Cdev/I2Cdev.c ****     array[0] = regAddr;
+ 569              		.loc 1 355 0
+ 570 0012 8DF80010 		strb	r1, [sp]
+ 571              	.LVL69:
+ 572              	.LBB5:
+ 356:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 573              		.loc 1 356 0
+ 574 0016 0021     		movs	r1, #0
+ 575              	.LVL70:
+ 576 0018 0BE0     		b	.L31
+ 577              	.LVL71:
+ 578              	.L32:
+ 357:.\I2Cdev/I2Cdev.c ****         array[i*2+1] = (data[i] >> 8) & 0xff;
+ 579              		.loc 1 357 0 discriminator 3
+ 580 001a 05EB4106 		add	r6, r5, r1, lsl #1
+ 581 001e 33F81140 		ldrh	r4, [r3, r1, lsl #1]
+ 582 0022 4FEA142E 		lsr	lr, r4, #8
+ 583 0026 86F801E0 		strb	lr, [r6, #1]
+ 358:.\I2Cdev/I2Cdev.c ****         array[i*2+2] = (data[i] & 0xff);
+ 584              		.loc 1 358 0 discriminator 3
+ 585 002a 0131     		adds	r1, r1, #1
+ 586              	.LVL72:
+ 587 002c 05F81140 		strb	r4, [r5, r1, lsl #1]
+ 356:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 588              		.loc 1 356 0 discriminator 3
+ 589 0030 C9B2     		uxtb	r1, r1
+ 590              	.LVL73:
+ 591              	.L31:
+ 356:.\I2Cdev/I2Cdev.c ****     for(uint8_t i = 0;i < length;i++){
+ 592              		.loc 1 356 0 is_stmt 0 discriminator 1
+ 593 0032 9142     		cmp	r1, r2
+ 594 0034 F1D3     		bcc	.L32
+ 595              	.LBE5:
+ 359:.\I2Cdev/I2Cdev.c ****     }
+ 360:.\I2Cdev/I2Cdev.c ****     I2C_MasterWriteBuf(devAddr, array, length+1, I2C_MODE_COMPLETE_XFER);
+ 596              		.loc 1 360 0 is_stmt 1
+ 597 0036 0132     		adds	r2, r2, #1
+ 598              	.LVL74:
+ 599 0038 2946     		mov	r1, r5
+ 600              	.LVL75:
+ 601 003a D2B2     		uxtb	r2, r2
+ 602              	.LVL76:
+ 603 003c 0023     		movs	r3, #0
+ 604              	.LVL77:
+ 605 003e FFF7FEFF 		bl	I2C_MasterWriteBuf
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 18
+
+
+ 606              	.LVL78:
+ 607              	.L33:
+ 361:.\I2Cdev/I2Cdev.c ****     while((I2C_MSTAT_WR_CMPLT & I2C_MasterStatus()) == 0);
+ 608              		.loc 1 361 0 discriminator 1
+ 609 0042 FFF7FEFF 		bl	I2C_MasterStatus
+ 610              	.LVL79:
+ 611 0046 10F0020F 		tst	r0, #2
+ 612 004a FAD0     		beq	.L33
+ 362:.\I2Cdev/I2Cdev.c ****     return true;
+ 363:.\I2Cdev/I2Cdev.c **** }
+ 613              		.loc 1 363 0
+ 614 004c 0120     		movs	r0, #1
+ 615 004e BD46     		mov	sp, r7
+ 616              		.cfi_def_cfa_register 13
+ 617              		@ sp needed
+ 618 0050 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 619              		.cfi_endproc
+ 620              	.LFE73:
+ 621              		.size	I2Cdev_writeWords, .-I2Cdev_writeWords
+ 622 0052 00BF     		.section	.text.I2Cdev_writeWord,"ax",%progbits
+ 623              		.align	2
+ 624              		.global	I2Cdev_writeWord
+ 625              		.thumb
+ 626              		.thumb_func
+ 627              		.type	I2Cdev_writeWord, %function
+ 628              	I2Cdev_writeWord:
+ 629              	.LFB74:
+ 364:.\I2Cdev/I2Cdev.c **** 
+ 365:.\I2Cdev/I2Cdev.c **** /** Write single word to a 16-bit device register.
+ 366:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 367:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register address to write to
+ 368:.\I2Cdev/I2Cdev.c ****  * @param data New word value to write
+ 369:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 370:.\I2Cdev/I2Cdev.c ****  */
+ 371:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data) {
+ 630              		.loc 1 371 0
+ 631              		.cfi_startproc
+ 632              		@ args = 0, pretend = 0, frame = 8
+ 633              		@ frame_needed = 0, uses_anonymous_args = 0
+ 634              	.LVL80:
+ 635 0000 00B5     		push	{lr}
+ 636              		.cfi_def_cfa_offset 4
+ 637              		.cfi_offset 14, -4
+ 638 0002 83B0     		sub	sp, sp, #12
+ 639              		.cfi_def_cfa_offset 16
+ 640 0004 02AB     		add	r3, sp, #8
+ 641 0006 23F8022D 		strh	r2, [r3, #-2]!	@ movhi
+ 372:.\I2Cdev/I2Cdev.c ****     return I2Cdev_writeWords(devAddr, regAddr, 1, &data);
+ 642              		.loc 1 372 0
+ 643 000a 0122     		movs	r2, #1
+ 644              	.LVL81:
+ 645 000c FFF7FEFF 		bl	I2Cdev_writeWords
+ 646              	.LVL82:
+ 373:.\I2Cdev/I2Cdev.c **** }
+ 647              		.loc 1 373 0
+ 648 0010 03B0     		add	sp, sp, #12
+ 649              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 19
+
+
+ 650              		@ sp needed
+ 651 0012 5DF804FB 		ldr	pc, [sp], #4
+ 652              		.cfi_endproc
+ 653              	.LFE74:
+ 654              		.size	I2Cdev_writeWord, .-I2Cdev_writeWord
+ 655 0016 00BF     		.section	.text.I2Cdev_writeBit,"ax",%progbits
+ 656              		.align	2
+ 657              		.global	I2Cdev_writeBit
+ 658              		.thumb
+ 659              		.thumb_func
+ 660              		.type	I2Cdev_writeBit, %function
+ 661              	I2Cdev_writeBit:
+ 662              	.LFB75:
+ 374:.\I2Cdev/I2Cdev.c **** 
+ 375:.\I2Cdev/I2Cdev.c **** /** write a single bit in an 8-bit device register.
+ 376:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 377:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to write to
+ 378:.\I2Cdev/I2Cdev.c ****  * @param bitNum Bit position to write (0-7)
+ 379:.\I2Cdev/I2Cdev.c ****  * @param value New bit value to write
+ 380:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 381:.\I2Cdev/I2Cdev.c ****  */
+ 382:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data) {
+ 663              		.loc 1 382 0
+ 664              		.cfi_startproc
+ 665              		@ args = 0, pretend = 0, frame = 8
+ 666              		@ frame_needed = 0, uses_anonymous_args = 0
+ 667              	.LVL83:
+ 668 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 669              		.cfi_def_cfa_offset 20
+ 670              		.cfi_offset 4, -20
+ 671              		.cfi_offset 5, -16
+ 672              		.cfi_offset 6, -12
+ 673              		.cfi_offset 7, -8
+ 674              		.cfi_offset 14, -4
+ 675 0002 83B0     		sub	sp, sp, #12
+ 676              		.cfi_def_cfa_offset 32
+ 677 0004 0546     		mov	r5, r0
+ 678 0006 0C46     		mov	r4, r1
+ 679 0008 1646     		mov	r6, r2
+ 680 000a 1F46     		mov	r7, r3
+ 383:.\I2Cdev/I2Cdev.c ****     uint8_t b;
+ 384:.\I2Cdev/I2Cdev.c ****     I2Cdev_readByte(devAddr, regAddr, &b);
+ 681              		.loc 1 384 0
+ 682 000c 0DF10702 		add	r2, sp, #7
+ 683              	.LVL84:
+ 684 0010 FFF7FEFF 		bl	I2Cdev_readByte
+ 685              	.LVL85:
+ 385:.\I2Cdev/I2Cdev.c ****     b = (data != 0) ? (b | (1 << bitNum)) : (b & ~(1 << bitNum));
+ 686              		.loc 1 385 0
+ 687 0014 37B1     		cbz	r7, .L38
+ 688              		.loc 1 385 0 is_stmt 0 discriminator 1
+ 689 0016 0122     		movs	r2, #1
+ 690 0018 B240     		lsls	r2, r2, r6
+ 691 001a 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 692 001e 1A43     		orrs	r2, r2, r3
+ 693 0020 D2B2     		uxtb	r2, r2
+ 694 0022 05E0     		b	.L39
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 20
+
+
+ 695              	.L38:
+ 696              		.loc 1 385 0 discriminator 2
+ 697 0024 0122     		movs	r2, #1
+ 698 0026 B240     		lsls	r2, r2, r6
+ 699 0028 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 700 002c 23EA0202 		bic	r2, r3, r2
+ 701              	.L39:
+ 702              		.loc 1 385 0 discriminator 4
+ 703 0030 8DF80720 		strb	r2, [sp, #7]
+ 386:.\I2Cdev/I2Cdev.c ****     return I2Cdev_writeByte(devAddr, regAddr, b);
+ 704              		.loc 1 386 0 is_stmt 1 discriminator 4
+ 705 0034 2846     		mov	r0, r5
+ 706 0036 2146     		mov	r1, r4
+ 707 0038 FFF7FEFF 		bl	I2Cdev_writeByte
+ 708              	.LVL86:
+ 387:.\I2Cdev/I2Cdev.c **** }
+ 709              		.loc 1 387 0 discriminator 4
+ 710 003c 03B0     		add	sp, sp, #12
+ 711              		.cfi_def_cfa_offset 20
+ 712              		@ sp needed
+ 713 003e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 714              		.cfi_endproc
+ 715              	.LFE75:
+ 716              		.size	I2Cdev_writeBit, .-I2Cdev_writeBit
+ 717              		.section	.text.I2Cdev_writeBitW,"ax",%progbits
+ 718              		.align	2
+ 719              		.global	I2Cdev_writeBitW
+ 720              		.thumb
+ 721              		.thumb_func
+ 722              		.type	I2Cdev_writeBitW, %function
+ 723              	I2Cdev_writeBitW:
+ 724              	.LFB76:
+ 388:.\I2Cdev/I2Cdev.c **** 
+ 389:.\I2Cdev/I2Cdev.c **** /** write a single bit in a 16-bit device register.
+ 390:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 391:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to write to
+ 392:.\I2Cdev/I2Cdev.c ****  * @param bitNum Bit position to write (0-15)
+ 393:.\I2Cdev/I2Cdev.c ****  * @param value New bit value to write
+ 394:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 395:.\I2Cdev/I2Cdev.c ****  */
+ 396:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeBitW(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint16_t data) {
+ 725              		.loc 1 396 0
+ 726              		.cfi_startproc
+ 727              		@ args = 0, pretend = 0, frame = 8
+ 728              		@ frame_needed = 0, uses_anonymous_args = 0
+ 729              	.LVL87:
+ 730 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 731              		.cfi_def_cfa_offset 20
+ 732              		.cfi_offset 4, -20
+ 733              		.cfi_offset 5, -16
+ 734              		.cfi_offset 6, -12
+ 735              		.cfi_offset 7, -8
+ 736              		.cfi_offset 14, -4
+ 737 0002 83B0     		sub	sp, sp, #12
+ 738              		.cfi_def_cfa_offset 32
+ 739 0004 0546     		mov	r5, r0
+ 740 0006 0C46     		mov	r4, r1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 21
+
+
+ 741 0008 1646     		mov	r6, r2
+ 742 000a 1F46     		mov	r7, r3
+ 397:.\I2Cdev/I2Cdev.c ****     uint16_t w;
+ 398:.\I2Cdev/I2Cdev.c ****     I2Cdev_readWord(devAddr, regAddr, &w);
+ 743              		.loc 1 398 0
+ 744 000c 0DF10602 		add	r2, sp, #6
+ 745              	.LVL88:
+ 746 0010 FFF7FEFF 		bl	I2Cdev_readWord
+ 747              	.LVL89:
+ 399:.\I2Cdev/I2Cdev.c ****     w = (data != 0) ? (w | (1 << bitNum)) : (w & ~(1 << bitNum));
+ 748              		.loc 1 399 0
+ 749 0014 37B1     		cbz	r7, .L42
+ 750              		.loc 1 399 0 is_stmt 0 discriminator 1
+ 751 0016 0122     		movs	r2, #1
+ 752 0018 B240     		lsls	r2, r2, r6
+ 753 001a BDF80630 		ldrh	r3, [sp, #6]
+ 754 001e 1A43     		orrs	r2, r2, r3
+ 755 0020 92B2     		uxth	r2, r2
+ 756 0022 05E0     		b	.L43
+ 757              	.L42:
+ 758              		.loc 1 399 0 discriminator 2
+ 759 0024 0122     		movs	r2, #1
+ 760 0026 B240     		lsls	r2, r2, r6
+ 761 0028 BDF80630 		ldrh	r3, [sp, #6]
+ 762 002c 23EA0202 		bic	r2, r3, r2
+ 763              	.L43:
+ 764              		.loc 1 399 0 discriminator 4
+ 765 0030 ADF80620 		strh	r2, [sp, #6]	@ movhi
+ 400:.\I2Cdev/I2Cdev.c ****     return I2Cdev_writeWord(devAddr, regAddr, w);
+ 766              		.loc 1 400 0 is_stmt 1 discriminator 4
+ 767 0034 2846     		mov	r0, r5
+ 768 0036 2146     		mov	r1, r4
+ 769 0038 FFF7FEFF 		bl	I2Cdev_writeWord
+ 770              	.LVL90:
+ 401:.\I2Cdev/I2Cdev.c **** }
+ 771              		.loc 1 401 0 discriminator 4
+ 772 003c 03B0     		add	sp, sp, #12
+ 773              		.cfi_def_cfa_offset 20
+ 774              		@ sp needed
+ 775 003e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 776              		.cfi_endproc
+ 777              	.LFE76:
+ 778              		.size	I2Cdev_writeBitW, .-I2Cdev_writeBitW
+ 779              		.section	.text.I2Cdev_writeBits,"ax",%progbits
+ 780              		.align	2
+ 781              		.global	I2Cdev_writeBits
+ 782              		.thumb
+ 783              		.thumb_func
+ 784              		.type	I2Cdev_writeBits, %function
+ 785              	I2Cdev_writeBits:
+ 786              	.LFB77:
+ 402:.\I2Cdev/I2Cdev.c **** 
+ 403:.\I2Cdev/I2Cdev.c **** /** Write multiple bits in an 8-bit device register.
+ 404:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 405:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to write to
+ 406:.\I2Cdev/I2Cdev.c ****  * @param bitStart First bit position to write (0-7)
+ 407:.\I2Cdev/I2Cdev.c ****  * @param length Number of bits to write (not more than 8)
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 22
+
+
+ 408:.\I2Cdev/I2Cdev.c ****  * @param data Right-aligned value to write
+ 409:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 410:.\I2Cdev/I2Cdev.c ****  */
+ 411:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint8_t d
+ 787              		.loc 1 411 0
+ 788              		.cfi_startproc
+ 789              		@ args = 4, pretend = 0, frame = 8
+ 790              		@ frame_needed = 0, uses_anonymous_args = 0
+ 791              	.LVL91:
+ 792 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 793              		.cfi_def_cfa_offset 20
+ 794              		.cfi_offset 4, -20
+ 795              		.cfi_offset 5, -16
+ 796              		.cfi_offset 6, -12
+ 797              		.cfi_offset 7, -8
+ 798              		.cfi_offset 14, -4
+ 799 0002 83B0     		sub	sp, sp, #12
+ 800              		.cfi_def_cfa_offset 32
+ 801 0004 0646     		mov	r6, r0
+ 802 0006 0D46     		mov	r5, r1
+ 803 0008 1446     		mov	r4, r2
+ 804 000a 1F46     		mov	r7, r3
+ 412:.\I2Cdev/I2Cdev.c ****     //      010 value to write
+ 413:.\I2Cdev/I2Cdev.c ****     // 76543210 bit numbers
+ 414:.\I2Cdev/I2Cdev.c ****     //    xxx   args: bitStart=4, length=3
+ 415:.\I2Cdev/I2Cdev.c ****     // 00011100 mask byte
+ 416:.\I2Cdev/I2Cdev.c ****     // 10101111 original value (sample)
+ 417:.\I2Cdev/I2Cdev.c ****     // 10100011 original & ~mask
+ 418:.\I2Cdev/I2Cdev.c ****     // 10101011 masked | value
+ 419:.\I2Cdev/I2Cdev.c ****     uint8_t b;
+ 420:.\I2Cdev/I2Cdev.c ****     if (I2Cdev_readByte(devAddr, regAddr, &b) != 0) {
+ 805              		.loc 1 420 0
+ 806 000c 0DF10702 		add	r2, sp, #7
+ 807              	.LVL92:
+ 808 0010 FFF7FEFF 		bl	I2Cdev_readByte
+ 809              	.LVL93:
+ 810 0014 B0B1     		cbz	r0, .L47
+ 811              	.LBB6:
+ 421:.\I2Cdev/I2Cdev.c ****         uint8_t mask = ((1 << length) - 1) << (bitStart - length + 1);
+ 812              		.loc 1 421 0
+ 813 0016 0121     		movs	r1, #1
+ 814 0018 B940     		lsls	r1, r1, r7
+ 815 001a 0139     		subs	r1, r1, #1
+ 816 001c E41B     		subs	r4, r4, r7
+ 817 001e 0134     		adds	r4, r4, #1
+ 818 0020 A140     		lsls	r1, r1, r4
+ 819              	.LVL94:
+ 422:.\I2Cdev/I2Cdev.c ****         data <<= (bitStart - length + 1); // shift data into correct position
+ 820              		.loc 1 422 0
+ 821 0022 9DF82030 		ldrb	r3, [sp, #32]	@ zero_extendqisi2
+ 822 0026 A340     		lsls	r3, r3, r4
+ 823 0028 DBB2     		uxtb	r3, r3
+ 824              	.LVL95:
+ 423:.\I2Cdev/I2Cdev.c ****         data &= mask; // zero all non-important bits in data
+ 825              		.loc 1 423 0
+ 826 002a 0B40     		ands	r3, r3, r1
+ 827              	.LVL96:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 23
+
+
+ 424:.\I2Cdev/I2Cdev.c ****         b &= ~(mask); // zero all important bits in existing byte
+ 828              		.loc 1 424 0
+ 829 002c 9DF80720 		ldrb	r2, [sp, #7]	@ zero_extendqisi2
+ 830 0030 22EA0102 		bic	r2, r2, r1
+ 425:.\I2Cdev/I2Cdev.c ****         b |= data; // combine data with existing byte
+ 831              		.loc 1 425 0
+ 832 0034 1A43     		orrs	r2, r2, r3
+ 833 0036 8DF80720 		strb	r2, [sp, #7]
+ 426:.\I2Cdev/I2Cdev.c ****         return I2Cdev_writeByte(devAddr, regAddr, b);
+ 834              		.loc 1 426 0
+ 835 003a 3046     		mov	r0, r6
+ 836 003c 2946     		mov	r1, r5
+ 837              	.LVL97:
+ 838 003e FFF7FEFF 		bl	I2Cdev_writeByte
+ 839              	.LVL98:
+ 840 0042 00E0     		b	.L46
+ 841              	.LVL99:
+ 842              	.L47:
+ 843              	.LBE6:
+ 427:.\I2Cdev/I2Cdev.c ****     } else {
+ 428:.\I2Cdev/I2Cdev.c ****         return false;
+ 844              		.loc 1 428 0
+ 845 0044 0020     		movs	r0, #0
+ 846              	.LVL100:
+ 847              	.L46:
+ 429:.\I2Cdev/I2Cdev.c ****     }
+ 430:.\I2Cdev/I2Cdev.c **** }
+ 848              		.loc 1 430 0
+ 849 0046 03B0     		add	sp, sp, #12
+ 850              		.cfi_def_cfa_offset 20
+ 851              		@ sp needed
+ 852 0048 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 853              		.cfi_endproc
+ 854              	.LFE77:
+ 855              		.size	I2Cdev_writeBits, .-I2Cdev_writeBits
+ 856 004a 00BF     		.section	.text.I2Cdev_writeBitsW,"ax",%progbits
+ 857              		.align	2
+ 858              		.global	I2Cdev_writeBitsW
+ 859              		.thumb
+ 860              		.thumb_func
+ 861              		.type	I2Cdev_writeBitsW, %function
+ 862              	I2Cdev_writeBitsW:
+ 863              	.LFB78:
+ 431:.\I2Cdev/I2Cdev.c **** 
+ 432:.\I2Cdev/I2Cdev.c **** /** Write multiple bits in a 16-bit device register.
+ 433:.\I2Cdev/I2Cdev.c ****  * @param devAddr I2C slave device address
+ 434:.\I2Cdev/I2Cdev.c ****  * @param regAddr Register regAddr to write to
+ 435:.\I2Cdev/I2Cdev.c ****  * @param bitStart First bit position to write (0-15)
+ 436:.\I2Cdev/I2Cdev.c ****  * @param length Number of bits to write (not more than 16)
+ 437:.\I2Cdev/I2Cdev.c ****  * @param data Right-aligned value to write
+ 438:.\I2Cdev/I2Cdev.c ****  * @return Status of operation (true = success)
+ 439:.\I2Cdev/I2Cdev.c ****  */
+ 440:.\I2Cdev/I2Cdev.c **** bool I2Cdev_writeBitsW(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t length, uint16_t
+ 864              		.loc 1 440 0
+ 865              		.cfi_startproc
+ 866              		@ args = 4, pretend = 0, frame = 8
+ 867              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 24
+
+
+ 868              	.LVL101:
+ 869 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 870              		.cfi_def_cfa_offset 20
+ 871              		.cfi_offset 4, -20
+ 872              		.cfi_offset 5, -16
+ 873              		.cfi_offset 6, -12
+ 874              		.cfi_offset 7, -8
+ 875              		.cfi_offset 14, -4
+ 876 0002 83B0     		sub	sp, sp, #12
+ 877              		.cfi_def_cfa_offset 32
+ 878 0004 0646     		mov	r6, r0
+ 879 0006 0D46     		mov	r5, r1
+ 880 0008 1446     		mov	r4, r2
+ 881 000a 1F46     		mov	r7, r3
+ 441:.\I2Cdev/I2Cdev.c ****     //              010 value to write
+ 442:.\I2Cdev/I2Cdev.c ****     // fedcba9876543210 bit numbers
+ 443:.\I2Cdev/I2Cdev.c ****     //    xxx           args: bitStart=12, length=3
+ 444:.\I2Cdev/I2Cdev.c ****     // 0001110000000000 mask word
+ 445:.\I2Cdev/I2Cdev.c ****     // 1010111110010110 original value (sample)
+ 446:.\I2Cdev/I2Cdev.c ****     // 1010001110010110 original & ~mask
+ 447:.\I2Cdev/I2Cdev.c ****     // 1010101110010110 masked | value
+ 448:.\I2Cdev/I2Cdev.c ****     uint16_t w;
+ 449:.\I2Cdev/I2Cdev.c ****     if (I2Cdev_readWord(devAddr, regAddr, &w) != 0) {
+ 882              		.loc 1 449 0
+ 883 000c 0DF10602 		add	r2, sp, #6
+ 884              	.LVL102:
+ 885 0010 FFF7FEFF 		bl	I2Cdev_readWord
+ 886              	.LVL103:
+ 887 0014 B0B1     		cbz	r0, .L51
+ 888              	.LBB7:
+ 450:.\I2Cdev/I2Cdev.c ****         uint16_t mask = ((1 << length) - 1) << (bitStart - length + 1);
+ 889              		.loc 1 450 0
+ 890 0016 0121     		movs	r1, #1
+ 891 0018 B940     		lsls	r1, r1, r7
+ 892 001a 0139     		subs	r1, r1, #1
+ 893 001c E41B     		subs	r4, r4, r7
+ 894 001e 0134     		adds	r4, r4, #1
+ 895 0020 A140     		lsls	r1, r1, r4
+ 896              	.LVL104:
+ 451:.\I2Cdev/I2Cdev.c ****         data <<= (bitStart - length + 1); // shift data into correct position
+ 897              		.loc 1 451 0
+ 898 0022 BDF82030 		ldrh	r3, [sp, #32]
+ 899 0026 A340     		lsls	r3, r3, r4
+ 900 0028 9BB2     		uxth	r3, r3
+ 901              	.LVL105:
+ 452:.\I2Cdev/I2Cdev.c ****         data &= mask; // zero all non-important bits in data
+ 902              		.loc 1 452 0
+ 903 002a 0B40     		ands	r3, r3, r1
+ 904              	.LVL106:
+ 453:.\I2Cdev/I2Cdev.c ****         w &= ~(mask); // zero all important bits in existing word
+ 905              		.loc 1 453 0
+ 906 002c BDF80620 		ldrh	r2, [sp, #6]
+ 907 0030 22EA0102 		bic	r2, r2, r1
+ 454:.\I2Cdev/I2Cdev.c ****         w |= data; // combine data with existing word
+ 908              		.loc 1 454 0
+ 909 0034 1A43     		orrs	r2, r2, r3
+ 910 0036 ADF80620 		strh	r2, [sp, #6]	@ movhi
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 25
+
+
+ 455:.\I2Cdev/I2Cdev.c ****         return I2Cdev_writeWord(devAddr, regAddr, w);
+ 911              		.loc 1 455 0
+ 912 003a 3046     		mov	r0, r6
+ 913 003c 2946     		mov	r1, r5
+ 914              	.LVL107:
+ 915 003e FFF7FEFF 		bl	I2Cdev_writeWord
+ 916              	.LVL108:
+ 917 0042 00E0     		b	.L50
+ 918              	.LVL109:
+ 919              	.L51:
+ 920              	.LBE7:
+ 456:.\I2Cdev/I2Cdev.c ****     } else {
+ 457:.\I2Cdev/I2Cdev.c ****         return false;
+ 921              		.loc 1 457 0
+ 922 0044 0020     		movs	r0, #0
+ 923              	.LVL110:
+ 924              	.L50:
+ 458:.\I2Cdev/I2Cdev.c ****     }
+ 459:.\I2Cdev/I2Cdev.c **** }
+ 925              		.loc 1 459 0
+ 926 0046 03B0     		add	sp, sp, #12
+ 927              		.cfi_def_cfa_offset 20
+ 928              		@ sp needed
+ 929 0048 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 930              		.cfi_endproc
+ 931              	.LFE78:
+ 932              		.size	I2Cdev_writeBitsW, .-I2Cdev_writeBitsW
+ 933 004a 00BF     		.text
+ 934              	.Letext0:
+ 935              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 936              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 937              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 938              		.file 5 "Generated_Source\\PSoC5/I2C.h"
+ 939              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 940              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\3.3\\psoc creator\\import\\gnu\\arm\\4.9.
+ 941              		.section	.debug_info,"",%progbits
+ 942              	.Ldebug_info0:
+ 943 0000 760B0000 		.4byte	0xb76
+ 944 0004 0400     		.2byte	0x4
+ 945 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 946 000a 04       		.byte	0x4
+ 947 000b 01       		.uleb128 0x1
+ 948 000c 91020000 		.4byte	.LASF50
+ 949 0010 01       		.byte	0x1
+ 950 0011 59020000 		.4byte	.LASF51
+ 951 0015 91000000 		.4byte	.LASF52
+ 952 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 953 001d 00000000 		.4byte	0
+ 954 0021 00000000 		.4byte	.Ldebug_line0
+ 955 0025 02       		.uleb128 0x2
+ 956 0026 00000000 		.4byte	.LASF0
+ 957 002a 02       		.byte	0x2
+ 958 002b 1B       		.byte	0x1b
+ 959 002c 30000000 		.4byte	0x30
+ 960 0030 03       		.uleb128 0x3
+ 961 0031 01       		.byte	0x1
+ 962 0032 06       		.byte	0x6
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 26
+
+
+ 963 0033 54030000 		.4byte	.LASF2
+ 964 0037 02       		.uleb128 0x2
+ 965 0038 09000000 		.4byte	.LASF1
+ 966 003c 02       		.byte	0x2
+ 967 003d 1D       		.byte	0x1d
+ 968 003e 42000000 		.4byte	0x42
+ 969 0042 03       		.uleb128 0x3
+ 970 0043 01       		.byte	0x1
+ 971 0044 08       		.byte	0x8
+ 972 0045 70000000 		.4byte	.LASF3
+ 973 0049 03       		.uleb128 0x3
+ 974 004a 02       		.byte	0x2
+ 975 004b 05       		.byte	0x5
+ 976 004c 6B020000 		.4byte	.LASF4
+ 977 0050 02       		.uleb128 0x2
+ 978 0051 7D020000 		.4byte	.LASF5
+ 979 0055 02       		.byte	0x2
+ 980 0056 2B       		.byte	0x2b
+ 981 0057 5B000000 		.4byte	0x5b
+ 982 005b 03       		.uleb128 0x3
+ 983 005c 02       		.byte	0x2
+ 984 005d 07       		.byte	0x7
+ 985 005e 22000000 		.4byte	.LASF6
+ 986 0062 02       		.uleb128 0x2
+ 987 0063 13000000 		.4byte	.LASF7
+ 988 0067 02       		.byte	0x2
+ 989 0068 3F       		.byte	0x3f
+ 990 0069 6D000000 		.4byte	0x6d
+ 991 006d 03       		.uleb128 0x3
+ 992 006e 04       		.byte	0x4
+ 993 006f 05       		.byte	0x5
+ 994 0070 2A030000 		.4byte	.LASF8
+ 995 0074 03       		.uleb128 0x3
+ 996 0075 04       		.byte	0x4
+ 997 0076 07       		.byte	0x7
+ 998 0077 EC000000 		.4byte	.LASF9
+ 999 007b 03       		.uleb128 0x3
+ 1000 007c 08       		.byte	0x8
+ 1001 007d 05       		.byte	0x5
+ 1002 007e 12020000 		.4byte	.LASF10
+ 1003 0082 03       		.uleb128 0x3
+ 1004 0083 08       		.byte	0x8
+ 1005 0084 07       		.byte	0x7
+ 1006 0085 CA010000 		.4byte	.LASF11
+ 1007 0089 04       		.uleb128 0x4
+ 1008 008a 04       		.byte	0x4
+ 1009 008b 05       		.byte	0x5
+ 1010 008c 696E7400 		.ascii	"int\000"
+ 1011 0090 03       		.uleb128 0x3
+ 1012 0091 04       		.byte	0x4
+ 1013 0092 07       		.byte	0x7
+ 1014 0093 BD010000 		.4byte	.LASF12
+ 1015 0097 02       		.uleb128 0x2
+ 1016 0098 47000000 		.4byte	.LASF13
+ 1017 009c 03       		.byte	0x3
+ 1018 009d 14       		.byte	0x14
+ 1019 009e 25000000 		.4byte	0x25
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 27
+
+
+ 1020 00a2 02       		.uleb128 0x2
+ 1021 00a3 E1010000 		.4byte	.LASF14
+ 1022 00a7 03       		.byte	0x3
+ 1023 00a8 15       		.byte	0x15
+ 1024 00a9 37000000 		.4byte	0x37
+ 1025 00ad 02       		.uleb128 0x2
+ 1026 00ae 88020000 		.4byte	.LASF15
+ 1027 00b2 03       		.byte	0x3
+ 1028 00b3 21       		.byte	0x21
+ 1029 00b4 50000000 		.4byte	0x50
+ 1030 00b8 02       		.uleb128 0x2
+ 1031 00b9 FA010000 		.4byte	.LASF16
+ 1032 00bd 03       		.byte	0x3
+ 1033 00be 2C       		.byte	0x2c
+ 1034 00bf 62000000 		.4byte	0x62
+ 1035 00c3 05       		.uleb128 0x5
+ 1036 00c4 59000000 		.4byte	.LASF17
+ 1037 00c8 04       		.byte	0x4
+ 1038 00c9 3801     		.2byte	0x138
+ 1039 00cb 42000000 		.4byte	0x42
+ 1040 00cf 03       		.uleb128 0x3
+ 1041 00d0 04       		.byte	0x4
+ 1042 00d1 04       		.byte	0x4
+ 1043 00d2 4E000000 		.4byte	.LASF18
+ 1044 00d6 03       		.uleb128 0x3
+ 1045 00d7 08       		.byte	0x8
+ 1046 00d8 04       		.byte	0x4
+ 1047 00d9 38010000 		.4byte	.LASF19
+ 1048 00dd 03       		.uleb128 0x3
+ 1049 00de 01       		.byte	0x1
+ 1050 00df 08       		.byte	0x8
+ 1051 00e0 31020000 		.4byte	.LASF20
+ 1052 00e4 03       		.uleb128 0x3
+ 1053 00e5 04       		.byte	0x4
+ 1054 00e6 07       		.byte	0x7
+ 1055 00e7 02020000 		.4byte	.LASF21
+ 1056 00eb 06       		.uleb128 0x6
+ 1057 00ec 04       		.byte	0x4
+ 1058 00ed DD000000 		.4byte	0xdd
+ 1059 00f1 06       		.uleb128 0x6
+ 1060 00f2 04       		.byte	0x4
+ 1061 00f3 F7000000 		.4byte	0xf7
+ 1062 00f7 07       		.uleb128 0x7
+ 1063 00f8 DD000000 		.4byte	0xdd
+ 1064 00fc 08       		.uleb128 0x8
+ 1065 00fd 20020000 		.4byte	.LASF26
+ 1066 0101 01       		.byte	0x1
+ 1067 0102 2B       		.byte	0x2b
+ 1068 0103 97000000 		.4byte	0x97
+ 1069 0107 00000000 		.4byte	.LFB63
+ 1070 010b 40000000 		.4byte	.LFE63-.LFB63
+ 1071 010f 01       		.uleb128 0x1
+ 1072 0110 9C       		.byte	0x9c
+ 1073 0111 AD010000 		.4byte	0x1ad
+ 1074 0115 09       		.uleb128 0x9
+ 1075 0116 75020000 		.4byte	.LASF22
+ 1076 011a 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 28
+
+
+ 1077 011b 2B       		.byte	0x2b
+ 1078 011c A2000000 		.4byte	0xa2
+ 1079 0120 00000000 		.4byte	.LLST0
+ 1080 0124 09       		.uleb128 0x9
+ 1081 0125 E4000000 		.4byte	.LASF23
+ 1082 0129 01       		.byte	0x1
+ 1083 012a 2B       		.byte	0x2b
+ 1084 012b A2000000 		.4byte	0xa2
+ 1085 012f 21000000 		.4byte	.LLST1
+ 1086 0133 09       		.uleb128 0x9
+ 1087 0134 66030000 		.4byte	.LASF24
+ 1088 0138 01       		.byte	0x1
+ 1089 0139 2B       		.byte	0x2b
+ 1090 013a A2000000 		.4byte	0xa2
+ 1091 013e 58000000 		.4byte	.LLST2
+ 1092 0142 09       		.uleb128 0x9
+ 1093 0143 54000000 		.4byte	.LASF25
+ 1094 0147 01       		.byte	0x1
+ 1095 0148 2B       		.byte	0x2b
+ 1096 0149 AD010000 		.4byte	0x1ad
+ 1097 014d 79000000 		.4byte	.LLST3
+ 1098 0151 0A       		.uleb128 0xa
+ 1099 0152 1A000000 		.4byte	.LVL4
+ 1100 0156 0A0B0000 		.4byte	0xb0a
+ 1101 015a 75010000 		.4byte	0x175
+ 1102 015e 0B       		.uleb128 0xb
+ 1103 015f 01       		.uleb128 0x1
+ 1104 0160 53       		.byte	0x53
+ 1105 0161 01       		.uleb128 0x1
+ 1106 0162 32       		.byte	0x32
+ 1107 0163 0B       		.uleb128 0xb
+ 1108 0164 01       		.uleb128 0x1
+ 1109 0165 52       		.byte	0x52
+ 1110 0166 01       		.uleb128 0x1
+ 1111 0167 31       		.byte	0x31
+ 1112 0168 0B       		.uleb128 0xb
+ 1113 0169 01       		.uleb128 0x1
+ 1114 016a 51       		.byte	0x51
+ 1115 016b 02       		.uleb128 0x2
+ 1116 016c 91       		.byte	0x91
+ 1117 016d 6F       		.sleb128 -17
+ 1118 016e 0B       		.uleb128 0xb
+ 1119 016f 01       		.uleb128 0x1
+ 1120 0170 50       		.byte	0x50
+ 1121 0171 02       		.uleb128 0x2
+ 1122 0172 76       		.byte	0x76
+ 1123 0173 00       		.sleb128 0
+ 1124 0174 00       		.byte	0
+ 1125 0175 0C       		.uleb128 0xc
+ 1126 0176 1E000000 		.4byte	.LVL5
+ 1127 017a 340B0000 		.4byte	0xb34
+ 1128 017e 0A       		.uleb128 0xa
+ 1129 017f 30000000 		.4byte	.LVL6
+ 1130 0183 3F0B0000 		.4byte	0xb3f
+ 1131 0187 A3010000 		.4byte	0x1a3
+ 1132 018b 0B       		.uleb128 0xb
+ 1133 018c 01       		.uleb128 0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 29
+
+
+ 1134 018d 53       		.byte	0x53
+ 1135 018e 01       		.uleb128 0x1
+ 1136 018f 31       		.byte	0x31
+ 1137 0190 0B       		.uleb128 0xb
+ 1138 0191 01       		.uleb128 0x1
+ 1139 0192 52       		.byte	0x52
+ 1140 0193 02       		.uleb128 0x2
+ 1141 0194 74       		.byte	0x74
+ 1142 0195 00       		.sleb128 0
+ 1143 0196 0B       		.uleb128 0xb
+ 1144 0197 01       		.uleb128 0x1
+ 1145 0198 51       		.byte	0x51
+ 1146 0199 02       		.uleb128 0x2
+ 1147 019a 75       		.byte	0x75
+ 1148 019b 00       		.sleb128 0
+ 1149 019c 0B       		.uleb128 0xb
+ 1150 019d 01       		.uleb128 0x1
+ 1151 019e 50       		.byte	0x50
+ 1152 019f 02       		.uleb128 0x2
+ 1153 01a0 76       		.byte	0x76
+ 1154 01a1 00       		.sleb128 0
+ 1155 01a2 00       		.byte	0
+ 1156 01a3 0C       		.uleb128 0xc
+ 1157 01a4 34000000 		.4byte	.LVL7
+ 1158 01a8 340B0000 		.4byte	0xb34
+ 1159 01ac 00       		.byte	0
+ 1160 01ad 06       		.uleb128 0x6
+ 1161 01ae 04       		.byte	0x4
+ 1162 01af A2000000 		.4byte	0xa2
+ 1163 01b3 08       		.uleb128 0x8
+ 1164 01b4 6D030000 		.4byte	.LASF27
+ 1165 01b8 01       		.byte	0x1
+ 1166 01b9 66       		.byte	0x66
+ 1167 01ba 97000000 		.4byte	0x97
+ 1168 01be 00000000 		.4byte	.LFB64
+ 1169 01c2 0C000000 		.4byte	.LFE64-.LFB64
+ 1170 01c6 01       		.uleb128 0x1
+ 1171 01c7 9C       		.byte	0x9c
+ 1172 01c8 10020000 		.4byte	0x210
+ 1173 01cc 09       		.uleb128 0x9
+ 1174 01cd 75020000 		.4byte	.LASF22
+ 1175 01d1 01       		.byte	0x1
+ 1176 01d2 66       		.byte	0x66
+ 1177 01d3 A2000000 		.4byte	0xa2
+ 1178 01d7 97000000 		.4byte	.LLST4
+ 1179 01db 09       		.uleb128 0x9
+ 1180 01dc E4000000 		.4byte	.LASF23
+ 1181 01e0 01       		.byte	0x1
+ 1182 01e1 66       		.byte	0x66
+ 1183 01e2 A2000000 		.4byte	0xa2
+ 1184 01e6 B8000000 		.4byte	.LLST5
+ 1185 01ea 09       		.uleb128 0x9
+ 1186 01eb 54000000 		.4byte	.LASF25
+ 1187 01ef 01       		.byte	0x1
+ 1188 01f0 66       		.byte	0x66
+ 1189 01f1 AD010000 		.4byte	0x1ad
+ 1190 01f5 D9000000 		.4byte	.LLST6
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 30
+
+
+ 1191 01f9 0D       		.uleb128 0xd
+ 1192 01fa 0A000000 		.4byte	.LVL11
+ 1193 01fe FC000000 		.4byte	0xfc
+ 1194 0202 0B       		.uleb128 0xb
+ 1195 0203 01       		.uleb128 0x1
+ 1196 0204 53       		.byte	0x53
+ 1197 0205 03       		.uleb128 0x3
+ 1198 0206 F3       		.byte	0xf3
+ 1199 0207 01       		.uleb128 0x1
+ 1200 0208 52       		.byte	0x52
+ 1201 0209 0B       		.uleb128 0xb
+ 1202 020a 01       		.uleb128 0x1
+ 1203 020b 52       		.byte	0x52
+ 1204 020c 01       		.uleb128 0x1
+ 1205 020d 31       		.byte	0x31
+ 1206 020e 00       		.byte	0
+ 1207 020f 00       		.byte	0
+ 1208 0210 08       		.uleb128 0x8
+ 1209 0211 68010000 		.4byte	.LASF28
+ 1210 0215 01       		.byte	0x1
+ 1211 0216 71       		.byte	0x71
+ 1212 0217 97000000 		.4byte	0x97
+ 1213 021b 00000000 		.4byte	.LFB65
+ 1214 021f 7A000000 		.4byte	.LFE65-.LFB65
+ 1215 0223 01       		.uleb128 0x1
+ 1216 0224 9C       		.byte	0x9c
+ 1217 0225 F8020000 		.4byte	0x2f8
+ 1218 0229 09       		.uleb128 0x9
+ 1219 022a 75020000 		.4byte	.LASF22
+ 1220 022e 01       		.byte	0x1
+ 1221 022f 71       		.byte	0x71
+ 1222 0230 A2000000 		.4byte	0xa2
+ 1223 0234 05010000 		.4byte	.LLST7
+ 1224 0238 09       		.uleb128 0x9
+ 1225 0239 E4000000 		.4byte	.LASF23
+ 1226 023d 01       		.byte	0x1
+ 1227 023e 71       		.byte	0x71
+ 1228 023f A2000000 		.4byte	0xa2
+ 1229 0243 26010000 		.4byte	.LLST8
+ 1230 0247 09       		.uleb128 0x9
+ 1231 0248 66030000 		.4byte	.LASF24
+ 1232 024c 01       		.byte	0x1
+ 1233 024d 71       		.byte	0x71
+ 1234 024e A2000000 		.4byte	0xa2
+ 1235 0252 5D010000 		.4byte	.LLST9
+ 1236 0256 09       		.uleb128 0x9
+ 1237 0257 54000000 		.4byte	.LASF25
+ 1238 025b 01       		.byte	0x1
+ 1239 025c 71       		.byte	0x71
+ 1240 025d F8020000 		.4byte	0x2f8
+ 1241 0261 7E010000 		.4byte	.LLST10
+ 1242 0265 0E       		.uleb128 0xe
+ 1243 0266 11030000 		.4byte	0x311
+ 1244 026a 9C010000 		.4byte	.LLST11
+ 1245 026e 0F       		.uleb128 0xf
+ 1246 026f 1F010000 		.4byte	.LASF29
+ 1247 0273 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 31
+
+
+ 1248 0274 72       		.byte	0x72
+ 1249 0275 FE020000 		.4byte	0x2fe
+ 1250 0279 02       		.uleb128 0x2
+ 1251 027a 74       		.byte	0x74
+ 1252 027b 00       		.sleb128 0
+ 1253 027c 10       		.uleb128 0x10
+ 1254 027d 56000000 		.4byte	.LBB2
+ 1255 0281 1A000000 		.4byte	.LBE2-.LBB2
+ 1256 0285 97020000 		.4byte	0x297
+ 1257 0289 11       		.uleb128 0x11
+ 1258 028a 6900     		.ascii	"i\000"
+ 1259 028c 01       		.byte	0x1
+ 1260 028d AC       		.byte	0xac
+ 1261 028e A2000000 		.4byte	0xa2
+ 1262 0292 CF010000 		.4byte	.LLST12
+ 1263 0296 00       		.byte	0
+ 1264 0297 0A       		.uleb128 0xa
+ 1265 0298 2E000000 		.4byte	.LVL19
+ 1266 029c 0A0B0000 		.4byte	0xb0a
+ 1267 02a0 BB020000 		.4byte	0x2bb
+ 1268 02a4 0B       		.uleb128 0xb
+ 1269 02a5 01       		.uleb128 0x1
+ 1270 02a6 53       		.byte	0x53
+ 1271 02a7 01       		.uleb128 0x1
+ 1272 02a8 32       		.byte	0x32
+ 1273 02a9 0B       		.uleb128 0xb
+ 1274 02aa 01       		.uleb128 0x1
+ 1275 02ab 52       		.byte	0x52
+ 1276 02ac 01       		.uleb128 0x1
+ 1277 02ad 31       		.byte	0x31
+ 1278 02ae 0B       		.uleb128 0xb
+ 1279 02af 01       		.uleb128 0x1
+ 1280 02b0 51       		.byte	0x51
+ 1281 02b1 02       		.uleb128 0x2
+ 1282 02b2 77       		.byte	0x77
+ 1283 02b3 1B       		.sleb128 27
+ 1284 02b4 0B       		.uleb128 0xb
+ 1285 02b5 01       		.uleb128 0x1
+ 1286 02b6 50       		.byte	0x50
+ 1287 02b7 02       		.uleb128 0x2
+ 1288 02b8 78       		.byte	0x78
+ 1289 02b9 00       		.sleb128 0
+ 1290 02ba 00       		.byte	0
+ 1291 02bb 0C       		.uleb128 0xc
+ 1292 02bc 32000000 		.4byte	.LVL20
+ 1293 02c0 340B0000 		.4byte	0xb34
+ 1294 02c4 0A       		.uleb128 0xa
+ 1295 02c5 48000000 		.4byte	.LVL21
+ 1296 02c9 3F0B0000 		.4byte	0xb3f
+ 1297 02cd EE020000 		.4byte	0x2ee
+ 1298 02d1 0B       		.uleb128 0xb
+ 1299 02d2 01       		.uleb128 0x1
+ 1300 02d3 53       		.byte	0x53
+ 1301 02d4 01       		.uleb128 0x1
+ 1302 02d5 31       		.byte	0x31
+ 1303 02d6 0B       		.uleb128 0xb
+ 1304 02d7 01       		.uleb128 0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 32
+
+
+ 1305 02d8 52       		.byte	0x52
+ 1306 02d9 07       		.uleb128 0x7
+ 1307 02da 75       		.byte	0x75
+ 1308 02db 00       		.sleb128 0
+ 1309 02dc 31       		.byte	0x31
+ 1310 02dd 24       		.byte	0x24
+ 1311 02de 08       		.byte	0x8
+ 1312 02df FE       		.byte	0xfe
+ 1313 02e0 1A       		.byte	0x1a
+ 1314 02e1 0B       		.uleb128 0xb
+ 1315 02e2 01       		.uleb128 0x1
+ 1316 02e3 51       		.byte	0x51
+ 1317 02e4 02       		.uleb128 0x2
+ 1318 02e5 74       		.byte	0x74
+ 1319 02e6 00       		.sleb128 0
+ 1320 02e7 0B       		.uleb128 0xb
+ 1321 02e8 01       		.uleb128 0x1
+ 1322 02e9 50       		.byte	0x50
+ 1323 02ea 02       		.uleb128 0x2
+ 1324 02eb 78       		.byte	0x78
+ 1325 02ec 00       		.sleb128 0
+ 1326 02ed 00       		.byte	0
+ 1327 02ee 0C       		.uleb128 0xc
+ 1328 02ef 4C000000 		.4byte	.LVL22
+ 1329 02f3 340B0000 		.4byte	0xb34
+ 1330 02f7 00       		.byte	0
+ 1331 02f8 06       		.uleb128 0x6
+ 1332 02f9 04       		.byte	0x4
+ 1333 02fa AD000000 		.4byte	0xad
+ 1334 02fe 12       		.uleb128 0x12
+ 1335 02ff A2000000 		.4byte	0xa2
+ 1336 0303 11030000 		.4byte	0x311
+ 1337 0307 13       		.uleb128 0x13
+ 1338 0308 E4000000 		.4byte	0xe4
+ 1339 030c 65020000 		.4byte	0x265
+ 1340 0310 00       		.byte	0
+ 1341 0311 07       		.uleb128 0x7
+ 1342 0312 E4000000 		.4byte	0xe4
+ 1343 0316 08       		.uleb128 0x8
+ 1344 0317 44030000 		.4byte	.LASF30
+ 1345 031b 01       		.byte	0x1
+ 1346 031c B8       		.byte	0xb8
+ 1347 031d 97000000 		.4byte	0x97
+ 1348 0321 00000000 		.4byte	.LFB66
+ 1349 0325 0C000000 		.4byte	.LFE66-.LFB66
+ 1350 0329 01       		.uleb128 0x1
+ 1351 032a 9C       		.byte	0x9c
+ 1352 032b 73030000 		.4byte	0x373
+ 1353 032f 09       		.uleb128 0x9
+ 1354 0330 75020000 		.4byte	.LASF22
+ 1355 0334 01       		.byte	0x1
+ 1356 0335 B8       		.byte	0xb8
+ 1357 0336 A2000000 		.4byte	0xa2
+ 1358 033a ED010000 		.4byte	.LLST13
+ 1359 033e 09       		.uleb128 0x9
+ 1360 033f E4000000 		.4byte	.LASF23
+ 1361 0343 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 33
+
+
+ 1362 0344 B8       		.byte	0xb8
+ 1363 0345 A2000000 		.4byte	0xa2
+ 1364 0349 0E020000 		.4byte	.LLST14
+ 1365 034d 09       		.uleb128 0x9
+ 1366 034e 54000000 		.4byte	.LASF25
+ 1367 0352 01       		.byte	0x1
+ 1368 0353 B8       		.byte	0xb8
+ 1369 0354 F8020000 		.4byte	0x2f8
+ 1370 0358 2F020000 		.4byte	.LLST15
+ 1371 035c 0D       		.uleb128 0xd
+ 1372 035d 0A000000 		.4byte	.LVL29
+ 1373 0361 10020000 		.4byte	0x210
+ 1374 0365 0B       		.uleb128 0xb
+ 1375 0366 01       		.uleb128 0x1
+ 1376 0367 53       		.byte	0x53
+ 1377 0368 03       		.uleb128 0x3
+ 1378 0369 F3       		.byte	0xf3
+ 1379 036a 01       		.uleb128 0x1
+ 1380 036b 52       		.byte	0x52
+ 1381 036c 0B       		.uleb128 0xb
+ 1382 036d 01       		.uleb128 0x1
+ 1383 036e 52       		.byte	0x52
+ 1384 036f 01       		.uleb128 0x1
+ 1385 0370 31       		.byte	0x31
+ 1386 0371 00       		.byte	0
+ 1387 0372 00       		.byte	0
+ 1388 0373 08       		.uleb128 0x8
+ 1389 0374 3F010000 		.4byte	.LASF31
+ 1390 0378 01       		.byte	0x1
+ 1391 0379 C3       		.byte	0xc3
+ 1392 037a 97000000 		.4byte	0x97
+ 1393 037e 00000000 		.4byte	.LFB67
+ 1394 0382 20000000 		.4byte	.LFE67-.LFB67
+ 1395 0386 01       		.uleb128 0x1
+ 1396 0387 9C       		.byte	0x9c
+ 1397 0388 F2030000 		.4byte	0x3f2
+ 1398 038c 09       		.uleb128 0x9
+ 1399 038d 75020000 		.4byte	.LASF22
+ 1400 0391 01       		.byte	0x1
+ 1401 0392 C3       		.byte	0xc3
+ 1402 0393 A2000000 		.4byte	0xa2
+ 1403 0397 5B020000 		.4byte	.LLST16
+ 1404 039b 09       		.uleb128 0x9
+ 1405 039c E4000000 		.4byte	.LASF23
+ 1406 03a0 01       		.byte	0x1
+ 1407 03a1 C3       		.byte	0xc3
+ 1408 03a2 A2000000 		.4byte	0xa2
+ 1409 03a6 7C020000 		.4byte	.LLST17
+ 1410 03aa 09       		.uleb128 0x9
+ 1411 03ab 0B020000 		.4byte	.LASF32
+ 1412 03af 01       		.byte	0x1
+ 1413 03b0 C3       		.byte	0xc3
+ 1414 03b1 A2000000 		.4byte	0xa2
+ 1415 03b5 9D020000 		.4byte	.LLST18
+ 1416 03b9 09       		.uleb128 0x9
+ 1417 03ba 54000000 		.4byte	.LASF25
+ 1418 03be 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 34
+
+
+ 1419 03bf C3       		.byte	0xc3
+ 1420 03c0 AD010000 		.4byte	0x1ad
+ 1421 03c4 BE020000 		.4byte	.LLST19
+ 1422 03c8 14       		.uleb128 0x14
+ 1423 03c9 6200     		.ascii	"b\000"
+ 1424 03cb 01       		.byte	0x1
+ 1425 03cc C4       		.byte	0xc4
+ 1426 03cd A2000000 		.4byte	0xa2
+ 1427 03d1 02       		.uleb128 0x2
+ 1428 03d2 91       		.byte	0x91
+ 1429 03d3 6F       		.sleb128 -17
+ 1430 03d4 0F       		.uleb128 0xf
+ 1431 03d5 32010000 		.4byte	.LASF33
+ 1432 03d9 01       		.byte	0x1
+ 1433 03da C5       		.byte	0xc5
+ 1434 03db A2000000 		.4byte	0xa2
+ 1435 03df 01       		.uleb128 0x1
+ 1436 03e0 50       		.byte	0x50
+ 1437 03e1 0D       		.uleb128 0xd
+ 1438 03e2 10000000 		.4byte	.LVL32
+ 1439 03e6 B3010000 		.4byte	0x1b3
+ 1440 03ea 0B       		.uleb128 0xb
+ 1441 03eb 01       		.uleb128 0x1
+ 1442 03ec 52       		.byte	0x52
+ 1443 03ed 02       		.uleb128 0x2
+ 1444 03ee 91       		.byte	0x91
+ 1445 03ef 6F       		.sleb128 -17
+ 1446 03f0 00       		.byte	0
+ 1447 03f1 00       		.byte	0
+ 1448 03f2 08       		.uleb128 0x8
+ 1449 03f3 79010000 		.4byte	.LASF34
+ 1450 03f7 01       		.byte	0x1
+ 1451 03f8 D1       		.byte	0xd1
+ 1452 03f9 97000000 		.4byte	0x97
+ 1453 03fd 00000000 		.4byte	.LFB68
+ 1454 0401 20000000 		.4byte	.LFE68-.LFB68
+ 1455 0405 01       		.uleb128 0x1
+ 1456 0406 9C       		.byte	0x9c
+ 1457 0407 71040000 		.4byte	0x471
+ 1458 040b 09       		.uleb128 0x9
+ 1459 040c 75020000 		.4byte	.LASF22
+ 1460 0410 01       		.byte	0x1
+ 1461 0411 D1       		.byte	0xd1
+ 1462 0412 A2000000 		.4byte	0xa2
+ 1463 0416 DC020000 		.4byte	.LLST20
+ 1464 041a 09       		.uleb128 0x9
+ 1465 041b E4000000 		.4byte	.LASF23
+ 1466 041f 01       		.byte	0x1
+ 1467 0420 D1       		.byte	0xd1
+ 1468 0421 A2000000 		.4byte	0xa2
+ 1469 0425 FD020000 		.4byte	.LLST21
+ 1470 0429 09       		.uleb128 0x9
+ 1471 042a 0B020000 		.4byte	.LASF32
+ 1472 042e 01       		.byte	0x1
+ 1473 042f D1       		.byte	0xd1
+ 1474 0430 A2000000 		.4byte	0xa2
+ 1475 0434 1E030000 		.4byte	.LLST22
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 35
+
+
+ 1476 0438 09       		.uleb128 0x9
+ 1477 0439 54000000 		.4byte	.LASF25
+ 1478 043d 01       		.byte	0x1
+ 1479 043e D1       		.byte	0xd1
+ 1480 043f F8020000 		.4byte	0x2f8
+ 1481 0443 3F030000 		.4byte	.LLST23
+ 1482 0447 14       		.uleb128 0x14
+ 1483 0448 6200     		.ascii	"b\000"
+ 1484 044a 01       		.byte	0x1
+ 1485 044b D2       		.byte	0xd2
+ 1486 044c AD000000 		.4byte	0xad
+ 1487 0450 02       		.uleb128 0x2
+ 1488 0451 91       		.byte	0x91
+ 1489 0452 6E       		.sleb128 -18
+ 1490 0453 0F       		.uleb128 0xf
+ 1491 0454 32010000 		.4byte	.LASF33
+ 1492 0458 01       		.byte	0x1
+ 1493 0459 D3       		.byte	0xd3
+ 1494 045a A2000000 		.4byte	0xa2
+ 1495 045e 01       		.uleb128 0x1
+ 1496 045f 50       		.byte	0x50
+ 1497 0460 0D       		.uleb128 0xd
+ 1498 0461 10000000 		.4byte	.LVL35
+ 1499 0465 16030000 		.4byte	0x316
+ 1500 0469 0B       		.uleb128 0xb
+ 1501 046a 01       		.uleb128 0x1
+ 1502 046b 52       		.byte	0x52
+ 1503 046c 02       		.uleb128 0x2
+ 1504 046d 91       		.byte	0x91
+ 1505 046e 6E       		.sleb128 -18
+ 1506 046f 00       		.byte	0
+ 1507 0470 00       		.byte	0
+ 1508 0471 08       		.uleb128 0x8
+ 1509 0472 FE000000 		.4byte	.LASF35
+ 1510 0476 01       		.byte	0x1
+ 1511 0477 E0       		.byte	0xe0
+ 1512 0478 97000000 		.4byte	0x97
+ 1513 047c 00000000 		.4byte	.LFB69
+ 1514 0480 32000000 		.4byte	.LFE69-.LFB69
+ 1515 0484 01       		.uleb128 0x1
+ 1516 0485 9C       		.byte	0x9c
+ 1517 0486 1C050000 		.4byte	0x51c
+ 1518 048a 09       		.uleb128 0x9
+ 1519 048b 75020000 		.4byte	.LASF22
+ 1520 048f 01       		.byte	0x1
+ 1521 0490 E0       		.byte	0xe0
+ 1522 0491 A2000000 		.4byte	0xa2
+ 1523 0495 5D030000 		.4byte	.LLST24
+ 1524 0499 09       		.uleb128 0x9
+ 1525 049a E4000000 		.4byte	.LASF23
+ 1526 049e 01       		.byte	0x1
+ 1527 049f E0       		.byte	0xe0
+ 1528 04a0 A2000000 		.4byte	0xa2
+ 1529 04a4 7E030000 		.4byte	.LLST25
+ 1530 04a8 09       		.uleb128 0x9
+ 1531 04a9 4E010000 		.4byte	.LASF36
+ 1532 04ad 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 36
+
+
+ 1533 04ae E0       		.byte	0xe0
+ 1534 04af A2000000 		.4byte	0xa2
+ 1535 04b3 9F030000 		.4byte	.LLST26
+ 1536 04b7 09       		.uleb128 0x9
+ 1537 04b8 66030000 		.4byte	.LASF24
+ 1538 04bc 01       		.byte	0x1
+ 1539 04bd E0       		.byte	0xe0
+ 1540 04be A2000000 		.4byte	0xa2
+ 1541 04c2 C0030000 		.4byte	.LLST27
+ 1542 04c6 15       		.uleb128 0x15
+ 1543 04c7 54000000 		.4byte	.LASF25
+ 1544 04cb 01       		.byte	0x1
+ 1545 04cc E0       		.byte	0xe0
+ 1546 04cd AD010000 		.4byte	0x1ad
+ 1547 04d1 02       		.uleb128 0x2
+ 1548 04d2 91       		.byte	0x91
+ 1549 04d3 00       		.sleb128 0
+ 1550 04d4 0F       		.uleb128 0xf
+ 1551 04d5 32010000 		.4byte	.LASF33
+ 1552 04d9 01       		.byte	0x1
+ 1553 04da E6       		.byte	0xe6
+ 1554 04db A2000000 		.4byte	0xa2
+ 1555 04df 01       		.uleb128 0x1
+ 1556 04e0 50       		.byte	0x50
+ 1557 04e1 11       		.uleb128 0x11
+ 1558 04e2 6200     		.ascii	"b\000"
+ 1559 04e4 01       		.byte	0x1
+ 1560 04e5 E6       		.byte	0xe6
+ 1561 04e6 A2000000 		.4byte	0xa2
+ 1562 04ea E1030000 		.4byte	.LLST28
+ 1563 04ee 10       		.uleb128 0x10
+ 1564 04ef 16000000 		.4byte	.LBB3
+ 1565 04f3 18000000 		.4byte	.LBE3-.LBB3
+ 1566 04f7 0B050000 		.4byte	0x50b
+ 1567 04fb 16       		.uleb128 0x16
+ 1568 04fc 1D000000 		.4byte	.LASF37
+ 1569 0500 01       		.byte	0x1
+ 1570 0501 E8       		.byte	0xe8
+ 1571 0502 A2000000 		.4byte	0xa2
+ 1572 0506 F4030000 		.4byte	.LLST29
+ 1573 050a 00       		.byte	0
+ 1574 050b 0D       		.uleb128 0xd
+ 1575 050c 10000000 		.4byte	.LVL38
+ 1576 0510 B3010000 		.4byte	0x1b3
+ 1577 0514 0B       		.uleb128 0xb
+ 1578 0515 01       		.uleb128 0x1
+ 1579 0516 52       		.byte	0x52
+ 1580 0517 02       		.uleb128 0x2
+ 1581 0518 91       		.byte	0x91
+ 1582 0519 6F       		.sleb128 -17
+ 1583 051a 00       		.byte	0
+ 1584 051b 00       		.byte	0
+ 1585 051c 08       		.uleb128 0x8
+ 1586 051d 57010000 		.4byte	.LASF38
+ 1587 0521 01       		.byte	0x1
+ 1588 0522 F8       		.byte	0xf8
+ 1589 0523 97000000 		.4byte	0x97
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 37
+
+
+ 1590 0527 00000000 		.4byte	.LFB70
+ 1591 052b 32000000 		.4byte	.LFE70-.LFB70
+ 1592 052f 01       		.uleb128 0x1
+ 1593 0530 9C       		.byte	0x9c
+ 1594 0531 C8050000 		.4byte	0x5c8
+ 1595 0535 09       		.uleb128 0x9
+ 1596 0536 75020000 		.4byte	.LASF22
+ 1597 053a 01       		.byte	0x1
+ 1598 053b F8       		.byte	0xf8
+ 1599 053c A2000000 		.4byte	0xa2
+ 1600 0540 1B040000 		.4byte	.LLST30
+ 1601 0544 09       		.uleb128 0x9
+ 1602 0545 E4000000 		.4byte	.LASF23
+ 1603 0549 01       		.byte	0x1
+ 1604 054a F8       		.byte	0xf8
+ 1605 054b A2000000 		.4byte	0xa2
+ 1606 054f 3C040000 		.4byte	.LLST31
+ 1607 0553 09       		.uleb128 0x9
+ 1608 0554 4E010000 		.4byte	.LASF36
+ 1609 0558 01       		.byte	0x1
+ 1610 0559 F8       		.byte	0xf8
+ 1611 055a A2000000 		.4byte	0xa2
+ 1612 055e 5D040000 		.4byte	.LLST32
+ 1613 0562 09       		.uleb128 0x9
+ 1614 0563 66030000 		.4byte	.LASF24
+ 1615 0567 01       		.byte	0x1
+ 1616 0568 F8       		.byte	0xf8
+ 1617 0569 A2000000 		.4byte	0xa2
+ 1618 056d 7E040000 		.4byte	.LLST33
+ 1619 0571 15       		.uleb128 0x15
+ 1620 0572 54000000 		.4byte	.LASF25
+ 1621 0576 01       		.byte	0x1
+ 1622 0577 F8       		.byte	0xf8
+ 1623 0578 F8020000 		.4byte	0x2f8
+ 1624 057c 02       		.uleb128 0x2
+ 1625 057d 91       		.byte	0x91
+ 1626 057e 00       		.sleb128 0
+ 1627 057f 0F       		.uleb128 0xf
+ 1628 0580 32010000 		.4byte	.LASF33
+ 1629 0584 01       		.byte	0x1
+ 1630 0585 FE       		.byte	0xfe
+ 1631 0586 A2000000 		.4byte	0xa2
+ 1632 058a 01       		.uleb128 0x1
+ 1633 058b 50       		.byte	0x50
+ 1634 058c 11       		.uleb128 0x11
+ 1635 058d 7700     		.ascii	"w\000"
+ 1636 058f 01       		.byte	0x1
+ 1637 0590 FF       		.byte	0xff
+ 1638 0591 AD000000 		.4byte	0xad
+ 1639 0595 9F040000 		.4byte	.LLST34
+ 1640 0599 10       		.uleb128 0x10
+ 1641 059a 16000000 		.4byte	.LBB4
+ 1642 059e 18000000 		.4byte	.LBE4-.LBB4
+ 1643 05a2 B7050000 		.4byte	0x5b7
+ 1644 05a6 17       		.uleb128 0x17
+ 1645 05a7 1D000000 		.4byte	.LASF37
+ 1646 05ab 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 38
+
+
+ 1647 05ac 0101     		.2byte	0x101
+ 1648 05ae AD000000 		.4byte	0xad
+ 1649 05b2 B2040000 		.4byte	.LLST35
+ 1650 05b6 00       		.byte	0
+ 1651 05b7 0D       		.uleb128 0xd
+ 1652 05b8 10000000 		.4byte	.LVL45
+ 1653 05bc 16030000 		.4byte	0x316
+ 1654 05c0 0B       		.uleb128 0xb
+ 1655 05c1 01       		.uleb128 0x1
+ 1656 05c2 52       		.byte	0x52
+ 1657 05c3 02       		.uleb128 0x2
+ 1658 05c4 91       		.byte	0x91
+ 1659 05c5 6E       		.sleb128 -18
+ 1660 05c6 00       		.byte	0
+ 1661 05c7 00       		.byte	0
+ 1662 05c8 18       		.uleb128 0x18
+ 1663 05c9 47020000 		.4byte	.LASF39
+ 1664 05cd 01       		.byte	0x1
+ 1665 05ce 1001     		.2byte	0x110
+ 1666 05d0 85060000 		.4byte	0x685
+ 1667 05d4 00000000 		.4byte	.LFB71
+ 1668 05d8 3A000000 		.4byte	.LFE71-.LFB71
+ 1669 05dc 01       		.uleb128 0x1
+ 1670 05dd 9C       		.byte	0x9c
+ 1671 05de 85060000 		.4byte	0x685
+ 1672 05e2 19       		.uleb128 0x19
+ 1673 05e3 75020000 		.4byte	.LASF22
+ 1674 05e7 01       		.byte	0x1
+ 1675 05e8 1001     		.2byte	0x110
+ 1676 05ea A2000000 		.4byte	0xa2
+ 1677 05ee D9040000 		.4byte	.LLST36
+ 1678 05f2 19       		.uleb128 0x19
+ 1679 05f3 E4000000 		.4byte	.LASF23
+ 1680 05f7 01       		.byte	0x1
+ 1681 05f8 1001     		.2byte	0x110
+ 1682 05fa A2000000 		.4byte	0xa2
+ 1683 05fe FA040000 		.4byte	.LLST37
+ 1684 0602 19       		.uleb128 0x19
+ 1685 0603 66030000 		.4byte	.LASF24
+ 1686 0607 01       		.byte	0x1
+ 1687 0608 1001     		.2byte	0x110
+ 1688 060a A2000000 		.4byte	0xa2
+ 1689 060e 27050000 		.4byte	.LLST38
+ 1690 0612 19       		.uleb128 0x19
+ 1691 0613 54000000 		.4byte	.LASF25
+ 1692 0617 01       		.byte	0x1
+ 1693 0618 1001     		.2byte	0x110
+ 1694 061a AD010000 		.4byte	0x1ad
+ 1695 061e 48050000 		.4byte	.LLST39
+ 1696 0622 0E       		.uleb128 0xe
+ 1697 0623 9F060000 		.4byte	0x69f
+ 1698 0627 69050000 		.4byte	.LLST40
+ 1699 062b 17       		.uleb128 0x17
+ 1700 062c 1F010000 		.4byte	.LASF29
+ 1701 0630 01       		.byte	0x1
+ 1702 0631 1101     		.2byte	0x111
+ 1703 0633 8C060000 		.4byte	0x68c
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 39
+
+
+ 1704 0637 96050000 		.4byte	.LLST41
+ 1705 063b 0A       		.uleb128 0xa
+ 1706 063c 1E000000 		.4byte	.LVL57
+ 1707 0640 630B0000 		.4byte	0xb63
+ 1708 0644 56060000 		.4byte	0x656
+ 1709 0648 0B       		.uleb128 0xb
+ 1710 0649 01       		.uleb128 0x1
+ 1711 064a 51       		.byte	0x51
+ 1712 064b 03       		.uleb128 0x3
+ 1713 064c F3       		.byte	0xf3
+ 1714 064d 01       		.uleb128 0x1
+ 1715 064e 53       		.byte	0x53
+ 1716 064f 0B       		.uleb128 0xb
+ 1717 0650 01       		.uleb128 0x1
+ 1718 0651 50       		.byte	0x50
+ 1719 0652 02       		.uleb128 0x2
+ 1720 0653 7D       		.byte	0x7d
+ 1721 0654 01       		.sleb128 1
+ 1722 0655 00       		.byte	0
+ 1723 0656 0A       		.uleb128 0xa
+ 1724 0657 2A000000 		.4byte	.LVL58
+ 1725 065b 0A0B0000 		.4byte	0xb0a
+ 1726 065f 7B060000 		.4byte	0x67b
+ 1727 0663 0B       		.uleb128 0xb
+ 1728 0664 01       		.uleb128 0x1
+ 1729 0665 53       		.byte	0x53
+ 1730 0666 01       		.uleb128 0x1
+ 1731 0667 30       		.byte	0x30
+ 1732 0668 0B       		.uleb128 0xb
+ 1733 0669 01       		.uleb128 0x1
+ 1734 066a 52       		.byte	0x52
+ 1735 066b 02       		.uleb128 0x2
+ 1736 066c 74       		.byte	0x74
+ 1737 066d 00       		.sleb128 0
+ 1738 066e 0B       		.uleb128 0xb
+ 1739 066f 01       		.uleb128 0x1
+ 1740 0670 51       		.byte	0x51
+ 1741 0671 02       		.uleb128 0x2
+ 1742 0672 7D       		.byte	0x7d
+ 1743 0673 00       		.sleb128 0
+ 1744 0674 0B       		.uleb128 0xb
+ 1745 0675 01       		.uleb128 0x1
+ 1746 0676 50       		.byte	0x50
+ 1747 0677 02       		.uleb128 0x2
+ 1748 0678 75       		.byte	0x75
+ 1749 0679 00       		.sleb128 0
+ 1750 067a 00       		.byte	0
+ 1751 067b 0C       		.uleb128 0xc
+ 1752 067c 2E000000 		.4byte	.LVL59
+ 1753 0680 340B0000 		.4byte	0xb34
+ 1754 0684 00       		.byte	0
+ 1755 0685 03       		.uleb128 0x3
+ 1756 0686 01       		.byte	0x1
+ 1757 0687 02       		.byte	0x2
+ 1758 0688 60030000 		.4byte	.LASF40
+ 1759 068c 12       		.uleb128 0x12
+ 1760 068d A2000000 		.4byte	0xa2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 40
+
+
+ 1761 0691 9F060000 		.4byte	0x69f
+ 1762 0695 13       		.uleb128 0x13
+ 1763 0696 E4000000 		.4byte	0xe4
+ 1764 069a 22060000 		.4byte	0x622
+ 1765 069e 00       		.byte	0
+ 1766 069f 07       		.uleb128 0x7
+ 1767 06a0 E4000000 		.4byte	0xe4
+ 1768 06a4 18       		.uleb128 0x18
+ 1769 06a5 0E010000 		.4byte	.LASF41
+ 1770 06a9 01       		.byte	0x1
+ 1771 06aa 3801     		.2byte	0x138
+ 1772 06ac 85060000 		.4byte	0x685
+ 1773 06b0 00000000 		.4byte	.LFB72
+ 1774 06b4 16000000 		.4byte	.LFE72-.LFB72
+ 1775 06b8 01       		.uleb128 0x1
+ 1776 06b9 9C       		.byte	0x9c
+ 1777 06ba 04070000 		.4byte	0x704
+ 1778 06be 19       		.uleb128 0x19
+ 1779 06bf 75020000 		.4byte	.LASF22
+ 1780 06c3 01       		.byte	0x1
+ 1781 06c4 3801     		.2byte	0x138
+ 1782 06c6 A2000000 		.4byte	0xa2
+ 1783 06ca AA050000 		.4byte	.LLST42
+ 1784 06ce 19       		.uleb128 0x19
+ 1785 06cf E4000000 		.4byte	.LASF23
+ 1786 06d3 01       		.byte	0x1
+ 1787 06d4 3801     		.2byte	0x138
+ 1788 06d6 A2000000 		.4byte	0xa2
+ 1789 06da CB050000 		.4byte	.LLST43
+ 1790 06de 19       		.uleb128 0x19
+ 1791 06df 54000000 		.4byte	.LASF25
+ 1792 06e3 01       		.byte	0x1
+ 1793 06e4 3801     		.2byte	0x138
+ 1794 06e6 A2000000 		.4byte	0xa2
+ 1795 06ea EC050000 		.4byte	.LLST44
+ 1796 06ee 0D       		.uleb128 0xd
+ 1797 06ef 10000000 		.4byte	.LVL63
+ 1798 06f3 C8050000 		.4byte	0x5c8
+ 1799 06f7 0B       		.uleb128 0xb
+ 1800 06f8 01       		.uleb128 0x1
+ 1801 06f9 53       		.byte	0x53
+ 1802 06fa 02       		.uleb128 0x2
+ 1803 06fb 91       		.byte	0x91
+ 1804 06fc 77       		.sleb128 -9
+ 1805 06fd 0B       		.uleb128 0xb
+ 1806 06fe 01       		.uleb128 0x1
+ 1807 06ff 52       		.byte	0x52
+ 1808 0700 01       		.uleb128 0x1
+ 1809 0701 31       		.byte	0x31
+ 1810 0702 00       		.byte	0
+ 1811 0703 00       		.byte	0
+ 1812 0704 18       		.uleb128 0x18
+ 1813 0705 AB010000 		.4byte	.LASF42
+ 1814 0709 01       		.byte	0x1
+ 1815 070a 4301     		.2byte	0x143
+ 1816 070c 85060000 		.4byte	0x685
+ 1817 0710 00000000 		.4byte	.LFB73
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 41
+
+
+ 1818 0714 52000000 		.4byte	.LFE73-.LFB73
+ 1819 0718 01       		.uleb128 0x1
+ 1820 0719 9C       		.byte	0x9c
+ 1821 071a B5070000 		.4byte	0x7b5
+ 1822 071e 19       		.uleb128 0x19
+ 1823 071f 75020000 		.4byte	.LASF22
+ 1824 0723 01       		.byte	0x1
+ 1825 0724 4301     		.2byte	0x143
+ 1826 0726 A2000000 		.4byte	0xa2
+ 1827 072a 17060000 		.4byte	.LLST45
+ 1828 072e 19       		.uleb128 0x19
+ 1829 072f E4000000 		.4byte	.LASF23
+ 1830 0733 01       		.byte	0x1
+ 1831 0734 4301     		.2byte	0x143
+ 1832 0736 A2000000 		.4byte	0xa2
+ 1833 073a 38060000 		.4byte	.LLST46
+ 1834 073e 19       		.uleb128 0x19
+ 1835 073f 66030000 		.4byte	.LASF24
+ 1836 0743 01       		.byte	0x1
+ 1837 0744 4301     		.2byte	0x143
+ 1838 0746 A2000000 		.4byte	0xa2
+ 1839 074a 65060000 		.4byte	.LLST47
+ 1840 074e 19       		.uleb128 0x19
+ 1841 074f 54000000 		.4byte	.LASF25
+ 1842 0753 01       		.byte	0x1
+ 1843 0754 4301     		.2byte	0x143
+ 1844 0756 F8020000 		.4byte	0x2f8
+ 1845 075a 86060000 		.4byte	.LLST48
+ 1846 075e 0E       		.uleb128 0xe
+ 1847 075f C8070000 		.4byte	0x7c8
+ 1848 0763 A7060000 		.4byte	.LLST49
+ 1849 0767 1A       		.uleb128 0x1a
+ 1850 0768 1F010000 		.4byte	.LASF29
+ 1851 076c 01       		.byte	0x1
+ 1852 076d 4401     		.2byte	0x144
+ 1853 076f B5070000 		.4byte	0x7b5
+ 1854 0773 02       		.uleb128 0x2
+ 1855 0774 75       		.byte	0x75
+ 1856 0775 00       		.sleb128 0
+ 1857 0776 10       		.uleb128 0x10
+ 1858 0777 16000000 		.4byte	.LBB5
+ 1859 077b 20000000 		.4byte	.LBE5-.LBB5
+ 1860 077f 92070000 		.4byte	0x792
+ 1861 0783 1B       		.uleb128 0x1b
+ 1862 0784 6900     		.ascii	"i\000"
+ 1863 0786 01       		.byte	0x1
+ 1864 0787 6401     		.2byte	0x164
+ 1865 0789 A2000000 		.4byte	0xa2
+ 1866 078d E5060000 		.4byte	.LLST50
+ 1867 0791 00       		.byte	0
+ 1868 0792 0A       		.uleb128 0xa
+ 1869 0793 42000000 		.4byte	.LVL78
+ 1870 0797 0A0B0000 		.4byte	0xb0a
+ 1871 079b AB070000 		.4byte	0x7ab
+ 1872 079f 0B       		.uleb128 0xb
+ 1873 07a0 01       		.uleb128 0x1
+ 1874 07a1 53       		.byte	0x53
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 42
+
+
+ 1875 07a2 01       		.uleb128 0x1
+ 1876 07a3 30       		.byte	0x30
+ 1877 07a4 0B       		.uleb128 0xb
+ 1878 07a5 01       		.uleb128 0x1
+ 1879 07a6 51       		.byte	0x51
+ 1880 07a7 02       		.uleb128 0x2
+ 1881 07a8 75       		.byte	0x75
+ 1882 07a9 00       		.sleb128 0
+ 1883 07aa 00       		.byte	0
+ 1884 07ab 0C       		.uleb128 0xc
+ 1885 07ac 46000000 		.4byte	.LVL79
+ 1886 07b0 340B0000 		.4byte	0xb34
+ 1887 07b4 00       		.byte	0
+ 1888 07b5 12       		.uleb128 0x12
+ 1889 07b6 A2000000 		.4byte	0xa2
+ 1890 07ba C8070000 		.4byte	0x7c8
+ 1891 07be 13       		.uleb128 0x13
+ 1892 07bf E4000000 		.4byte	0xe4
+ 1893 07c3 5E070000 		.4byte	0x75e
+ 1894 07c7 00       		.byte	0
+ 1895 07c8 07       		.uleb128 0x7
+ 1896 07c9 E4000000 		.4byte	0xe4
+ 1897 07cd 18       		.uleb128 0x18
+ 1898 07ce 5F000000 		.4byte	.LASF43
+ 1899 07d2 01       		.byte	0x1
+ 1900 07d3 7301     		.2byte	0x173
+ 1901 07d5 85060000 		.4byte	0x685
+ 1902 07d9 00000000 		.4byte	.LFB74
+ 1903 07dd 16000000 		.4byte	.LFE74-.LFB74
+ 1904 07e1 01       		.uleb128 0x1
+ 1905 07e2 9C       		.byte	0x9c
+ 1906 07e3 2D080000 		.4byte	0x82d
+ 1907 07e7 19       		.uleb128 0x19
+ 1908 07e8 75020000 		.4byte	.LASF22
+ 1909 07ec 01       		.byte	0x1
+ 1910 07ed 7301     		.2byte	0x173
+ 1911 07ef A2000000 		.4byte	0xa2
+ 1912 07f3 0F070000 		.4byte	.LLST51
+ 1913 07f7 19       		.uleb128 0x19
+ 1914 07f8 E4000000 		.4byte	.LASF23
+ 1915 07fc 01       		.byte	0x1
+ 1916 07fd 7301     		.2byte	0x173
+ 1917 07ff A2000000 		.4byte	0xa2
+ 1918 0803 30070000 		.4byte	.LLST52
+ 1919 0807 19       		.uleb128 0x19
+ 1920 0808 54000000 		.4byte	.LASF25
+ 1921 080c 01       		.byte	0x1
+ 1922 080d 7301     		.2byte	0x173
+ 1923 080f AD000000 		.4byte	0xad
+ 1924 0813 51070000 		.4byte	.LLST53
+ 1925 0817 0D       		.uleb128 0xd
+ 1926 0818 10000000 		.4byte	.LVL82
+ 1927 081c 04070000 		.4byte	0x704
+ 1928 0820 0B       		.uleb128 0xb
+ 1929 0821 01       		.uleb128 0x1
+ 1930 0822 53       		.byte	0x53
+ 1931 0823 02       		.uleb128 0x2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 43
+
+
+ 1932 0824 91       		.byte	0x91
+ 1933 0825 76       		.sleb128 -10
+ 1934 0826 0B       		.uleb128 0xb
+ 1935 0827 01       		.uleb128 0x1
+ 1936 0828 52       		.byte	0x52
+ 1937 0829 01       		.uleb128 0x1
+ 1938 082a 31       		.byte	0x31
+ 1939 082b 00       		.byte	0
+ 1940 082c 00       		.byte	0
+ 1941 082d 18       		.uleb128 0x18
+ 1942 082e 9B010000 		.4byte	.LASF44
+ 1943 0832 01       		.byte	0x1
+ 1944 0833 7E01     		.2byte	0x17e
+ 1945 0835 85060000 		.4byte	0x685
+ 1946 0839 00000000 		.4byte	.LFB75
+ 1947 083d 40000000 		.4byte	.LFE75-.LFB75
+ 1948 0841 01       		.uleb128 0x1
+ 1949 0842 9C       		.byte	0x9c
+ 1950 0843 CB080000 		.4byte	0x8cb
+ 1951 0847 19       		.uleb128 0x19
+ 1952 0848 75020000 		.4byte	.LASF22
+ 1953 084c 01       		.byte	0x1
+ 1954 084d 7E01     		.2byte	0x17e
+ 1955 084f A2000000 		.4byte	0xa2
+ 1956 0853 7C070000 		.4byte	.LLST54
+ 1957 0857 19       		.uleb128 0x19
+ 1958 0858 E4000000 		.4byte	.LASF23
+ 1959 085c 01       		.byte	0x1
+ 1960 085d 7E01     		.2byte	0x17e
+ 1961 085f A2000000 		.4byte	0xa2
+ 1962 0863 9D070000 		.4byte	.LLST55
+ 1963 0867 19       		.uleb128 0x19
+ 1964 0868 0B020000 		.4byte	.LASF32
+ 1965 086c 01       		.byte	0x1
+ 1966 086d 7E01     		.2byte	0x17e
+ 1967 086f A2000000 		.4byte	0xa2
+ 1968 0873 BE070000 		.4byte	.LLST56
+ 1969 0877 19       		.uleb128 0x19
+ 1970 0878 54000000 		.4byte	.LASF25
+ 1971 087c 01       		.byte	0x1
+ 1972 087d 7E01     		.2byte	0x17e
+ 1973 087f A2000000 		.4byte	0xa2
+ 1974 0883 DF070000 		.4byte	.LLST57
+ 1975 0887 1C       		.uleb128 0x1c
+ 1976 0888 6200     		.ascii	"b\000"
+ 1977 088a 01       		.byte	0x1
+ 1978 088b 7F01     		.2byte	0x17f
+ 1979 088d A2000000 		.4byte	0xa2
+ 1980 0891 02       		.uleb128 0x2
+ 1981 0892 91       		.byte	0x91
+ 1982 0893 67       		.sleb128 -25
+ 1983 0894 0A       		.uleb128 0xa
+ 1984 0895 14000000 		.4byte	.LVL85
+ 1985 0899 B3010000 		.4byte	0x1b3
+ 1986 089d B4080000 		.4byte	0x8b4
+ 1987 08a1 0B       		.uleb128 0xb
+ 1988 08a2 01       		.uleb128 0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 44
+
+
+ 1989 08a3 52       		.byte	0x52
+ 1990 08a4 02       		.uleb128 0x2
+ 1991 08a5 91       		.byte	0x91
+ 1992 08a6 67       		.sleb128 -25
+ 1993 08a7 0B       		.uleb128 0xb
+ 1994 08a8 01       		.uleb128 0x1
+ 1995 08a9 51       		.byte	0x51
+ 1996 08aa 02       		.uleb128 0x2
+ 1997 08ab 74       		.byte	0x74
+ 1998 08ac 00       		.sleb128 0
+ 1999 08ad 0B       		.uleb128 0xb
+ 2000 08ae 01       		.uleb128 0x1
+ 2001 08af 50       		.byte	0x50
+ 2002 08b0 02       		.uleb128 0x2
+ 2003 08b1 75       		.byte	0x75
+ 2004 08b2 00       		.sleb128 0
+ 2005 08b3 00       		.byte	0
+ 2006 08b4 0D       		.uleb128 0xd
+ 2007 08b5 3C000000 		.4byte	.LVL86
+ 2008 08b9 A4060000 		.4byte	0x6a4
+ 2009 08bd 0B       		.uleb128 0xb
+ 2010 08be 01       		.uleb128 0x1
+ 2011 08bf 51       		.byte	0x51
+ 2012 08c0 02       		.uleb128 0x2
+ 2013 08c1 74       		.byte	0x74
+ 2014 08c2 00       		.sleb128 0
+ 2015 08c3 0B       		.uleb128 0xb
+ 2016 08c4 01       		.uleb128 0x1
+ 2017 08c5 50       		.byte	0x50
+ 2018 08c6 02       		.uleb128 0x2
+ 2019 08c7 75       		.byte	0x75
+ 2020 08c8 00       		.sleb128 0
+ 2021 08c9 00       		.byte	0
+ 2022 08ca 00       		.byte	0
+ 2023 08cb 18       		.uleb128 0x18
+ 2024 08cc E9010000 		.4byte	.LASF45
+ 2025 08d0 01       		.byte	0x1
+ 2026 08d1 8C01     		.2byte	0x18c
+ 2027 08d3 85060000 		.4byte	0x685
+ 2028 08d7 00000000 		.4byte	.LFB76
+ 2029 08db 40000000 		.4byte	.LFE76-.LFB76
+ 2030 08df 01       		.uleb128 0x1
+ 2031 08e0 9C       		.byte	0x9c
+ 2032 08e1 69090000 		.4byte	0x969
+ 2033 08e5 19       		.uleb128 0x19
+ 2034 08e6 75020000 		.4byte	.LASF22
+ 2035 08ea 01       		.byte	0x1
+ 2036 08eb 8C01     		.2byte	0x18c
+ 2037 08ed A2000000 		.4byte	0xa2
+ 2038 08f1 00080000 		.4byte	.LLST58
+ 2039 08f5 19       		.uleb128 0x19
+ 2040 08f6 E4000000 		.4byte	.LASF23
+ 2041 08fa 01       		.byte	0x1
+ 2042 08fb 8C01     		.2byte	0x18c
+ 2043 08fd A2000000 		.4byte	0xa2
+ 2044 0901 21080000 		.4byte	.LLST59
+ 2045 0905 19       		.uleb128 0x19
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 45
+
+
+ 2046 0906 0B020000 		.4byte	.LASF32
+ 2047 090a 01       		.byte	0x1
+ 2048 090b 8C01     		.2byte	0x18c
+ 2049 090d A2000000 		.4byte	0xa2
+ 2050 0911 42080000 		.4byte	.LLST60
+ 2051 0915 19       		.uleb128 0x19
+ 2052 0916 54000000 		.4byte	.LASF25
+ 2053 091a 01       		.byte	0x1
+ 2054 091b 8C01     		.2byte	0x18c
+ 2055 091d AD000000 		.4byte	0xad
+ 2056 0921 63080000 		.4byte	.LLST61
+ 2057 0925 1C       		.uleb128 0x1c
+ 2058 0926 7700     		.ascii	"w\000"
+ 2059 0928 01       		.byte	0x1
+ 2060 0929 8D01     		.2byte	0x18d
+ 2061 092b AD000000 		.4byte	0xad
+ 2062 092f 02       		.uleb128 0x2
+ 2063 0930 91       		.byte	0x91
+ 2064 0931 66       		.sleb128 -26
+ 2065 0932 0A       		.uleb128 0xa
+ 2066 0933 14000000 		.4byte	.LVL89
+ 2067 0937 16030000 		.4byte	0x316
+ 2068 093b 52090000 		.4byte	0x952
+ 2069 093f 0B       		.uleb128 0xb
+ 2070 0940 01       		.uleb128 0x1
+ 2071 0941 52       		.byte	0x52
+ 2072 0942 02       		.uleb128 0x2
+ 2073 0943 91       		.byte	0x91
+ 2074 0944 66       		.sleb128 -26
+ 2075 0945 0B       		.uleb128 0xb
+ 2076 0946 01       		.uleb128 0x1
+ 2077 0947 51       		.byte	0x51
+ 2078 0948 02       		.uleb128 0x2
+ 2079 0949 74       		.byte	0x74
+ 2080 094a 00       		.sleb128 0
+ 2081 094b 0B       		.uleb128 0xb
+ 2082 094c 01       		.uleb128 0x1
+ 2083 094d 50       		.byte	0x50
+ 2084 094e 02       		.uleb128 0x2
+ 2085 094f 75       		.byte	0x75
+ 2086 0950 00       		.sleb128 0
+ 2087 0951 00       		.byte	0
+ 2088 0952 0D       		.uleb128 0xd
+ 2089 0953 3C000000 		.4byte	.LVL90
+ 2090 0957 CD070000 		.4byte	0x7cd
+ 2091 095b 0B       		.uleb128 0xb
+ 2092 095c 01       		.uleb128 0x1
+ 2093 095d 51       		.byte	0x51
+ 2094 095e 02       		.uleb128 0x2
+ 2095 095f 74       		.byte	0x74
+ 2096 0960 00       		.sleb128 0
+ 2097 0961 0B       		.uleb128 0xb
+ 2098 0962 01       		.uleb128 0x1
+ 2099 0963 50       		.byte	0x50
+ 2100 0964 02       		.uleb128 0x2
+ 2101 0965 75       		.byte	0x75
+ 2102 0966 00       		.sleb128 0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 46
+
+
+ 2103 0967 00       		.byte	0
+ 2104 0968 00       		.byte	0
+ 2105 0969 18       		.uleb128 0x18
+ 2106 096a 33030000 		.4byte	.LASF46
+ 2107 096e 01       		.byte	0x1
+ 2108 096f 9B01     		.2byte	0x19b
+ 2109 0971 85060000 		.4byte	0x685
+ 2110 0975 00000000 		.4byte	.LFB77
+ 2111 0979 4A000000 		.4byte	.LFE77-.LFB77
+ 2112 097d 01       		.uleb128 0x1
+ 2113 097e 9C       		.byte	0x9c
+ 2114 097f 310A0000 		.4byte	0xa31
+ 2115 0983 19       		.uleb128 0x19
+ 2116 0984 75020000 		.4byte	.LASF22
+ 2117 0988 01       		.byte	0x1
+ 2118 0989 9B01     		.2byte	0x19b
+ 2119 098b A2000000 		.4byte	0xa2
+ 2120 098f 84080000 		.4byte	.LLST62
+ 2121 0993 19       		.uleb128 0x19
+ 2122 0994 E4000000 		.4byte	.LASF23
+ 2123 0998 01       		.byte	0x1
+ 2124 0999 9B01     		.2byte	0x19b
+ 2125 099b A2000000 		.4byte	0xa2
+ 2126 099f A5080000 		.4byte	.LLST63
+ 2127 09a3 19       		.uleb128 0x19
+ 2128 09a4 4E010000 		.4byte	.LASF36
+ 2129 09a8 01       		.byte	0x1
+ 2130 09a9 9B01     		.2byte	0x19b
+ 2131 09ab A2000000 		.4byte	0xa2
+ 2132 09af C6080000 		.4byte	.LLST64
+ 2133 09b3 19       		.uleb128 0x19
+ 2134 09b4 66030000 		.4byte	.LASF24
+ 2135 09b8 01       		.byte	0x1
+ 2136 09b9 9B01     		.2byte	0x19b
+ 2137 09bb A2000000 		.4byte	0xa2
+ 2138 09bf E7080000 		.4byte	.LLST65
+ 2139 09c3 19       		.uleb128 0x19
+ 2140 09c4 54000000 		.4byte	.LASF25
+ 2141 09c8 01       		.byte	0x1
+ 2142 09c9 9B01     		.2byte	0x19b
+ 2143 09cb A2000000 		.4byte	0xa2
+ 2144 09cf 08090000 		.4byte	.LLST66
+ 2145 09d3 1C       		.uleb128 0x1c
+ 2146 09d4 6200     		.ascii	"b\000"
+ 2147 09d6 01       		.byte	0x1
+ 2148 09d7 A301     		.2byte	0x1a3
+ 2149 09d9 A2000000 		.4byte	0xa2
+ 2150 09dd 02       		.uleb128 0x2
+ 2151 09de 91       		.byte	0x91
+ 2152 09df 67       		.sleb128 -25
+ 2153 09e0 10       		.uleb128 0x10
+ 2154 09e1 16000000 		.4byte	.LBB6
+ 2155 09e5 2E000000 		.4byte	.LBE6-.LBB6
+ 2156 09e9 140A0000 		.4byte	0xa14
+ 2157 09ed 17       		.uleb128 0x17
+ 2158 09ee 1D000000 		.4byte	.LASF37
+ 2159 09f2 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 47
+
+
+ 2160 09f3 A501     		.2byte	0x1a5
+ 2161 09f5 A2000000 		.4byte	0xa2
+ 2162 09f9 55090000 		.4byte	.LLST67
+ 2163 09fd 0D       		.uleb128 0xd
+ 2164 09fe 42000000 		.4byte	.LVL98
+ 2165 0a02 A4060000 		.4byte	0x6a4
+ 2166 0a06 0B       		.uleb128 0xb
+ 2167 0a07 01       		.uleb128 0x1
+ 2168 0a08 51       		.byte	0x51
+ 2169 0a09 02       		.uleb128 0x2
+ 2170 0a0a 75       		.byte	0x75
+ 2171 0a0b 00       		.sleb128 0
+ 2172 0a0c 0B       		.uleb128 0xb
+ 2173 0a0d 01       		.uleb128 0x1
+ 2174 0a0e 50       		.byte	0x50
+ 2175 0a0f 02       		.uleb128 0x2
+ 2176 0a10 76       		.byte	0x76
+ 2177 0a11 00       		.sleb128 0
+ 2178 0a12 00       		.byte	0
+ 2179 0a13 00       		.byte	0
+ 2180 0a14 0D       		.uleb128 0xd
+ 2181 0a15 14000000 		.4byte	.LVL93
+ 2182 0a19 B3010000 		.4byte	0x1b3
+ 2183 0a1d 0B       		.uleb128 0xb
+ 2184 0a1e 01       		.uleb128 0x1
+ 2185 0a1f 52       		.byte	0x52
+ 2186 0a20 02       		.uleb128 0x2
+ 2187 0a21 91       		.byte	0x91
+ 2188 0a22 67       		.sleb128 -25
+ 2189 0a23 0B       		.uleb128 0xb
+ 2190 0a24 01       		.uleb128 0x1
+ 2191 0a25 51       		.byte	0x51
+ 2192 0a26 02       		.uleb128 0x2
+ 2193 0a27 75       		.byte	0x75
+ 2194 0a28 00       		.sleb128 0
+ 2195 0a29 0B       		.uleb128 0xb
+ 2196 0a2a 01       		.uleb128 0x1
+ 2197 0a2b 50       		.byte	0x50
+ 2198 0a2c 02       		.uleb128 0x2
+ 2199 0a2d 76       		.byte	0x76
+ 2200 0a2e 00       		.sleb128 0
+ 2201 0a2f 00       		.byte	0
+ 2202 0a30 00       		.byte	0
+ 2203 0a31 18       		.uleb128 0x18
+ 2204 0a32 89010000 		.4byte	.LASF47
+ 2205 0a36 01       		.byte	0x1
+ 2206 0a37 B801     		.2byte	0x1b8
+ 2207 0a39 85060000 		.4byte	0x685
+ 2208 0a3d 00000000 		.4byte	.LFB78
+ 2209 0a41 4A000000 		.4byte	.LFE78-.LFB78
+ 2210 0a45 01       		.uleb128 0x1
+ 2211 0a46 9C       		.byte	0x9c
+ 2212 0a47 F90A0000 		.4byte	0xaf9
+ 2213 0a4b 19       		.uleb128 0x19
+ 2214 0a4c 75020000 		.4byte	.LASF22
+ 2215 0a50 01       		.byte	0x1
+ 2216 0a51 B801     		.2byte	0x1b8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 48
+
+
+ 2217 0a53 A2000000 		.4byte	0xa2
+ 2218 0a57 7C090000 		.4byte	.LLST68
+ 2219 0a5b 19       		.uleb128 0x19
+ 2220 0a5c E4000000 		.4byte	.LASF23
+ 2221 0a60 01       		.byte	0x1
+ 2222 0a61 B801     		.2byte	0x1b8
+ 2223 0a63 A2000000 		.4byte	0xa2
+ 2224 0a67 9D090000 		.4byte	.LLST69
+ 2225 0a6b 19       		.uleb128 0x19
+ 2226 0a6c 4E010000 		.4byte	.LASF36
+ 2227 0a70 01       		.byte	0x1
+ 2228 0a71 B801     		.2byte	0x1b8
+ 2229 0a73 A2000000 		.4byte	0xa2
+ 2230 0a77 BE090000 		.4byte	.LLST70
+ 2231 0a7b 19       		.uleb128 0x19
+ 2232 0a7c 66030000 		.4byte	.LASF24
+ 2233 0a80 01       		.byte	0x1
+ 2234 0a81 B801     		.2byte	0x1b8
+ 2235 0a83 A2000000 		.4byte	0xa2
+ 2236 0a87 DF090000 		.4byte	.LLST71
+ 2237 0a8b 19       		.uleb128 0x19
+ 2238 0a8c 54000000 		.4byte	.LASF25
+ 2239 0a90 01       		.byte	0x1
+ 2240 0a91 B801     		.2byte	0x1b8
+ 2241 0a93 AD000000 		.4byte	0xad
+ 2242 0a97 000A0000 		.4byte	.LLST72
+ 2243 0a9b 1C       		.uleb128 0x1c
+ 2244 0a9c 7700     		.ascii	"w\000"
+ 2245 0a9e 01       		.byte	0x1
+ 2246 0a9f C001     		.2byte	0x1c0
+ 2247 0aa1 AD000000 		.4byte	0xad
+ 2248 0aa5 02       		.uleb128 0x2
+ 2249 0aa6 91       		.byte	0x91
+ 2250 0aa7 66       		.sleb128 -26
+ 2251 0aa8 10       		.uleb128 0x10
+ 2252 0aa9 16000000 		.4byte	.LBB7
+ 2253 0aad 2E000000 		.4byte	.LBE7-.LBB7
+ 2254 0ab1 DC0A0000 		.4byte	0xadc
+ 2255 0ab5 17       		.uleb128 0x17
+ 2256 0ab6 1D000000 		.4byte	.LASF37
+ 2257 0aba 01       		.byte	0x1
+ 2258 0abb C201     		.2byte	0x1c2
+ 2259 0abd AD000000 		.4byte	0xad
+ 2260 0ac1 4F0A0000 		.4byte	.LLST73
+ 2261 0ac5 0D       		.uleb128 0xd
+ 2262 0ac6 42000000 		.4byte	.LVL108
+ 2263 0aca CD070000 		.4byte	0x7cd
+ 2264 0ace 0B       		.uleb128 0xb
+ 2265 0acf 01       		.uleb128 0x1
+ 2266 0ad0 51       		.byte	0x51
+ 2267 0ad1 02       		.uleb128 0x2
+ 2268 0ad2 75       		.byte	0x75
+ 2269 0ad3 00       		.sleb128 0
+ 2270 0ad4 0B       		.uleb128 0xb
+ 2271 0ad5 01       		.uleb128 0x1
+ 2272 0ad6 50       		.byte	0x50
+ 2273 0ad7 02       		.uleb128 0x2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 49
+
+
+ 2274 0ad8 76       		.byte	0x76
+ 2275 0ad9 00       		.sleb128 0
+ 2276 0ada 00       		.byte	0
+ 2277 0adb 00       		.byte	0
+ 2278 0adc 0D       		.uleb128 0xd
+ 2279 0add 14000000 		.4byte	.LVL103
+ 2280 0ae1 16030000 		.4byte	0x316
+ 2281 0ae5 0B       		.uleb128 0xb
+ 2282 0ae6 01       		.uleb128 0x1
+ 2283 0ae7 52       		.byte	0x52
+ 2284 0ae8 02       		.uleb128 0x2
+ 2285 0ae9 91       		.byte	0x91
+ 2286 0aea 66       		.sleb128 -26
+ 2287 0aeb 0B       		.uleb128 0xb
+ 2288 0aec 01       		.uleb128 0x1
+ 2289 0aed 51       		.byte	0x51
+ 2290 0aee 02       		.uleb128 0x2
+ 2291 0aef 75       		.byte	0x75
+ 2292 0af0 00       		.sleb128 0
+ 2293 0af1 0B       		.uleb128 0xb
+ 2294 0af2 01       		.uleb128 0x1
+ 2295 0af3 50       		.byte	0x50
+ 2296 0af4 02       		.uleb128 0x2
+ 2297 0af5 76       		.byte	0x76
+ 2298 0af6 00       		.sleb128 0
+ 2299 0af7 00       		.byte	0
+ 2300 0af8 00       		.byte	0
+ 2301 0af9 1D       		.uleb128 0x1d
+ 2302 0afa 25010000 		.4byte	.LASF53
+ 2303 0afe 06       		.byte	0x6
+ 2304 0aff 5506     		.2byte	0x655
+ 2305 0b01 050B0000 		.4byte	0xb05
+ 2306 0b05 1E       		.uleb128 0x1e
+ 2307 0b06 B8000000 		.4byte	0xb8
+ 2308 0b0a 1F       		.uleb128 0x1f
+ 2309 0b0b 7E000000 		.4byte	.LASF48
+ 2310 0b0f 05       		.byte	0x5
+ 2311 0b10 A7       		.byte	0xa7
+ 2312 0b11 C3000000 		.4byte	0xc3
+ 2313 0b15 2E0B0000 		.4byte	0xb2e
+ 2314 0b19 20       		.uleb128 0x20
+ 2315 0b1a C3000000 		.4byte	0xc3
+ 2316 0b1e 20       		.uleb128 0x20
+ 2317 0b1f 2E0B0000 		.4byte	0xb2e
+ 2318 0b23 20       		.uleb128 0x20
+ 2319 0b24 C3000000 		.4byte	0xc3
+ 2320 0b28 20       		.uleb128 0x20
+ 2321 0b29 C3000000 		.4byte	0xc3
+ 2322 0b2d 00       		.byte	0
+ 2323 0b2e 06       		.uleb128 0x6
+ 2324 0b2f 04       		.byte	0x4
+ 2325 0b30 C3000000 		.4byte	0xc3
+ 2326 0b34 21       		.uleb128 0x21
+ 2327 0b35 36020000 		.4byte	.LASF54
+ 2328 0b39 05       		.byte	0x5
+ 2329 0b3a A3       		.byte	0xa3
+ 2330 0b3b C3000000 		.4byte	0xc3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 50
+
+
+ 2331 0b3f 1F       		.uleb128 0x1f
+ 2332 0b40 35000000 		.4byte	.LASF49
+ 2333 0b44 05       		.byte	0x5
+ 2334 0b45 A9       		.byte	0xa9
+ 2335 0b46 C3000000 		.4byte	0xc3
+ 2336 0b4a 630B0000 		.4byte	0xb63
+ 2337 0b4e 20       		.uleb128 0x20
+ 2338 0b4f C3000000 		.4byte	0xc3
+ 2339 0b53 20       		.uleb128 0x20
+ 2340 0b54 2E0B0000 		.4byte	0xb2e
+ 2341 0b58 20       		.uleb128 0x20
+ 2342 0b59 C3000000 		.4byte	0xc3
+ 2343 0b5d 20       		.uleb128 0x20
+ 2344 0b5e C3000000 		.4byte	0xc3
+ 2345 0b62 00       		.byte	0
+ 2346 0b63 22       		.uleb128 0x22
+ 2347 0b64 DD000000 		.4byte	.LASF55
+ 2348 0b68 07       		.byte	0x7
+ 2349 0b69 1E       		.byte	0x1e
+ 2350 0b6a EB000000 		.4byte	0xeb
+ 2351 0b6e 20       		.uleb128 0x20
+ 2352 0b6f EB000000 		.4byte	0xeb
+ 2353 0b73 20       		.uleb128 0x20
+ 2354 0b74 F1000000 		.4byte	0xf1
+ 2355 0b78 00       		.byte	0
+ 2356 0b79 00       		.byte	0
+ 2357              		.section	.debug_abbrev,"",%progbits
+ 2358              	.Ldebug_abbrev0:
+ 2359 0000 01       		.uleb128 0x1
+ 2360 0001 11       		.uleb128 0x11
+ 2361 0002 01       		.byte	0x1
+ 2362 0003 25       		.uleb128 0x25
+ 2363 0004 0E       		.uleb128 0xe
+ 2364 0005 13       		.uleb128 0x13
+ 2365 0006 0B       		.uleb128 0xb
+ 2366 0007 03       		.uleb128 0x3
+ 2367 0008 0E       		.uleb128 0xe
+ 2368 0009 1B       		.uleb128 0x1b
+ 2369 000a 0E       		.uleb128 0xe
+ 2370 000b 55       		.uleb128 0x55
+ 2371 000c 17       		.uleb128 0x17
+ 2372 000d 11       		.uleb128 0x11
+ 2373 000e 01       		.uleb128 0x1
+ 2374 000f 10       		.uleb128 0x10
+ 2375 0010 17       		.uleb128 0x17
+ 2376 0011 00       		.byte	0
+ 2377 0012 00       		.byte	0
+ 2378 0013 02       		.uleb128 0x2
+ 2379 0014 16       		.uleb128 0x16
+ 2380 0015 00       		.byte	0
+ 2381 0016 03       		.uleb128 0x3
+ 2382 0017 0E       		.uleb128 0xe
+ 2383 0018 3A       		.uleb128 0x3a
+ 2384 0019 0B       		.uleb128 0xb
+ 2385 001a 3B       		.uleb128 0x3b
+ 2386 001b 0B       		.uleb128 0xb
+ 2387 001c 49       		.uleb128 0x49
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 51
+
+
+ 2388 001d 13       		.uleb128 0x13
+ 2389 001e 00       		.byte	0
+ 2390 001f 00       		.byte	0
+ 2391 0020 03       		.uleb128 0x3
+ 2392 0021 24       		.uleb128 0x24
+ 2393 0022 00       		.byte	0
+ 2394 0023 0B       		.uleb128 0xb
+ 2395 0024 0B       		.uleb128 0xb
+ 2396 0025 3E       		.uleb128 0x3e
+ 2397 0026 0B       		.uleb128 0xb
+ 2398 0027 03       		.uleb128 0x3
+ 2399 0028 0E       		.uleb128 0xe
+ 2400 0029 00       		.byte	0
+ 2401 002a 00       		.byte	0
+ 2402 002b 04       		.uleb128 0x4
+ 2403 002c 24       		.uleb128 0x24
+ 2404 002d 00       		.byte	0
+ 2405 002e 0B       		.uleb128 0xb
+ 2406 002f 0B       		.uleb128 0xb
+ 2407 0030 3E       		.uleb128 0x3e
+ 2408 0031 0B       		.uleb128 0xb
+ 2409 0032 03       		.uleb128 0x3
+ 2410 0033 08       		.uleb128 0x8
+ 2411 0034 00       		.byte	0
+ 2412 0035 00       		.byte	0
+ 2413 0036 05       		.uleb128 0x5
+ 2414 0037 16       		.uleb128 0x16
+ 2415 0038 00       		.byte	0
+ 2416 0039 03       		.uleb128 0x3
+ 2417 003a 0E       		.uleb128 0xe
+ 2418 003b 3A       		.uleb128 0x3a
+ 2419 003c 0B       		.uleb128 0xb
+ 2420 003d 3B       		.uleb128 0x3b
+ 2421 003e 05       		.uleb128 0x5
+ 2422 003f 49       		.uleb128 0x49
+ 2423 0040 13       		.uleb128 0x13
+ 2424 0041 00       		.byte	0
+ 2425 0042 00       		.byte	0
+ 2426 0043 06       		.uleb128 0x6
+ 2427 0044 0F       		.uleb128 0xf
+ 2428 0045 00       		.byte	0
+ 2429 0046 0B       		.uleb128 0xb
+ 2430 0047 0B       		.uleb128 0xb
+ 2431 0048 49       		.uleb128 0x49
+ 2432 0049 13       		.uleb128 0x13
+ 2433 004a 00       		.byte	0
+ 2434 004b 00       		.byte	0
+ 2435 004c 07       		.uleb128 0x7
+ 2436 004d 26       		.uleb128 0x26
+ 2437 004e 00       		.byte	0
+ 2438 004f 49       		.uleb128 0x49
+ 2439 0050 13       		.uleb128 0x13
+ 2440 0051 00       		.byte	0
+ 2441 0052 00       		.byte	0
+ 2442 0053 08       		.uleb128 0x8
+ 2443 0054 2E       		.uleb128 0x2e
+ 2444 0055 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 52
+
+
+ 2445 0056 3F       		.uleb128 0x3f
+ 2446 0057 19       		.uleb128 0x19
+ 2447 0058 03       		.uleb128 0x3
+ 2448 0059 0E       		.uleb128 0xe
+ 2449 005a 3A       		.uleb128 0x3a
+ 2450 005b 0B       		.uleb128 0xb
+ 2451 005c 3B       		.uleb128 0x3b
+ 2452 005d 0B       		.uleb128 0xb
+ 2453 005e 27       		.uleb128 0x27
+ 2454 005f 19       		.uleb128 0x19
+ 2455 0060 49       		.uleb128 0x49
+ 2456 0061 13       		.uleb128 0x13
+ 2457 0062 11       		.uleb128 0x11
+ 2458 0063 01       		.uleb128 0x1
+ 2459 0064 12       		.uleb128 0x12
+ 2460 0065 06       		.uleb128 0x6
+ 2461 0066 40       		.uleb128 0x40
+ 2462 0067 18       		.uleb128 0x18
+ 2463 0068 9742     		.uleb128 0x2117
+ 2464 006a 19       		.uleb128 0x19
+ 2465 006b 01       		.uleb128 0x1
+ 2466 006c 13       		.uleb128 0x13
+ 2467 006d 00       		.byte	0
+ 2468 006e 00       		.byte	0
+ 2469 006f 09       		.uleb128 0x9
+ 2470 0070 05       		.uleb128 0x5
+ 2471 0071 00       		.byte	0
+ 2472 0072 03       		.uleb128 0x3
+ 2473 0073 0E       		.uleb128 0xe
+ 2474 0074 3A       		.uleb128 0x3a
+ 2475 0075 0B       		.uleb128 0xb
+ 2476 0076 3B       		.uleb128 0x3b
+ 2477 0077 0B       		.uleb128 0xb
+ 2478 0078 49       		.uleb128 0x49
+ 2479 0079 13       		.uleb128 0x13
+ 2480 007a 02       		.uleb128 0x2
+ 2481 007b 17       		.uleb128 0x17
+ 2482 007c 00       		.byte	0
+ 2483 007d 00       		.byte	0
+ 2484 007e 0A       		.uleb128 0xa
+ 2485 007f 898201   		.uleb128 0x4109
+ 2486 0082 01       		.byte	0x1
+ 2487 0083 11       		.uleb128 0x11
+ 2488 0084 01       		.uleb128 0x1
+ 2489 0085 31       		.uleb128 0x31
+ 2490 0086 13       		.uleb128 0x13
+ 2491 0087 01       		.uleb128 0x1
+ 2492 0088 13       		.uleb128 0x13
+ 2493 0089 00       		.byte	0
+ 2494 008a 00       		.byte	0
+ 2495 008b 0B       		.uleb128 0xb
+ 2496 008c 8A8201   		.uleb128 0x410a
+ 2497 008f 00       		.byte	0
+ 2498 0090 02       		.uleb128 0x2
+ 2499 0091 18       		.uleb128 0x18
+ 2500 0092 9142     		.uleb128 0x2111
+ 2501 0094 18       		.uleb128 0x18
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 53
+
+
+ 2502 0095 00       		.byte	0
+ 2503 0096 00       		.byte	0
+ 2504 0097 0C       		.uleb128 0xc
+ 2505 0098 898201   		.uleb128 0x4109
+ 2506 009b 00       		.byte	0
+ 2507 009c 11       		.uleb128 0x11
+ 2508 009d 01       		.uleb128 0x1
+ 2509 009e 31       		.uleb128 0x31
+ 2510 009f 13       		.uleb128 0x13
+ 2511 00a0 00       		.byte	0
+ 2512 00a1 00       		.byte	0
+ 2513 00a2 0D       		.uleb128 0xd
+ 2514 00a3 898201   		.uleb128 0x4109
+ 2515 00a6 01       		.byte	0x1
+ 2516 00a7 11       		.uleb128 0x11
+ 2517 00a8 01       		.uleb128 0x1
+ 2518 00a9 31       		.uleb128 0x31
+ 2519 00aa 13       		.uleb128 0x13
+ 2520 00ab 00       		.byte	0
+ 2521 00ac 00       		.byte	0
+ 2522 00ad 0E       		.uleb128 0xe
+ 2523 00ae 34       		.uleb128 0x34
+ 2524 00af 00       		.byte	0
+ 2525 00b0 34       		.uleb128 0x34
+ 2526 00b1 19       		.uleb128 0x19
+ 2527 00b2 49       		.uleb128 0x49
+ 2528 00b3 13       		.uleb128 0x13
+ 2529 00b4 02       		.uleb128 0x2
+ 2530 00b5 17       		.uleb128 0x17
+ 2531 00b6 00       		.byte	0
+ 2532 00b7 00       		.byte	0
+ 2533 00b8 0F       		.uleb128 0xf
+ 2534 00b9 34       		.uleb128 0x34
+ 2535 00ba 00       		.byte	0
+ 2536 00bb 03       		.uleb128 0x3
+ 2537 00bc 0E       		.uleb128 0xe
+ 2538 00bd 3A       		.uleb128 0x3a
+ 2539 00be 0B       		.uleb128 0xb
+ 2540 00bf 3B       		.uleb128 0x3b
+ 2541 00c0 0B       		.uleb128 0xb
+ 2542 00c1 49       		.uleb128 0x49
+ 2543 00c2 13       		.uleb128 0x13
+ 2544 00c3 02       		.uleb128 0x2
+ 2545 00c4 18       		.uleb128 0x18
+ 2546 00c5 00       		.byte	0
+ 2547 00c6 00       		.byte	0
+ 2548 00c7 10       		.uleb128 0x10
+ 2549 00c8 0B       		.uleb128 0xb
+ 2550 00c9 01       		.byte	0x1
+ 2551 00ca 11       		.uleb128 0x11
+ 2552 00cb 01       		.uleb128 0x1
+ 2553 00cc 12       		.uleb128 0x12
+ 2554 00cd 06       		.uleb128 0x6
+ 2555 00ce 01       		.uleb128 0x1
+ 2556 00cf 13       		.uleb128 0x13
+ 2557 00d0 00       		.byte	0
+ 2558 00d1 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 54
+
+
+ 2559 00d2 11       		.uleb128 0x11
+ 2560 00d3 34       		.uleb128 0x34
+ 2561 00d4 00       		.byte	0
+ 2562 00d5 03       		.uleb128 0x3
+ 2563 00d6 08       		.uleb128 0x8
+ 2564 00d7 3A       		.uleb128 0x3a
+ 2565 00d8 0B       		.uleb128 0xb
+ 2566 00d9 3B       		.uleb128 0x3b
+ 2567 00da 0B       		.uleb128 0xb
+ 2568 00db 49       		.uleb128 0x49
+ 2569 00dc 13       		.uleb128 0x13
+ 2570 00dd 02       		.uleb128 0x2
+ 2571 00de 17       		.uleb128 0x17
+ 2572 00df 00       		.byte	0
+ 2573 00e0 00       		.byte	0
+ 2574 00e1 12       		.uleb128 0x12
+ 2575 00e2 01       		.uleb128 0x1
+ 2576 00e3 01       		.byte	0x1
+ 2577 00e4 49       		.uleb128 0x49
+ 2578 00e5 13       		.uleb128 0x13
+ 2579 00e6 01       		.uleb128 0x1
+ 2580 00e7 13       		.uleb128 0x13
+ 2581 00e8 00       		.byte	0
+ 2582 00e9 00       		.byte	0
+ 2583 00ea 13       		.uleb128 0x13
+ 2584 00eb 21       		.uleb128 0x21
+ 2585 00ec 00       		.byte	0
+ 2586 00ed 49       		.uleb128 0x49
+ 2587 00ee 13       		.uleb128 0x13
+ 2588 00ef 2F       		.uleb128 0x2f
+ 2589 00f0 13       		.uleb128 0x13
+ 2590 00f1 00       		.byte	0
+ 2591 00f2 00       		.byte	0
+ 2592 00f3 14       		.uleb128 0x14
+ 2593 00f4 34       		.uleb128 0x34
+ 2594 00f5 00       		.byte	0
+ 2595 00f6 03       		.uleb128 0x3
+ 2596 00f7 08       		.uleb128 0x8
+ 2597 00f8 3A       		.uleb128 0x3a
+ 2598 00f9 0B       		.uleb128 0xb
+ 2599 00fa 3B       		.uleb128 0x3b
+ 2600 00fb 0B       		.uleb128 0xb
+ 2601 00fc 49       		.uleb128 0x49
+ 2602 00fd 13       		.uleb128 0x13
+ 2603 00fe 02       		.uleb128 0x2
+ 2604 00ff 18       		.uleb128 0x18
+ 2605 0100 00       		.byte	0
+ 2606 0101 00       		.byte	0
+ 2607 0102 15       		.uleb128 0x15
+ 2608 0103 05       		.uleb128 0x5
+ 2609 0104 00       		.byte	0
+ 2610 0105 03       		.uleb128 0x3
+ 2611 0106 0E       		.uleb128 0xe
+ 2612 0107 3A       		.uleb128 0x3a
+ 2613 0108 0B       		.uleb128 0xb
+ 2614 0109 3B       		.uleb128 0x3b
+ 2615 010a 0B       		.uleb128 0xb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 55
+
+
+ 2616 010b 49       		.uleb128 0x49
+ 2617 010c 13       		.uleb128 0x13
+ 2618 010d 02       		.uleb128 0x2
+ 2619 010e 18       		.uleb128 0x18
+ 2620 010f 00       		.byte	0
+ 2621 0110 00       		.byte	0
+ 2622 0111 16       		.uleb128 0x16
+ 2623 0112 34       		.uleb128 0x34
+ 2624 0113 00       		.byte	0
+ 2625 0114 03       		.uleb128 0x3
+ 2626 0115 0E       		.uleb128 0xe
+ 2627 0116 3A       		.uleb128 0x3a
+ 2628 0117 0B       		.uleb128 0xb
+ 2629 0118 3B       		.uleb128 0x3b
+ 2630 0119 0B       		.uleb128 0xb
+ 2631 011a 49       		.uleb128 0x49
+ 2632 011b 13       		.uleb128 0x13
+ 2633 011c 02       		.uleb128 0x2
+ 2634 011d 17       		.uleb128 0x17
+ 2635 011e 00       		.byte	0
+ 2636 011f 00       		.byte	0
+ 2637 0120 17       		.uleb128 0x17
+ 2638 0121 34       		.uleb128 0x34
+ 2639 0122 00       		.byte	0
+ 2640 0123 03       		.uleb128 0x3
+ 2641 0124 0E       		.uleb128 0xe
+ 2642 0125 3A       		.uleb128 0x3a
+ 2643 0126 0B       		.uleb128 0xb
+ 2644 0127 3B       		.uleb128 0x3b
+ 2645 0128 05       		.uleb128 0x5
+ 2646 0129 49       		.uleb128 0x49
+ 2647 012a 13       		.uleb128 0x13
+ 2648 012b 02       		.uleb128 0x2
+ 2649 012c 17       		.uleb128 0x17
+ 2650 012d 00       		.byte	0
+ 2651 012e 00       		.byte	0
+ 2652 012f 18       		.uleb128 0x18
+ 2653 0130 2E       		.uleb128 0x2e
+ 2654 0131 01       		.byte	0x1
+ 2655 0132 3F       		.uleb128 0x3f
+ 2656 0133 19       		.uleb128 0x19
+ 2657 0134 03       		.uleb128 0x3
+ 2658 0135 0E       		.uleb128 0xe
+ 2659 0136 3A       		.uleb128 0x3a
+ 2660 0137 0B       		.uleb128 0xb
+ 2661 0138 3B       		.uleb128 0x3b
+ 2662 0139 05       		.uleb128 0x5
+ 2663 013a 27       		.uleb128 0x27
+ 2664 013b 19       		.uleb128 0x19
+ 2665 013c 49       		.uleb128 0x49
+ 2666 013d 13       		.uleb128 0x13
+ 2667 013e 11       		.uleb128 0x11
+ 2668 013f 01       		.uleb128 0x1
+ 2669 0140 12       		.uleb128 0x12
+ 2670 0141 06       		.uleb128 0x6
+ 2671 0142 40       		.uleb128 0x40
+ 2672 0143 18       		.uleb128 0x18
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 56
+
+
+ 2673 0144 9742     		.uleb128 0x2117
+ 2674 0146 19       		.uleb128 0x19
+ 2675 0147 01       		.uleb128 0x1
+ 2676 0148 13       		.uleb128 0x13
+ 2677 0149 00       		.byte	0
+ 2678 014a 00       		.byte	0
+ 2679 014b 19       		.uleb128 0x19
+ 2680 014c 05       		.uleb128 0x5
+ 2681 014d 00       		.byte	0
+ 2682 014e 03       		.uleb128 0x3
+ 2683 014f 0E       		.uleb128 0xe
+ 2684 0150 3A       		.uleb128 0x3a
+ 2685 0151 0B       		.uleb128 0xb
+ 2686 0152 3B       		.uleb128 0x3b
+ 2687 0153 05       		.uleb128 0x5
+ 2688 0154 49       		.uleb128 0x49
+ 2689 0155 13       		.uleb128 0x13
+ 2690 0156 02       		.uleb128 0x2
+ 2691 0157 17       		.uleb128 0x17
+ 2692 0158 00       		.byte	0
+ 2693 0159 00       		.byte	0
+ 2694 015a 1A       		.uleb128 0x1a
+ 2695 015b 34       		.uleb128 0x34
+ 2696 015c 00       		.byte	0
+ 2697 015d 03       		.uleb128 0x3
+ 2698 015e 0E       		.uleb128 0xe
+ 2699 015f 3A       		.uleb128 0x3a
+ 2700 0160 0B       		.uleb128 0xb
+ 2701 0161 3B       		.uleb128 0x3b
+ 2702 0162 05       		.uleb128 0x5
+ 2703 0163 49       		.uleb128 0x49
+ 2704 0164 13       		.uleb128 0x13
+ 2705 0165 02       		.uleb128 0x2
+ 2706 0166 18       		.uleb128 0x18
+ 2707 0167 00       		.byte	0
+ 2708 0168 00       		.byte	0
+ 2709 0169 1B       		.uleb128 0x1b
+ 2710 016a 34       		.uleb128 0x34
+ 2711 016b 00       		.byte	0
+ 2712 016c 03       		.uleb128 0x3
+ 2713 016d 08       		.uleb128 0x8
+ 2714 016e 3A       		.uleb128 0x3a
+ 2715 016f 0B       		.uleb128 0xb
+ 2716 0170 3B       		.uleb128 0x3b
+ 2717 0171 05       		.uleb128 0x5
+ 2718 0172 49       		.uleb128 0x49
+ 2719 0173 13       		.uleb128 0x13
+ 2720 0174 02       		.uleb128 0x2
+ 2721 0175 17       		.uleb128 0x17
+ 2722 0176 00       		.byte	0
+ 2723 0177 00       		.byte	0
+ 2724 0178 1C       		.uleb128 0x1c
+ 2725 0179 34       		.uleb128 0x34
+ 2726 017a 00       		.byte	0
+ 2727 017b 03       		.uleb128 0x3
+ 2728 017c 08       		.uleb128 0x8
+ 2729 017d 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 57
+
+
+ 2730 017e 0B       		.uleb128 0xb
+ 2731 017f 3B       		.uleb128 0x3b
+ 2732 0180 05       		.uleb128 0x5
+ 2733 0181 49       		.uleb128 0x49
+ 2734 0182 13       		.uleb128 0x13
+ 2735 0183 02       		.uleb128 0x2
+ 2736 0184 18       		.uleb128 0x18
+ 2737 0185 00       		.byte	0
+ 2738 0186 00       		.byte	0
+ 2739 0187 1D       		.uleb128 0x1d
+ 2740 0188 34       		.uleb128 0x34
+ 2741 0189 00       		.byte	0
+ 2742 018a 03       		.uleb128 0x3
+ 2743 018b 0E       		.uleb128 0xe
+ 2744 018c 3A       		.uleb128 0x3a
+ 2745 018d 0B       		.uleb128 0xb
+ 2746 018e 3B       		.uleb128 0x3b
+ 2747 018f 05       		.uleb128 0x5
+ 2748 0190 49       		.uleb128 0x49
+ 2749 0191 13       		.uleb128 0x13
+ 2750 0192 3F       		.uleb128 0x3f
+ 2751 0193 19       		.uleb128 0x19
+ 2752 0194 3C       		.uleb128 0x3c
+ 2753 0195 19       		.uleb128 0x19
+ 2754 0196 00       		.byte	0
+ 2755 0197 00       		.byte	0
+ 2756 0198 1E       		.uleb128 0x1e
+ 2757 0199 35       		.uleb128 0x35
+ 2758 019a 00       		.byte	0
+ 2759 019b 49       		.uleb128 0x49
+ 2760 019c 13       		.uleb128 0x13
+ 2761 019d 00       		.byte	0
+ 2762 019e 00       		.byte	0
+ 2763 019f 1F       		.uleb128 0x1f
+ 2764 01a0 2E       		.uleb128 0x2e
+ 2765 01a1 01       		.byte	0x1
+ 2766 01a2 3F       		.uleb128 0x3f
+ 2767 01a3 19       		.uleb128 0x19
+ 2768 01a4 03       		.uleb128 0x3
+ 2769 01a5 0E       		.uleb128 0xe
+ 2770 01a6 3A       		.uleb128 0x3a
+ 2771 01a7 0B       		.uleb128 0xb
+ 2772 01a8 3B       		.uleb128 0x3b
+ 2773 01a9 0B       		.uleb128 0xb
+ 2774 01aa 27       		.uleb128 0x27
+ 2775 01ab 19       		.uleb128 0x19
+ 2776 01ac 49       		.uleb128 0x49
+ 2777 01ad 13       		.uleb128 0x13
+ 2778 01ae 3C       		.uleb128 0x3c
+ 2779 01af 19       		.uleb128 0x19
+ 2780 01b0 01       		.uleb128 0x1
+ 2781 01b1 13       		.uleb128 0x13
+ 2782 01b2 00       		.byte	0
+ 2783 01b3 00       		.byte	0
+ 2784 01b4 20       		.uleb128 0x20
+ 2785 01b5 05       		.uleb128 0x5
+ 2786 01b6 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 58
+
+
+ 2787 01b7 49       		.uleb128 0x49
+ 2788 01b8 13       		.uleb128 0x13
+ 2789 01b9 00       		.byte	0
+ 2790 01ba 00       		.byte	0
+ 2791 01bb 21       		.uleb128 0x21
+ 2792 01bc 2E       		.uleb128 0x2e
+ 2793 01bd 00       		.byte	0
+ 2794 01be 3F       		.uleb128 0x3f
+ 2795 01bf 19       		.uleb128 0x19
+ 2796 01c0 03       		.uleb128 0x3
+ 2797 01c1 0E       		.uleb128 0xe
+ 2798 01c2 3A       		.uleb128 0x3a
+ 2799 01c3 0B       		.uleb128 0xb
+ 2800 01c4 3B       		.uleb128 0x3b
+ 2801 01c5 0B       		.uleb128 0xb
+ 2802 01c6 27       		.uleb128 0x27
+ 2803 01c7 19       		.uleb128 0x19
+ 2804 01c8 49       		.uleb128 0x49
+ 2805 01c9 13       		.uleb128 0x13
+ 2806 01ca 3C       		.uleb128 0x3c
+ 2807 01cb 19       		.uleb128 0x19
+ 2808 01cc 00       		.byte	0
+ 2809 01cd 00       		.byte	0
+ 2810 01ce 22       		.uleb128 0x22
+ 2811 01cf 2E       		.uleb128 0x2e
+ 2812 01d0 01       		.byte	0x1
+ 2813 01d1 3F       		.uleb128 0x3f
+ 2814 01d2 19       		.uleb128 0x19
+ 2815 01d3 03       		.uleb128 0x3
+ 2816 01d4 0E       		.uleb128 0xe
+ 2817 01d5 3A       		.uleb128 0x3a
+ 2818 01d6 0B       		.uleb128 0xb
+ 2819 01d7 3B       		.uleb128 0x3b
+ 2820 01d8 0B       		.uleb128 0xb
+ 2821 01d9 27       		.uleb128 0x27
+ 2822 01da 19       		.uleb128 0x19
+ 2823 01db 49       		.uleb128 0x49
+ 2824 01dc 13       		.uleb128 0x13
+ 2825 01dd 3C       		.uleb128 0x3c
+ 2826 01de 19       		.uleb128 0x19
+ 2827 01df 00       		.byte	0
+ 2828 01e0 00       		.byte	0
+ 2829 01e1 00       		.byte	0
+ 2830              		.section	.debug_loc,"",%progbits
+ 2831              	.Ldebug_loc0:
+ 2832              	.LLST0:
+ 2833 0000 00000000 		.4byte	.LVL0
+ 2834 0004 19000000 		.4byte	.LVL4-1
+ 2835 0008 0100     		.2byte	0x1
+ 2836 000a 50       		.byte	0x50
+ 2837 000b 19000000 		.4byte	.LVL4-1
+ 2838 000f 40000000 		.4byte	.LFE63
+ 2839 0013 0400     		.2byte	0x4
+ 2840 0015 F3       		.byte	0xf3
+ 2841 0016 01       		.uleb128 0x1
+ 2842 0017 50       		.byte	0x50
+ 2843 0018 9F       		.byte	0x9f
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 59
+
+
+ 2844 0019 00000000 		.4byte	0
+ 2845 001d 00000000 		.4byte	0
+ 2846              	.LLST1:
+ 2847 0021 00000000 		.4byte	.LVL0
+ 2848 0025 12000000 		.4byte	.LVL2
+ 2849 0029 0100     		.2byte	0x1
+ 2850 002b 51       		.byte	0x51
+ 2851 002c 12000000 		.4byte	.LVL2
+ 2852 0030 19000000 		.4byte	.LVL4-1
+ 2853 0034 0200     		.2byte	0x2
+ 2854 0036 71       		.byte	0x71
+ 2855 0037 00       		.sleb128 0
+ 2856 0038 19000000 		.4byte	.LVL4-1
+ 2857 003c 3E000000 		.4byte	.LVL8
+ 2858 0040 0200     		.2byte	0x2
+ 2859 0042 91       		.byte	0x91
+ 2860 0043 6F       		.sleb128 -17
+ 2861 0044 3E000000 		.4byte	.LVL8
+ 2862 0048 40000000 		.4byte	.LFE63
+ 2863 004c 0200     		.2byte	0x2
+ 2864 004e 7D       		.byte	0x7d
+ 2865 004f 7F       		.sleb128 -1
+ 2866 0050 00000000 		.4byte	0
+ 2867 0054 00000000 		.4byte	0
+ 2868              	.LLST2:
+ 2869 0058 00000000 		.4byte	.LVL0
+ 2870 005c 14000000 		.4byte	.LVL3
+ 2871 0060 0100     		.2byte	0x1
+ 2872 0062 52       		.byte	0x52
+ 2873 0063 14000000 		.4byte	.LVL3
+ 2874 0067 40000000 		.4byte	.LFE63
+ 2875 006b 0400     		.2byte	0x4
+ 2876 006d F3       		.byte	0xf3
+ 2877 006e 01       		.uleb128 0x1
+ 2878 006f 52       		.byte	0x52
+ 2879 0070 9F       		.byte	0x9f
+ 2880 0071 00000000 		.4byte	0
+ 2881 0075 00000000 		.4byte	0
+ 2882              	.LLST3:
+ 2883 0079 00000000 		.4byte	.LVL0
+ 2884 007d 0C000000 		.4byte	.LVL1
+ 2885 0081 0100     		.2byte	0x1
+ 2886 0083 53       		.byte	0x53
+ 2887 0084 0C000000 		.4byte	.LVL1
+ 2888 0088 40000000 		.4byte	.LFE63
+ 2889 008c 0100     		.2byte	0x1
+ 2890 008e 55       		.byte	0x55
+ 2891 008f 00000000 		.4byte	0
+ 2892 0093 00000000 		.4byte	0
+ 2893              	.LLST4:
+ 2894 0097 00000000 		.4byte	.LVL9
+ 2895 009b 09000000 		.4byte	.LVL11-1
+ 2896 009f 0100     		.2byte	0x1
+ 2897 00a1 50       		.byte	0x50
+ 2898 00a2 09000000 		.4byte	.LVL11-1
+ 2899 00a6 0C000000 		.4byte	.LFE64
+ 2900 00aa 0400     		.2byte	0x4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 60
+
+
+ 2901 00ac F3       		.byte	0xf3
+ 2902 00ad 01       		.uleb128 0x1
+ 2903 00ae 50       		.byte	0x50
+ 2904 00af 9F       		.byte	0x9f
+ 2905 00b0 00000000 		.4byte	0
+ 2906 00b4 00000000 		.4byte	0
+ 2907              	.LLST5:
+ 2908 00b8 00000000 		.4byte	.LVL9
+ 2909 00bc 09000000 		.4byte	.LVL11-1
+ 2910 00c0 0100     		.2byte	0x1
+ 2911 00c2 51       		.byte	0x51
+ 2912 00c3 09000000 		.4byte	.LVL11-1
+ 2913 00c7 0C000000 		.4byte	.LFE64
+ 2914 00cb 0400     		.2byte	0x4
+ 2915 00cd F3       		.byte	0xf3
+ 2916 00ce 01       		.uleb128 0x1
+ 2917 00cf 51       		.byte	0x51
+ 2918 00d0 9F       		.byte	0x9f
+ 2919 00d1 00000000 		.4byte	0
+ 2920 00d5 00000000 		.4byte	0
+ 2921              	.LLST6:
+ 2922 00d9 00000000 		.4byte	.LVL9
+ 2923 00dd 06000000 		.4byte	.LVL10
+ 2924 00e1 0100     		.2byte	0x1
+ 2925 00e3 52       		.byte	0x52
+ 2926 00e4 06000000 		.4byte	.LVL10
+ 2927 00e8 09000000 		.4byte	.LVL11-1
+ 2928 00ec 0100     		.2byte	0x1
+ 2929 00ee 53       		.byte	0x53
+ 2930 00ef 09000000 		.4byte	.LVL11-1
+ 2931 00f3 0C000000 		.4byte	.LFE64
+ 2932 00f7 0400     		.2byte	0x4
+ 2933 00f9 F3       		.byte	0xf3
+ 2934 00fa 01       		.uleb128 0x1
+ 2935 00fb 52       		.byte	0x52
+ 2936 00fc 9F       		.byte	0x9f
+ 2937 00fd 00000000 		.4byte	0
+ 2938 0101 00000000 		.4byte	0
+ 2939              	.LLST7:
+ 2940 0105 00000000 		.4byte	.LVL12
+ 2941 0109 2D000000 		.4byte	.LVL19-1
+ 2942 010d 0100     		.2byte	0x1
+ 2943 010f 50       		.byte	0x50
+ 2944 0110 2D000000 		.4byte	.LVL19-1
+ 2945 0114 7A000000 		.4byte	.LFE65
+ 2946 0118 0400     		.2byte	0x4
+ 2947 011a F3       		.byte	0xf3
+ 2948 011b 01       		.uleb128 0x1
+ 2949 011c 50       		.byte	0x50
+ 2950 011d 9F       		.byte	0x9f
+ 2951 011e 00000000 		.4byte	0
+ 2952 0122 00000000 		.4byte	0
+ 2953              	.LLST8:
+ 2954 0126 00000000 		.4byte	.LVL12
+ 2955 012a 26000000 		.4byte	.LVL18
+ 2956 012e 0100     		.2byte	0x1
+ 2957 0130 51       		.byte	0x51
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 61
+
+
+ 2958 0131 26000000 		.4byte	.LVL18
+ 2959 0135 2D000000 		.4byte	.LVL19-1
+ 2960 0139 0200     		.2byte	0x2
+ 2961 013b 71       		.byte	0x71
+ 2962 013c 00       		.sleb128 0
+ 2963 013d 2D000000 		.4byte	.LVL19-1
+ 2964 0141 74000000 		.4byte	.LVL26
+ 2965 0145 0200     		.2byte	0x2
+ 2966 0147 77       		.byte	0x77
+ 2967 0148 1B       		.sleb128 27
+ 2968 0149 74000000 		.4byte	.LVL26
+ 2969 014d 7A000000 		.4byte	.LFE65
+ 2970 0151 0200     		.2byte	0x2
+ 2971 0153 77       		.byte	0x77
+ 2972 0154 7F       		.sleb128 -1
+ 2973 0155 00000000 		.4byte	0
+ 2974 0159 00000000 		.4byte	0
+ 2975              	.LLST9:
+ 2976 015d 00000000 		.4byte	.LVL12
+ 2977 0161 12000000 		.4byte	.LVL13
+ 2978 0165 0100     		.2byte	0x1
+ 2979 0167 52       		.byte	0x52
+ 2980 0168 12000000 		.4byte	.LVL13
+ 2981 016c 7A000000 		.4byte	.LFE65
+ 2982 0170 0400     		.2byte	0x4
+ 2983 0172 F3       		.byte	0xf3
+ 2984 0173 01       		.uleb128 0x1
+ 2985 0174 52       		.byte	0x52
+ 2986 0175 9F       		.byte	0x9f
+ 2987 0176 00000000 		.4byte	0
+ 2988 017a 00000000 		.4byte	0
+ 2989              	.LLST10:
+ 2990 017e 00000000 		.4byte	.LVL12
+ 2991 0182 18000000 		.4byte	.LVL14
+ 2992 0186 0100     		.2byte	0x1
+ 2993 0188 53       		.byte	0x53
+ 2994 0189 18000000 		.4byte	.LVL14
+ 2995 018d 7A000000 		.4byte	.LFE65
+ 2996 0191 0100     		.2byte	0x1
+ 2997 0193 56       		.byte	0x56
+ 2998 0194 00000000 		.4byte	0
+ 2999 0198 00000000 		.4byte	0
+ 3000              	.LLST11:
+ 3001 019c 18000000 		.4byte	.LVL14
+ 3002 01a0 1A000000 		.4byte	.LVL15
+ 3003 01a4 0300     		.2byte	0x3
+ 3004 01a6 73       		.byte	0x73
+ 3005 01a7 7F       		.sleb128 -1
+ 3006 01a8 9F       		.byte	0x9f
+ 3007 01a9 1A000000 		.4byte	.LVL15
+ 3008 01ad 1E000000 		.4byte	.LVL16
+ 3009 01b1 0300     		.2byte	0x3
+ 3010 01b3 73       		.byte	0x73
+ 3011 01b4 78       		.sleb128 -8
+ 3012 01b5 9F       		.byte	0x9f
+ 3013 01b6 1E000000 		.4byte	.LVL16
+ 3014 01ba 7A000000 		.4byte	.LFE65
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 62
+
+
+ 3015 01be 0700     		.2byte	0x7
+ 3016 01c0 75       		.byte	0x75
+ 3017 01c1 00       		.sleb128 0
+ 3018 01c2 31       		.byte	0x31
+ 3019 01c3 24       		.byte	0x24
+ 3020 01c4 31       		.byte	0x31
+ 3021 01c5 1C       		.byte	0x1c
+ 3022 01c6 9F       		.byte	0x9f
+ 3023 01c7 00000000 		.4byte	0
+ 3024 01cb 00000000 		.4byte	0
+ 3025              	.LLST12:
+ 3026 01cf 56000000 		.4byte	.LVL23
+ 3027 01d3 6A000000 		.4byte	.LVL24
+ 3028 01d7 0100     		.2byte	0x1
+ 3029 01d9 53       		.byte	0x53
+ 3030 01da 6C000000 		.4byte	.LVL25
+ 3031 01de 7A000000 		.4byte	.LFE65
+ 3032 01e2 0100     		.2byte	0x1
+ 3033 01e4 53       		.byte	0x53
+ 3034 01e5 00000000 		.4byte	0
+ 3035 01e9 00000000 		.4byte	0
+ 3036              	.LLST13:
+ 3037 01ed 00000000 		.4byte	.LVL27
+ 3038 01f1 09000000 		.4byte	.LVL29-1
+ 3039 01f5 0100     		.2byte	0x1
+ 3040 01f7 50       		.byte	0x50
+ 3041 01f8 09000000 		.4byte	.LVL29-1
+ 3042 01fc 0C000000 		.4byte	.LFE66
+ 3043 0200 0400     		.2byte	0x4
+ 3044 0202 F3       		.byte	0xf3
+ 3045 0203 01       		.uleb128 0x1
+ 3046 0204 50       		.byte	0x50
+ 3047 0205 9F       		.byte	0x9f
+ 3048 0206 00000000 		.4byte	0
+ 3049 020a 00000000 		.4byte	0
+ 3050              	.LLST14:
+ 3051 020e 00000000 		.4byte	.LVL27
+ 3052 0212 09000000 		.4byte	.LVL29-1
+ 3053 0216 0100     		.2byte	0x1
+ 3054 0218 51       		.byte	0x51
+ 3055 0219 09000000 		.4byte	.LVL29-1
+ 3056 021d 0C000000 		.4byte	.LFE66
+ 3057 0221 0400     		.2byte	0x4
+ 3058 0223 F3       		.byte	0xf3
+ 3059 0224 01       		.uleb128 0x1
+ 3060 0225 51       		.byte	0x51
+ 3061 0226 9F       		.byte	0x9f
+ 3062 0227 00000000 		.4byte	0
+ 3063 022b 00000000 		.4byte	0
+ 3064              	.LLST15:
+ 3065 022f 00000000 		.4byte	.LVL27
+ 3066 0233 06000000 		.4byte	.LVL28
+ 3067 0237 0100     		.2byte	0x1
+ 3068 0239 52       		.byte	0x52
+ 3069 023a 06000000 		.4byte	.LVL28
+ 3070 023e 09000000 		.4byte	.LVL29-1
+ 3071 0242 0100     		.2byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 63
+
+
+ 3072 0244 53       		.byte	0x53
+ 3073 0245 09000000 		.4byte	.LVL29-1
+ 3074 0249 0C000000 		.4byte	.LFE66
+ 3075 024d 0400     		.2byte	0x4
+ 3076 024f F3       		.byte	0xf3
+ 3077 0250 01       		.uleb128 0x1
+ 3078 0251 52       		.byte	0x52
+ 3079 0252 9F       		.byte	0x9f
+ 3080 0253 00000000 		.4byte	0
+ 3081 0257 00000000 		.4byte	0
+ 3082              	.LLST16:
+ 3083 025b 00000000 		.4byte	.LVL30
+ 3084 025f 0F000000 		.4byte	.LVL32-1
+ 3085 0263 0100     		.2byte	0x1
+ 3086 0265 50       		.byte	0x50
+ 3087 0266 0F000000 		.4byte	.LVL32-1
+ 3088 026a 20000000 		.4byte	.LFE67
+ 3089 026e 0400     		.2byte	0x4
+ 3090 0270 F3       		.byte	0xf3
+ 3091 0271 01       		.uleb128 0x1
+ 3092 0272 50       		.byte	0x50
+ 3093 0273 9F       		.byte	0x9f
+ 3094 0274 00000000 		.4byte	0
+ 3095 0278 00000000 		.4byte	0
+ 3096              	.LLST17:
+ 3097 027c 00000000 		.4byte	.LVL30
+ 3098 0280 0F000000 		.4byte	.LVL32-1
+ 3099 0284 0100     		.2byte	0x1
+ 3100 0286 51       		.byte	0x51
+ 3101 0287 0F000000 		.4byte	.LVL32-1
+ 3102 028b 20000000 		.4byte	.LFE67
+ 3103 028f 0400     		.2byte	0x4
+ 3104 0291 F3       		.byte	0xf3
+ 3105 0292 01       		.uleb128 0x1
+ 3106 0293 51       		.byte	0x51
+ 3107 0294 9F       		.byte	0x9f
+ 3108 0295 00000000 		.4byte	0
+ 3109 0299 00000000 		.4byte	0
+ 3110              	.LLST18:
+ 3111 029d 00000000 		.4byte	.LVL30
+ 3112 02a1 0C000000 		.4byte	.LVL31
+ 3113 02a5 0100     		.2byte	0x1
+ 3114 02a7 52       		.byte	0x52
+ 3115 02a8 0C000000 		.4byte	.LVL31
+ 3116 02ac 20000000 		.4byte	.LFE67
+ 3117 02b0 0400     		.2byte	0x4
+ 3118 02b2 F3       		.byte	0xf3
+ 3119 02b3 01       		.uleb128 0x1
+ 3120 02b4 52       		.byte	0x52
+ 3121 02b5 9F       		.byte	0x9f
+ 3122 02b6 00000000 		.4byte	0
+ 3123 02ba 00000000 		.4byte	0
+ 3124              	.LLST19:
+ 3125 02be 00000000 		.4byte	.LVL30
+ 3126 02c2 0F000000 		.4byte	.LVL32-1
+ 3127 02c6 0100     		.2byte	0x1
+ 3128 02c8 53       		.byte	0x53
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 64
+
+
+ 3129 02c9 0F000000 		.4byte	.LVL32-1
+ 3130 02cd 20000000 		.4byte	.LFE67
+ 3131 02d1 0100     		.2byte	0x1
+ 3132 02d3 54       		.byte	0x54
+ 3133 02d4 00000000 		.4byte	0
+ 3134 02d8 00000000 		.4byte	0
+ 3135              	.LLST20:
+ 3136 02dc 00000000 		.4byte	.LVL33
+ 3137 02e0 0F000000 		.4byte	.LVL35-1
+ 3138 02e4 0100     		.2byte	0x1
+ 3139 02e6 50       		.byte	0x50
+ 3140 02e7 0F000000 		.4byte	.LVL35-1
+ 3141 02eb 20000000 		.4byte	.LFE68
+ 3142 02ef 0400     		.2byte	0x4
+ 3143 02f1 F3       		.byte	0xf3
+ 3144 02f2 01       		.uleb128 0x1
+ 3145 02f3 50       		.byte	0x50
+ 3146 02f4 9F       		.byte	0x9f
+ 3147 02f5 00000000 		.4byte	0
+ 3148 02f9 00000000 		.4byte	0
+ 3149              	.LLST21:
+ 3150 02fd 00000000 		.4byte	.LVL33
+ 3151 0301 0F000000 		.4byte	.LVL35-1
+ 3152 0305 0100     		.2byte	0x1
+ 3153 0307 51       		.byte	0x51
+ 3154 0308 0F000000 		.4byte	.LVL35-1
+ 3155 030c 20000000 		.4byte	.LFE68
+ 3156 0310 0400     		.2byte	0x4
+ 3157 0312 F3       		.byte	0xf3
+ 3158 0313 01       		.uleb128 0x1
+ 3159 0314 51       		.byte	0x51
+ 3160 0315 9F       		.byte	0x9f
+ 3161 0316 00000000 		.4byte	0
+ 3162 031a 00000000 		.4byte	0
+ 3163              	.LLST22:
+ 3164 031e 00000000 		.4byte	.LVL33
+ 3165 0322 0C000000 		.4byte	.LVL34
+ 3166 0326 0100     		.2byte	0x1
+ 3167 0328 52       		.byte	0x52
+ 3168 0329 0C000000 		.4byte	.LVL34
+ 3169 032d 20000000 		.4byte	.LFE68
+ 3170 0331 0400     		.2byte	0x4
+ 3171 0333 F3       		.byte	0xf3
+ 3172 0334 01       		.uleb128 0x1
+ 3173 0335 52       		.byte	0x52
+ 3174 0336 9F       		.byte	0x9f
+ 3175 0337 00000000 		.4byte	0
+ 3176 033b 00000000 		.4byte	0
+ 3177              	.LLST23:
+ 3178 033f 00000000 		.4byte	.LVL33
+ 3179 0343 0F000000 		.4byte	.LVL35-1
+ 3180 0347 0100     		.2byte	0x1
+ 3181 0349 53       		.byte	0x53
+ 3182 034a 0F000000 		.4byte	.LVL35-1
+ 3183 034e 20000000 		.4byte	.LFE68
+ 3184 0352 0100     		.2byte	0x1
+ 3185 0354 54       		.byte	0x54
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 65
+
+
+ 3186 0355 00000000 		.4byte	0
+ 3187 0359 00000000 		.4byte	0
+ 3188              	.LLST24:
+ 3189 035d 00000000 		.4byte	.LVL36
+ 3190 0361 0F000000 		.4byte	.LVL38-1
+ 3191 0365 0100     		.2byte	0x1
+ 3192 0367 50       		.byte	0x50
+ 3193 0368 0F000000 		.4byte	.LVL38-1
+ 3194 036c 32000000 		.4byte	.LFE69
+ 3195 0370 0400     		.2byte	0x4
+ 3196 0372 F3       		.byte	0xf3
+ 3197 0373 01       		.uleb128 0x1
+ 3198 0374 50       		.byte	0x50
+ 3199 0375 9F       		.byte	0x9f
+ 3200 0376 00000000 		.4byte	0
+ 3201 037a 00000000 		.4byte	0
+ 3202              	.LLST25:
+ 3203 037e 00000000 		.4byte	.LVL36
+ 3204 0382 0F000000 		.4byte	.LVL38-1
+ 3205 0386 0100     		.2byte	0x1
+ 3206 0388 51       		.byte	0x51
+ 3207 0389 0F000000 		.4byte	.LVL38-1
+ 3208 038d 32000000 		.4byte	.LFE69
+ 3209 0391 0400     		.2byte	0x4
+ 3210 0393 F3       		.byte	0xf3
+ 3211 0394 01       		.uleb128 0x1
+ 3212 0395 51       		.byte	0x51
+ 3213 0396 9F       		.byte	0x9f
+ 3214 0397 00000000 		.4byte	0
+ 3215 039b 00000000 		.4byte	0
+ 3216              	.LLST26:
+ 3217 039f 00000000 		.4byte	.LVL36
+ 3218 03a3 0C000000 		.4byte	.LVL37
+ 3219 03a7 0100     		.2byte	0x1
+ 3220 03a9 52       		.byte	0x52
+ 3221 03aa 0C000000 		.4byte	.LVL37
+ 3222 03ae 32000000 		.4byte	.LFE69
+ 3223 03b2 0400     		.2byte	0x4
+ 3224 03b4 F3       		.byte	0xf3
+ 3225 03b5 01       		.uleb128 0x1
+ 3226 03b6 52       		.byte	0x52
+ 3227 03b7 9F       		.byte	0x9f
+ 3228 03b8 00000000 		.4byte	0
+ 3229 03bc 00000000 		.4byte	0
+ 3230              	.LLST27:
+ 3231 03c0 00000000 		.4byte	.LVL36
+ 3232 03c4 0F000000 		.4byte	.LVL38-1
+ 3233 03c8 0100     		.2byte	0x1
+ 3234 03ca 53       		.byte	0x53
+ 3235 03cb 0F000000 		.4byte	.LVL38-1
+ 3236 03cf 32000000 		.4byte	.LFE69
+ 3237 03d3 0400     		.2byte	0x4
+ 3238 03d5 F3       		.byte	0xf3
+ 3239 03d6 01       		.uleb128 0x1
+ 3240 03d7 53       		.byte	0x53
+ 3241 03d8 9F       		.byte	0x9f
+ 3242 03d9 00000000 		.4byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 66
+
+
+ 3243 03dd 00000000 		.4byte	0
+ 3244              	.LLST28:
+ 3245 03e1 28000000 		.4byte	.LVL40
+ 3246 03e5 2E000000 		.4byte	.LVL42
+ 3247 03e9 0100     		.2byte	0x1
+ 3248 03eb 51       		.byte	0x51
+ 3249 03ec 00000000 		.4byte	0
+ 3250 03f0 00000000 		.4byte	0
+ 3251              	.LLST29:
+ 3252 03f4 22000000 		.4byte	.LVL39
+ 3253 03f8 28000000 		.4byte	.LVL40
+ 3254 03fc 0100     		.2byte	0x1
+ 3255 03fe 51       		.byte	0x51
+ 3256 03ff 28000000 		.4byte	.LVL40
+ 3257 0403 2E000000 		.4byte	.LVL42
+ 3258 0407 0A00     		.2byte	0xa
+ 3259 0409 31       		.byte	0x31
+ 3260 040a 75       		.byte	0x75
+ 3261 040b 00       		.sleb128 0
+ 3262 040c 24       		.byte	0x24
+ 3263 040d 31       		.byte	0x31
+ 3264 040e 1C       		.byte	0x1c
+ 3265 040f 72       		.byte	0x72
+ 3266 0410 00       		.sleb128 0
+ 3267 0411 24       		.byte	0x24
+ 3268 0412 9F       		.byte	0x9f
+ 3269 0413 00000000 		.4byte	0
+ 3270 0417 00000000 		.4byte	0
+ 3271              	.LLST30:
+ 3272 041b 00000000 		.4byte	.LVL43
+ 3273 041f 0F000000 		.4byte	.LVL45-1
+ 3274 0423 0100     		.2byte	0x1
+ 3275 0425 50       		.byte	0x50
+ 3276 0426 0F000000 		.4byte	.LVL45-1
+ 3277 042a 32000000 		.4byte	.LFE70
+ 3278 042e 0400     		.2byte	0x4
+ 3279 0430 F3       		.byte	0xf3
+ 3280 0431 01       		.uleb128 0x1
+ 3281 0432 50       		.byte	0x50
+ 3282 0433 9F       		.byte	0x9f
+ 3283 0434 00000000 		.4byte	0
+ 3284 0438 00000000 		.4byte	0
+ 3285              	.LLST31:
+ 3286 043c 00000000 		.4byte	.LVL43
+ 3287 0440 0F000000 		.4byte	.LVL45-1
+ 3288 0444 0100     		.2byte	0x1
+ 3289 0446 51       		.byte	0x51
+ 3290 0447 0F000000 		.4byte	.LVL45-1
+ 3291 044b 32000000 		.4byte	.LFE70
+ 3292 044f 0400     		.2byte	0x4
+ 3293 0451 F3       		.byte	0xf3
+ 3294 0452 01       		.uleb128 0x1
+ 3295 0453 51       		.byte	0x51
+ 3296 0454 9F       		.byte	0x9f
+ 3297 0455 00000000 		.4byte	0
+ 3298 0459 00000000 		.4byte	0
+ 3299              	.LLST32:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 67
+
+
+ 3300 045d 00000000 		.4byte	.LVL43
+ 3301 0461 0C000000 		.4byte	.LVL44
+ 3302 0465 0100     		.2byte	0x1
+ 3303 0467 52       		.byte	0x52
+ 3304 0468 0C000000 		.4byte	.LVL44
+ 3305 046c 32000000 		.4byte	.LFE70
+ 3306 0470 0400     		.2byte	0x4
+ 3307 0472 F3       		.byte	0xf3
+ 3308 0473 01       		.uleb128 0x1
+ 3309 0474 52       		.byte	0x52
+ 3310 0475 9F       		.byte	0x9f
+ 3311 0476 00000000 		.4byte	0
+ 3312 047a 00000000 		.4byte	0
+ 3313              	.LLST33:
+ 3314 047e 00000000 		.4byte	.LVL43
+ 3315 0482 0F000000 		.4byte	.LVL45-1
+ 3316 0486 0100     		.2byte	0x1
+ 3317 0488 53       		.byte	0x53
+ 3318 0489 0F000000 		.4byte	.LVL45-1
+ 3319 048d 32000000 		.4byte	.LFE70
+ 3320 0491 0400     		.2byte	0x4
+ 3321 0493 F3       		.byte	0xf3
+ 3322 0494 01       		.uleb128 0x1
+ 3323 0495 53       		.byte	0x53
+ 3324 0496 9F       		.byte	0x9f
+ 3325 0497 00000000 		.4byte	0
+ 3326 049b 00000000 		.4byte	0
+ 3327              	.LLST34:
+ 3328 049f 28000000 		.4byte	.LVL47
+ 3329 04a3 2E000000 		.4byte	.LVL49
+ 3330 04a7 0100     		.2byte	0x1
+ 3331 04a9 51       		.byte	0x51
+ 3332 04aa 00000000 		.4byte	0
+ 3333 04ae 00000000 		.4byte	0
+ 3334              	.LLST35:
+ 3335 04b2 22000000 		.4byte	.LVL46
+ 3336 04b6 28000000 		.4byte	.LVL47
+ 3337 04ba 0100     		.2byte	0x1
+ 3338 04bc 51       		.byte	0x51
+ 3339 04bd 28000000 		.4byte	.LVL47
+ 3340 04c1 2E000000 		.4byte	.LVL49
+ 3341 04c5 0A00     		.2byte	0xa
+ 3342 04c7 31       		.byte	0x31
+ 3343 04c8 75       		.byte	0x75
+ 3344 04c9 00       		.sleb128 0
+ 3345 04ca 24       		.byte	0x24
+ 3346 04cb 31       		.byte	0x31
+ 3347 04cc 1C       		.byte	0x1c
+ 3348 04cd 72       		.byte	0x72
+ 3349 04ce 00       		.sleb128 0
+ 3350 04cf 24       		.byte	0x24
+ 3351 04d0 9F       		.byte	0x9f
+ 3352 04d1 00000000 		.4byte	0
+ 3353 04d5 00000000 		.4byte	0
+ 3354              	.LLST36:
+ 3355 04d9 00000000 		.4byte	.LVL50
+ 3356 04dd 14000000 		.4byte	.LVL55
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 68
+
+
+ 3357 04e1 0100     		.2byte	0x1
+ 3358 04e3 50       		.byte	0x50
+ 3359 04e4 14000000 		.4byte	.LVL55
+ 3360 04e8 3A000000 		.4byte	.LFE71
+ 3361 04ec 0400     		.2byte	0x4
+ 3362 04ee F3       		.byte	0xf3
+ 3363 04ef 01       		.uleb128 0x1
+ 3364 04f0 50       		.byte	0x50
+ 3365 04f1 9F       		.byte	0x9f
+ 3366 04f2 00000000 		.4byte	0
+ 3367 04f6 00000000 		.4byte	0
+ 3368              	.LLST37:
+ 3369 04fa 00000000 		.4byte	.LVL50
+ 3370 04fe 1A000000 		.4byte	.LVL56
+ 3371 0502 0100     		.2byte	0x1
+ 3372 0504 51       		.byte	0x51
+ 3373 0505 1A000000 		.4byte	.LVL56
+ 3374 0509 1D000000 		.4byte	.LVL57-1
+ 3375 050d 0200     		.2byte	0x2
+ 3376 050f 7D       		.byte	0x7d
+ 3377 0510 00       		.sleb128 0
+ 3378 0511 1D000000 		.4byte	.LVL57-1
+ 3379 0515 3A000000 		.4byte	.LFE71
+ 3380 0519 0400     		.2byte	0x4
+ 3381 051b F3       		.byte	0xf3
+ 3382 051c 01       		.uleb128 0x1
+ 3383 051d 51       		.byte	0x51
+ 3384 051e 9F       		.byte	0x9f
+ 3385 051f 00000000 		.4byte	0
+ 3386 0523 00000000 		.4byte	0
+ 3387              	.LLST38:
+ 3388 0527 00000000 		.4byte	.LVL50
+ 3389 052b 0A000000 		.4byte	.LVL52
+ 3390 052f 0100     		.2byte	0x1
+ 3391 0531 52       		.byte	0x52
+ 3392 0532 0A000000 		.4byte	.LVL52
+ 3393 0536 3A000000 		.4byte	.LFE71
+ 3394 053a 0400     		.2byte	0x4
+ 3395 053c F3       		.byte	0xf3
+ 3396 053d 01       		.uleb128 0x1
+ 3397 053e 52       		.byte	0x52
+ 3398 053f 9F       		.byte	0x9f
+ 3399 0540 00000000 		.4byte	0
+ 3400 0544 00000000 		.4byte	0
+ 3401              	.LLST39:
+ 3402 0548 00000000 		.4byte	.LVL50
+ 3403 054c 1D000000 		.4byte	.LVL57-1
+ 3404 0550 0100     		.2byte	0x1
+ 3405 0552 53       		.byte	0x53
+ 3406 0553 1D000000 		.4byte	.LVL57-1
+ 3407 0557 3A000000 		.4byte	.LFE71
+ 3408 055b 0400     		.2byte	0x4
+ 3409 055d F3       		.byte	0xf3
+ 3410 055e 01       		.uleb128 0x1
+ 3411 055f 53       		.byte	0x53
+ 3412 0560 9F       		.byte	0x9f
+ 3413 0561 00000000 		.4byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 69
+
+
+ 3414 0565 00000000 		.4byte	0
+ 3415              	.LLST40:
+ 3416 0569 08000000 		.4byte	.LVL51
+ 3417 056d 0A000000 		.4byte	.LVL52
+ 3418 0571 0100     		.2byte	0x1
+ 3419 0573 52       		.byte	0x52
+ 3420 0574 0A000000 		.4byte	.LVL52
+ 3421 0578 0E000000 		.4byte	.LVL53
+ 3422 057c 0300     		.2byte	0x3
+ 3423 057e 72       		.byte	0x72
+ 3424 057f 78       		.sleb128 -8
+ 3425 0580 9F       		.byte	0x9f
+ 3426 0581 0E000000 		.4byte	.LVL53
+ 3427 0585 3A000000 		.4byte	.LFE71
+ 3428 0589 0300     		.2byte	0x3
+ 3429 058b 74       		.byte	0x74
+ 3430 058c 7F       		.sleb128 -1
+ 3431 058d 9F       		.byte	0x9f
+ 3432 058e 00000000 		.4byte	0
+ 3433 0592 00000000 		.4byte	0
+ 3434              	.LLST41:
+ 3435 0596 12000000 		.4byte	.LVL54
+ 3436 059a 38000000 		.4byte	.LVL60
+ 3437 059e 0200     		.2byte	0x2
+ 3438 05a0 7D       		.byte	0x7d
+ 3439 05a1 00       		.sleb128 0
+ 3440 05a2 00000000 		.4byte	0
+ 3441 05a6 00000000 		.4byte	0
+ 3442              	.LLST42:
+ 3443 05aa 00000000 		.4byte	.LVL61
+ 3444 05ae 0F000000 		.4byte	.LVL63-1
+ 3445 05b2 0100     		.2byte	0x1
+ 3446 05b4 50       		.byte	0x50
+ 3447 05b5 0F000000 		.4byte	.LVL63-1
+ 3448 05b9 16000000 		.4byte	.LFE72
+ 3449 05bd 0400     		.2byte	0x4
+ 3450 05bf F3       		.byte	0xf3
+ 3451 05c0 01       		.uleb128 0x1
+ 3452 05c1 50       		.byte	0x50
+ 3453 05c2 9F       		.byte	0x9f
+ 3454 05c3 00000000 		.4byte	0
+ 3455 05c7 00000000 		.4byte	0
+ 3456              	.LLST43:
+ 3457 05cb 00000000 		.4byte	.LVL61
+ 3458 05cf 0F000000 		.4byte	.LVL63-1
+ 3459 05d3 0100     		.2byte	0x1
+ 3460 05d5 51       		.byte	0x51
+ 3461 05d6 0F000000 		.4byte	.LVL63-1
+ 3462 05da 16000000 		.4byte	.LFE72
+ 3463 05de 0400     		.2byte	0x4
+ 3464 05e0 F3       		.byte	0xf3
+ 3465 05e1 01       		.uleb128 0x1
+ 3466 05e2 51       		.byte	0x51
+ 3467 05e3 9F       		.byte	0x9f
+ 3468 05e4 00000000 		.4byte	0
+ 3469 05e8 00000000 		.4byte	0
+ 3470              	.LLST44:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 70
+
+
+ 3471 05ec 00000000 		.4byte	.LVL61
+ 3472 05f0 0C000000 		.4byte	.LVL62
+ 3473 05f4 0100     		.2byte	0x1
+ 3474 05f6 52       		.byte	0x52
+ 3475 05f7 0C000000 		.4byte	.LVL62
+ 3476 05fb 0F000000 		.4byte	.LVL63-1
+ 3477 05ff 0200     		.2byte	0x2
+ 3478 0601 73       		.byte	0x73
+ 3479 0602 00       		.sleb128 0
+ 3480 0603 0F000000 		.4byte	.LVL63-1
+ 3481 0607 16000000 		.4byte	.LFE72
+ 3482 060b 0200     		.2byte	0x2
+ 3483 060d 91       		.byte	0x91
+ 3484 060e 77       		.sleb128 -9
+ 3485 060f 00000000 		.4byte	0
+ 3486 0613 00000000 		.4byte	0
+ 3487              	.LLST45:
+ 3488 0617 00000000 		.4byte	.LVL64
+ 3489 061b 41000000 		.4byte	.LVL78-1
+ 3490 061f 0100     		.2byte	0x1
+ 3491 0621 50       		.byte	0x50
+ 3492 0622 41000000 		.4byte	.LVL78-1
+ 3493 0626 52000000 		.4byte	.LFE73
+ 3494 062a 0400     		.2byte	0x4
+ 3495 062c F3       		.byte	0xf3
+ 3496 062d 01       		.uleb128 0x1
+ 3497 062e 50       		.byte	0x50
+ 3498 062f 9F       		.byte	0x9f
+ 3499 0630 00000000 		.4byte	0
+ 3500 0634 00000000 		.4byte	0
+ 3501              	.LLST46:
+ 3502 0638 00000000 		.4byte	.LVL64
+ 3503 063c 18000000 		.4byte	.LVL70
+ 3504 0640 0100     		.2byte	0x1
+ 3505 0642 51       		.byte	0x51
+ 3506 0643 18000000 		.4byte	.LVL70
+ 3507 0647 1A000000 		.4byte	.LVL71
+ 3508 064b 0200     		.2byte	0x2
+ 3509 064d 75       		.byte	0x75
+ 3510 064e 00       		.sleb128 0
+ 3511 064f 1A000000 		.4byte	.LVL71
+ 3512 0653 52000000 		.4byte	.LFE73
+ 3513 0657 0400     		.2byte	0x4
+ 3514 0659 F3       		.byte	0xf3
+ 3515 065a 01       		.uleb128 0x1
+ 3516 065b 51       		.byte	0x51
+ 3517 065c 9F       		.byte	0x9f
+ 3518 065d 00000000 		.4byte	0
+ 3519 0661 00000000 		.4byte	0
+ 3520              	.LLST47:
+ 3521 0665 00000000 		.4byte	.LVL64
+ 3522 0669 38000000 		.4byte	.LVL74
+ 3523 066d 0100     		.2byte	0x1
+ 3524 066f 52       		.byte	0x52
+ 3525 0670 38000000 		.4byte	.LVL74
+ 3526 0674 52000000 		.4byte	.LFE73
+ 3527 0678 0400     		.2byte	0x4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 71
+
+
+ 3528 067a F3       		.byte	0xf3
+ 3529 067b 01       		.uleb128 0x1
+ 3530 067c 52       		.byte	0x52
+ 3531 067d 9F       		.byte	0x9f
+ 3532 067e 00000000 		.4byte	0
+ 3533 0682 00000000 		.4byte	0
+ 3534              	.LLST48:
+ 3535 0686 00000000 		.4byte	.LVL64
+ 3536 068a 3E000000 		.4byte	.LVL77
+ 3537 068e 0100     		.2byte	0x1
+ 3538 0690 53       		.byte	0x53
+ 3539 0691 3E000000 		.4byte	.LVL77
+ 3540 0695 52000000 		.4byte	.LFE73
+ 3541 0699 0400     		.2byte	0x4
+ 3542 069b F3       		.byte	0xf3
+ 3543 069c 01       		.uleb128 0x1
+ 3544 069d 53       		.byte	0x53
+ 3545 069e 9F       		.byte	0x9f
+ 3546 069f 00000000 		.4byte	0
+ 3547 06a3 00000000 		.4byte	0
+ 3548              	.LLST49:
+ 3549 06a7 06000000 		.4byte	.LVL65
+ 3550 06ab 08000000 		.4byte	.LVL66
+ 3551 06af 0100     		.2byte	0x1
+ 3552 06b1 54       		.byte	0x54
+ 3553 06b2 08000000 		.4byte	.LVL66
+ 3554 06b6 0C000000 		.4byte	.LVL67
+ 3555 06ba 0300     		.2byte	0x3
+ 3556 06bc 74       		.byte	0x74
+ 3557 06bd 78       		.sleb128 -8
+ 3558 06be 9F       		.byte	0x9f
+ 3559 06bf 0C000000 		.4byte	.LVL67
+ 3560 06c3 38000000 		.4byte	.LVL74
+ 3561 06c7 0500     		.2byte	0x5
+ 3562 06c9 72       		.byte	0x72
+ 3563 06ca 00       		.sleb128 0
+ 3564 06cb 31       		.byte	0x31
+ 3565 06cc 24       		.byte	0x24
+ 3566 06cd 9F       		.byte	0x9f
+ 3567 06ce 38000000 		.4byte	.LVL74
+ 3568 06d2 3C000000 		.4byte	.LVL76
+ 3569 06d6 0500     		.2byte	0x5
+ 3570 06d8 72       		.byte	0x72
+ 3571 06d9 7F       		.sleb128 -1
+ 3572 06da 31       		.byte	0x31
+ 3573 06db 24       		.byte	0x24
+ 3574 06dc 9F       		.byte	0x9f
+ 3575 06dd 00000000 		.4byte	0
+ 3576 06e1 00000000 		.4byte	0
+ 3577              	.LLST50:
+ 3578 06e5 16000000 		.4byte	.LVL69
+ 3579 06e9 1A000000 		.4byte	.LVL71
+ 3580 06ed 0200     		.2byte	0x2
+ 3581 06ef 30       		.byte	0x30
+ 3582 06f0 9F       		.byte	0x9f
+ 3583 06f1 1A000000 		.4byte	.LVL71
+ 3584 06f5 2C000000 		.4byte	.LVL72
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 72
+
+
+ 3585 06f9 0100     		.2byte	0x1
+ 3586 06fb 51       		.byte	0x51
+ 3587 06fc 32000000 		.4byte	.LVL73
+ 3588 0700 3A000000 		.4byte	.LVL75
+ 3589 0704 0100     		.2byte	0x1
+ 3590 0706 51       		.byte	0x51
+ 3591 0707 00000000 		.4byte	0
+ 3592 070b 00000000 		.4byte	0
+ 3593              	.LLST51:
+ 3594 070f 00000000 		.4byte	.LVL80
+ 3595 0713 0F000000 		.4byte	.LVL82-1
+ 3596 0717 0100     		.2byte	0x1
+ 3597 0719 50       		.byte	0x50
+ 3598 071a 0F000000 		.4byte	.LVL82-1
+ 3599 071e 16000000 		.4byte	.LFE74
+ 3600 0722 0400     		.2byte	0x4
+ 3601 0724 F3       		.byte	0xf3
+ 3602 0725 01       		.uleb128 0x1
+ 3603 0726 50       		.byte	0x50
+ 3604 0727 9F       		.byte	0x9f
+ 3605 0728 00000000 		.4byte	0
+ 3606 072c 00000000 		.4byte	0
+ 3607              	.LLST52:
+ 3608 0730 00000000 		.4byte	.LVL80
+ 3609 0734 0F000000 		.4byte	.LVL82-1
+ 3610 0738 0100     		.2byte	0x1
+ 3611 073a 51       		.byte	0x51
+ 3612 073b 0F000000 		.4byte	.LVL82-1
+ 3613 073f 16000000 		.4byte	.LFE74
+ 3614 0743 0400     		.2byte	0x4
+ 3615 0745 F3       		.byte	0xf3
+ 3616 0746 01       		.uleb128 0x1
+ 3617 0747 51       		.byte	0x51
+ 3618 0748 9F       		.byte	0x9f
+ 3619 0749 00000000 		.4byte	0
+ 3620 074d 00000000 		.4byte	0
+ 3621              	.LLST53:
+ 3622 0751 00000000 		.4byte	.LVL80
+ 3623 0755 0C000000 		.4byte	.LVL81
+ 3624 0759 0100     		.2byte	0x1
+ 3625 075b 52       		.byte	0x52
+ 3626 075c 0C000000 		.4byte	.LVL81
+ 3627 0760 0F000000 		.4byte	.LVL82-1
+ 3628 0764 0200     		.2byte	0x2
+ 3629 0766 73       		.byte	0x73
+ 3630 0767 00       		.sleb128 0
+ 3631 0768 0F000000 		.4byte	.LVL82-1
+ 3632 076c 16000000 		.4byte	.LFE74
+ 3633 0770 0200     		.2byte	0x2
+ 3634 0772 91       		.byte	0x91
+ 3635 0773 76       		.sleb128 -10
+ 3636 0774 00000000 		.4byte	0
+ 3637 0778 00000000 		.4byte	0
+ 3638              	.LLST54:
+ 3639 077c 00000000 		.4byte	.LVL83
+ 3640 0780 13000000 		.4byte	.LVL85-1
+ 3641 0784 0100     		.2byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 73
+
+
+ 3642 0786 50       		.byte	0x50
+ 3643 0787 13000000 		.4byte	.LVL85-1
+ 3644 078b 40000000 		.4byte	.LFE75
+ 3645 078f 0400     		.2byte	0x4
+ 3646 0791 F3       		.byte	0xf3
+ 3647 0792 01       		.uleb128 0x1
+ 3648 0793 50       		.byte	0x50
+ 3649 0794 9F       		.byte	0x9f
+ 3650 0795 00000000 		.4byte	0
+ 3651 0799 00000000 		.4byte	0
+ 3652              	.LLST55:
+ 3653 079d 00000000 		.4byte	.LVL83
+ 3654 07a1 13000000 		.4byte	.LVL85-1
+ 3655 07a5 0100     		.2byte	0x1
+ 3656 07a7 51       		.byte	0x51
+ 3657 07a8 13000000 		.4byte	.LVL85-1
+ 3658 07ac 40000000 		.4byte	.LFE75
+ 3659 07b0 0400     		.2byte	0x4
+ 3660 07b2 F3       		.byte	0xf3
+ 3661 07b3 01       		.uleb128 0x1
+ 3662 07b4 51       		.byte	0x51
+ 3663 07b5 9F       		.byte	0x9f
+ 3664 07b6 00000000 		.4byte	0
+ 3665 07ba 00000000 		.4byte	0
+ 3666              	.LLST56:
+ 3667 07be 00000000 		.4byte	.LVL83
+ 3668 07c2 10000000 		.4byte	.LVL84
+ 3669 07c6 0100     		.2byte	0x1
+ 3670 07c8 52       		.byte	0x52
+ 3671 07c9 10000000 		.4byte	.LVL84
+ 3672 07cd 40000000 		.4byte	.LFE75
+ 3673 07d1 0400     		.2byte	0x4
+ 3674 07d3 F3       		.byte	0xf3
+ 3675 07d4 01       		.uleb128 0x1
+ 3676 07d5 52       		.byte	0x52
+ 3677 07d6 9F       		.byte	0x9f
+ 3678 07d7 00000000 		.4byte	0
+ 3679 07db 00000000 		.4byte	0
+ 3680              	.LLST57:
+ 3681 07df 00000000 		.4byte	.LVL83
+ 3682 07e3 13000000 		.4byte	.LVL85-1
+ 3683 07e7 0100     		.2byte	0x1
+ 3684 07e9 53       		.byte	0x53
+ 3685 07ea 13000000 		.4byte	.LVL85-1
+ 3686 07ee 40000000 		.4byte	.LFE75
+ 3687 07f2 0400     		.2byte	0x4
+ 3688 07f4 F3       		.byte	0xf3
+ 3689 07f5 01       		.uleb128 0x1
+ 3690 07f6 53       		.byte	0x53
+ 3691 07f7 9F       		.byte	0x9f
+ 3692 07f8 00000000 		.4byte	0
+ 3693 07fc 00000000 		.4byte	0
+ 3694              	.LLST58:
+ 3695 0800 00000000 		.4byte	.LVL87
+ 3696 0804 13000000 		.4byte	.LVL89-1
+ 3697 0808 0100     		.2byte	0x1
+ 3698 080a 50       		.byte	0x50
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 74
+
+
+ 3699 080b 13000000 		.4byte	.LVL89-1
+ 3700 080f 40000000 		.4byte	.LFE76
+ 3701 0813 0400     		.2byte	0x4
+ 3702 0815 F3       		.byte	0xf3
+ 3703 0816 01       		.uleb128 0x1
+ 3704 0817 50       		.byte	0x50
+ 3705 0818 9F       		.byte	0x9f
+ 3706 0819 00000000 		.4byte	0
+ 3707 081d 00000000 		.4byte	0
+ 3708              	.LLST59:
+ 3709 0821 00000000 		.4byte	.LVL87
+ 3710 0825 13000000 		.4byte	.LVL89-1
+ 3711 0829 0100     		.2byte	0x1
+ 3712 082b 51       		.byte	0x51
+ 3713 082c 13000000 		.4byte	.LVL89-1
+ 3714 0830 40000000 		.4byte	.LFE76
+ 3715 0834 0400     		.2byte	0x4
+ 3716 0836 F3       		.byte	0xf3
+ 3717 0837 01       		.uleb128 0x1
+ 3718 0838 51       		.byte	0x51
+ 3719 0839 9F       		.byte	0x9f
+ 3720 083a 00000000 		.4byte	0
+ 3721 083e 00000000 		.4byte	0
+ 3722              	.LLST60:
+ 3723 0842 00000000 		.4byte	.LVL87
+ 3724 0846 10000000 		.4byte	.LVL88
+ 3725 084a 0100     		.2byte	0x1
+ 3726 084c 52       		.byte	0x52
+ 3727 084d 10000000 		.4byte	.LVL88
+ 3728 0851 40000000 		.4byte	.LFE76
+ 3729 0855 0400     		.2byte	0x4
+ 3730 0857 F3       		.byte	0xf3
+ 3731 0858 01       		.uleb128 0x1
+ 3732 0859 52       		.byte	0x52
+ 3733 085a 9F       		.byte	0x9f
+ 3734 085b 00000000 		.4byte	0
+ 3735 085f 00000000 		.4byte	0
+ 3736              	.LLST61:
+ 3737 0863 00000000 		.4byte	.LVL87
+ 3738 0867 13000000 		.4byte	.LVL89-1
+ 3739 086b 0100     		.2byte	0x1
+ 3740 086d 53       		.byte	0x53
+ 3741 086e 13000000 		.4byte	.LVL89-1
+ 3742 0872 40000000 		.4byte	.LFE76
+ 3743 0876 0400     		.2byte	0x4
+ 3744 0878 F3       		.byte	0xf3
+ 3745 0879 01       		.uleb128 0x1
+ 3746 087a 53       		.byte	0x53
+ 3747 087b 9F       		.byte	0x9f
+ 3748 087c 00000000 		.4byte	0
+ 3749 0880 00000000 		.4byte	0
+ 3750              	.LLST62:
+ 3751 0884 00000000 		.4byte	.LVL91
+ 3752 0888 13000000 		.4byte	.LVL93-1
+ 3753 088c 0100     		.2byte	0x1
+ 3754 088e 50       		.byte	0x50
+ 3755 088f 13000000 		.4byte	.LVL93-1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 75
+
+
+ 3756 0893 4A000000 		.4byte	.LFE77
+ 3757 0897 0400     		.2byte	0x4
+ 3758 0899 F3       		.byte	0xf3
+ 3759 089a 01       		.uleb128 0x1
+ 3760 089b 50       		.byte	0x50
+ 3761 089c 9F       		.byte	0x9f
+ 3762 089d 00000000 		.4byte	0
+ 3763 08a1 00000000 		.4byte	0
+ 3764              	.LLST63:
+ 3765 08a5 00000000 		.4byte	.LVL91
+ 3766 08a9 13000000 		.4byte	.LVL93-1
+ 3767 08ad 0100     		.2byte	0x1
+ 3768 08af 51       		.byte	0x51
+ 3769 08b0 13000000 		.4byte	.LVL93-1
+ 3770 08b4 4A000000 		.4byte	.LFE77
+ 3771 08b8 0400     		.2byte	0x4
+ 3772 08ba F3       		.byte	0xf3
+ 3773 08bb 01       		.uleb128 0x1
+ 3774 08bc 51       		.byte	0x51
+ 3775 08bd 9F       		.byte	0x9f
+ 3776 08be 00000000 		.4byte	0
+ 3777 08c2 00000000 		.4byte	0
+ 3778              	.LLST64:
+ 3779 08c6 00000000 		.4byte	.LVL91
+ 3780 08ca 10000000 		.4byte	.LVL92
+ 3781 08ce 0100     		.2byte	0x1
+ 3782 08d0 52       		.byte	0x52
+ 3783 08d1 10000000 		.4byte	.LVL92
+ 3784 08d5 4A000000 		.4byte	.LFE77
+ 3785 08d9 0400     		.2byte	0x4
+ 3786 08db F3       		.byte	0xf3
+ 3787 08dc 01       		.uleb128 0x1
+ 3788 08dd 52       		.byte	0x52
+ 3789 08de 9F       		.byte	0x9f
+ 3790 08df 00000000 		.4byte	0
+ 3791 08e3 00000000 		.4byte	0
+ 3792              	.LLST65:
+ 3793 08e7 00000000 		.4byte	.LVL91
+ 3794 08eb 13000000 		.4byte	.LVL93-1
+ 3795 08ef 0100     		.2byte	0x1
+ 3796 08f1 53       		.byte	0x53
+ 3797 08f2 13000000 		.4byte	.LVL93-1
+ 3798 08f6 4A000000 		.4byte	.LFE77
+ 3799 08fa 0400     		.2byte	0x4
+ 3800 08fc F3       		.byte	0xf3
+ 3801 08fd 01       		.uleb128 0x1
+ 3802 08fe 53       		.byte	0x53
+ 3803 08ff 9F       		.byte	0x9f
+ 3804 0900 00000000 		.4byte	0
+ 3805 0904 00000000 		.4byte	0
+ 3806              	.LLST66:
+ 3807 0908 00000000 		.4byte	.LVL91
+ 3808 090c 2A000000 		.4byte	.LVL95
+ 3809 0910 0200     		.2byte	0x2
+ 3810 0912 91       		.byte	0x91
+ 3811 0913 00       		.sleb128 0
+ 3812 0914 2A000000 		.4byte	.LVL95
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 76
+
+
+ 3813 0918 41000000 		.4byte	.LVL98-1
+ 3814 091c 0100     		.2byte	0x1
+ 3815 091e 53       		.byte	0x53
+ 3816 091f 41000000 		.4byte	.LVL98-1
+ 3817 0923 44000000 		.4byte	.LVL99
+ 3818 0927 1800     		.2byte	0x18
+ 3819 0929 31       		.byte	0x31
+ 3820 092a 77       		.byte	0x77
+ 3821 092b 00       		.sleb128 0
+ 3822 092c 24       		.byte	0x24
+ 3823 092d 31       		.byte	0x31
+ 3824 092e 1C       		.byte	0x1c
+ 3825 092f 74       		.byte	0x74
+ 3826 0930 00       		.sleb128 0
+ 3827 0931 24       		.byte	0x24
+ 3828 0932 91       		.byte	0x91
+ 3829 0933 00       		.sleb128 0
+ 3830 0934 94       		.byte	0x94
+ 3831 0935 01       		.byte	0x1
+ 3832 0936 08       		.byte	0x8
+ 3833 0937 FF       		.byte	0xff
+ 3834 0938 1A       		.byte	0x1a
+ 3835 0939 74       		.byte	0x74
+ 3836 093a 00       		.sleb128 0
+ 3837 093b 24       		.byte	0x24
+ 3838 093c 08       		.byte	0x8
+ 3839 093d FF       		.byte	0xff
+ 3840 093e 1A       		.byte	0x1a
+ 3841 093f 1A       		.byte	0x1a
+ 3842 0940 9F       		.byte	0x9f
+ 3843 0941 44000000 		.4byte	.LVL99
+ 3844 0945 46000000 		.4byte	.LVL100
+ 3845 0949 0200     		.2byte	0x2
+ 3846 094b 91       		.byte	0x91
+ 3847 094c 00       		.sleb128 0
+ 3848 094d 00000000 		.4byte	0
+ 3849 0951 00000000 		.4byte	0
+ 3850              	.LLST67:
+ 3851 0955 22000000 		.4byte	.LVL94
+ 3852 0959 3E000000 		.4byte	.LVL97
+ 3853 095d 0100     		.2byte	0x1
+ 3854 095f 51       		.byte	0x51
+ 3855 0960 3E000000 		.4byte	.LVL97
+ 3856 0964 44000000 		.4byte	.LVL99
+ 3857 0968 0A00     		.2byte	0xa
+ 3858 096a 31       		.byte	0x31
+ 3859 096b 77       		.byte	0x77
+ 3860 096c 00       		.sleb128 0
+ 3861 096d 24       		.byte	0x24
+ 3862 096e 31       		.byte	0x31
+ 3863 096f 1C       		.byte	0x1c
+ 3864 0970 74       		.byte	0x74
+ 3865 0971 00       		.sleb128 0
+ 3866 0972 24       		.byte	0x24
+ 3867 0973 9F       		.byte	0x9f
+ 3868 0974 00000000 		.4byte	0
+ 3869 0978 00000000 		.4byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 77
+
+
+ 3870              	.LLST68:
+ 3871 097c 00000000 		.4byte	.LVL101
+ 3872 0980 13000000 		.4byte	.LVL103-1
+ 3873 0984 0100     		.2byte	0x1
+ 3874 0986 50       		.byte	0x50
+ 3875 0987 13000000 		.4byte	.LVL103-1
+ 3876 098b 4A000000 		.4byte	.LFE78
+ 3877 098f 0400     		.2byte	0x4
+ 3878 0991 F3       		.byte	0xf3
+ 3879 0992 01       		.uleb128 0x1
+ 3880 0993 50       		.byte	0x50
+ 3881 0994 9F       		.byte	0x9f
+ 3882 0995 00000000 		.4byte	0
+ 3883 0999 00000000 		.4byte	0
+ 3884              	.LLST69:
+ 3885 099d 00000000 		.4byte	.LVL101
+ 3886 09a1 13000000 		.4byte	.LVL103-1
+ 3887 09a5 0100     		.2byte	0x1
+ 3888 09a7 51       		.byte	0x51
+ 3889 09a8 13000000 		.4byte	.LVL103-1
+ 3890 09ac 4A000000 		.4byte	.LFE78
+ 3891 09b0 0400     		.2byte	0x4
+ 3892 09b2 F3       		.byte	0xf3
+ 3893 09b3 01       		.uleb128 0x1
+ 3894 09b4 51       		.byte	0x51
+ 3895 09b5 9F       		.byte	0x9f
+ 3896 09b6 00000000 		.4byte	0
+ 3897 09ba 00000000 		.4byte	0
+ 3898              	.LLST70:
+ 3899 09be 00000000 		.4byte	.LVL101
+ 3900 09c2 10000000 		.4byte	.LVL102
+ 3901 09c6 0100     		.2byte	0x1
+ 3902 09c8 52       		.byte	0x52
+ 3903 09c9 10000000 		.4byte	.LVL102
+ 3904 09cd 4A000000 		.4byte	.LFE78
+ 3905 09d1 0400     		.2byte	0x4
+ 3906 09d3 F3       		.byte	0xf3
+ 3907 09d4 01       		.uleb128 0x1
+ 3908 09d5 52       		.byte	0x52
+ 3909 09d6 9F       		.byte	0x9f
+ 3910 09d7 00000000 		.4byte	0
+ 3911 09db 00000000 		.4byte	0
+ 3912              	.LLST71:
+ 3913 09df 00000000 		.4byte	.LVL101
+ 3914 09e3 13000000 		.4byte	.LVL103-1
+ 3915 09e7 0100     		.2byte	0x1
+ 3916 09e9 53       		.byte	0x53
+ 3917 09ea 13000000 		.4byte	.LVL103-1
+ 3918 09ee 4A000000 		.4byte	.LFE78
+ 3919 09f2 0400     		.2byte	0x4
+ 3920 09f4 F3       		.byte	0xf3
+ 3921 09f5 01       		.uleb128 0x1
+ 3922 09f6 53       		.byte	0x53
+ 3923 09f7 9F       		.byte	0x9f
+ 3924 09f8 00000000 		.4byte	0
+ 3925 09fc 00000000 		.4byte	0
+ 3926              	.LLST72:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 78
+
+
+ 3927 0a00 00000000 		.4byte	.LVL101
+ 3928 0a04 2A000000 		.4byte	.LVL105
+ 3929 0a08 0200     		.2byte	0x2
+ 3930 0a0a 91       		.byte	0x91
+ 3931 0a0b 00       		.sleb128 0
+ 3932 0a0c 2A000000 		.4byte	.LVL105
+ 3933 0a10 41000000 		.4byte	.LVL108-1
+ 3934 0a14 0100     		.2byte	0x1
+ 3935 0a16 53       		.byte	0x53
+ 3936 0a17 41000000 		.4byte	.LVL108-1
+ 3937 0a1b 44000000 		.4byte	.LVL109
+ 3938 0a1f 1A00     		.2byte	0x1a
+ 3939 0a21 31       		.byte	0x31
+ 3940 0a22 77       		.byte	0x77
+ 3941 0a23 00       		.sleb128 0
+ 3942 0a24 24       		.byte	0x24
+ 3943 0a25 31       		.byte	0x31
+ 3944 0a26 1C       		.byte	0x1c
+ 3945 0a27 74       		.byte	0x74
+ 3946 0a28 00       		.sleb128 0
+ 3947 0a29 24       		.byte	0x24
+ 3948 0a2a 91       		.byte	0x91
+ 3949 0a2b 00       		.sleb128 0
+ 3950 0a2c 94       		.byte	0x94
+ 3951 0a2d 02       		.byte	0x2
+ 3952 0a2e 0A       		.byte	0xa
+ 3953 0a2f FFFF     		.2byte	0xffff
+ 3954 0a31 1A       		.byte	0x1a
+ 3955 0a32 74       		.byte	0x74
+ 3956 0a33 00       		.sleb128 0
+ 3957 0a34 24       		.byte	0x24
+ 3958 0a35 0A       		.byte	0xa
+ 3959 0a36 FFFF     		.2byte	0xffff
+ 3960 0a38 1A       		.byte	0x1a
+ 3961 0a39 1A       		.byte	0x1a
+ 3962 0a3a 9F       		.byte	0x9f
+ 3963 0a3b 44000000 		.4byte	.LVL109
+ 3964 0a3f 46000000 		.4byte	.LVL110
+ 3965 0a43 0200     		.2byte	0x2
+ 3966 0a45 91       		.byte	0x91
+ 3967 0a46 00       		.sleb128 0
+ 3968 0a47 00000000 		.4byte	0
+ 3969 0a4b 00000000 		.4byte	0
+ 3970              	.LLST73:
+ 3971 0a4f 22000000 		.4byte	.LVL104
+ 3972 0a53 3E000000 		.4byte	.LVL107
+ 3973 0a57 0100     		.2byte	0x1
+ 3974 0a59 51       		.byte	0x51
+ 3975 0a5a 3E000000 		.4byte	.LVL107
+ 3976 0a5e 44000000 		.4byte	.LVL109
+ 3977 0a62 0A00     		.2byte	0xa
+ 3978 0a64 31       		.byte	0x31
+ 3979 0a65 77       		.byte	0x77
+ 3980 0a66 00       		.sleb128 0
+ 3981 0a67 24       		.byte	0x24
+ 3982 0a68 31       		.byte	0x31
+ 3983 0a69 1C       		.byte	0x1c
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 79
+
+
+ 3984 0a6a 74       		.byte	0x74
+ 3985 0a6b 00       		.sleb128 0
+ 3986 0a6c 24       		.byte	0x24
+ 3987 0a6d 9F       		.byte	0x9f
+ 3988 0a6e 00000000 		.4byte	0
+ 3989 0a72 00000000 		.4byte	0
+ 3990              		.section	.debug_aranges,"",%progbits
+ 3991 0000 94000000 		.4byte	0x94
+ 3992 0004 0200     		.2byte	0x2
+ 3993 0006 00000000 		.4byte	.Ldebug_info0
+ 3994 000a 04       		.byte	0x4
+ 3995 000b 00       		.byte	0
+ 3996 000c 0000     		.2byte	0
+ 3997 000e 0000     		.2byte	0
+ 3998 0010 00000000 		.4byte	.LFB63
+ 3999 0014 40000000 		.4byte	.LFE63-.LFB63
+ 4000 0018 00000000 		.4byte	.LFB64
+ 4001 001c 0C000000 		.4byte	.LFE64-.LFB64
+ 4002 0020 00000000 		.4byte	.LFB65
+ 4003 0024 7A000000 		.4byte	.LFE65-.LFB65
+ 4004 0028 00000000 		.4byte	.LFB66
+ 4005 002c 0C000000 		.4byte	.LFE66-.LFB66
+ 4006 0030 00000000 		.4byte	.LFB67
+ 4007 0034 20000000 		.4byte	.LFE67-.LFB67
+ 4008 0038 00000000 		.4byte	.LFB68
+ 4009 003c 20000000 		.4byte	.LFE68-.LFB68
+ 4010 0040 00000000 		.4byte	.LFB69
+ 4011 0044 32000000 		.4byte	.LFE69-.LFB69
+ 4012 0048 00000000 		.4byte	.LFB70
+ 4013 004c 32000000 		.4byte	.LFE70-.LFB70
+ 4014 0050 00000000 		.4byte	.LFB71
+ 4015 0054 3A000000 		.4byte	.LFE71-.LFB71
+ 4016 0058 00000000 		.4byte	.LFB72
+ 4017 005c 16000000 		.4byte	.LFE72-.LFB72
+ 4018 0060 00000000 		.4byte	.LFB73
+ 4019 0064 52000000 		.4byte	.LFE73-.LFB73
+ 4020 0068 00000000 		.4byte	.LFB74
+ 4021 006c 16000000 		.4byte	.LFE74-.LFB74
+ 4022 0070 00000000 		.4byte	.LFB75
+ 4023 0074 40000000 		.4byte	.LFE75-.LFB75
+ 4024 0078 00000000 		.4byte	.LFB76
+ 4025 007c 40000000 		.4byte	.LFE76-.LFB76
+ 4026 0080 00000000 		.4byte	.LFB77
+ 4027 0084 4A000000 		.4byte	.LFE77-.LFB77
+ 4028 0088 00000000 		.4byte	.LFB78
+ 4029 008c 4A000000 		.4byte	.LFE78-.LFB78
+ 4030 0090 00000000 		.4byte	0
+ 4031 0094 00000000 		.4byte	0
+ 4032              		.section	.debug_ranges,"",%progbits
+ 4033              	.Ldebug_ranges0:
+ 4034 0000 00000000 		.4byte	.LFB63
+ 4035 0004 40000000 		.4byte	.LFE63
+ 4036 0008 00000000 		.4byte	.LFB64
+ 4037 000c 0C000000 		.4byte	.LFE64
+ 4038 0010 00000000 		.4byte	.LFB65
+ 4039 0014 7A000000 		.4byte	.LFE65
+ 4040 0018 00000000 		.4byte	.LFB66
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 80
+
+
+ 4041 001c 0C000000 		.4byte	.LFE66
+ 4042 0020 00000000 		.4byte	.LFB67
+ 4043 0024 20000000 		.4byte	.LFE67
+ 4044 0028 00000000 		.4byte	.LFB68
+ 4045 002c 20000000 		.4byte	.LFE68
+ 4046 0030 00000000 		.4byte	.LFB69
+ 4047 0034 32000000 		.4byte	.LFE69
+ 4048 0038 00000000 		.4byte	.LFB70
+ 4049 003c 32000000 		.4byte	.LFE70
+ 4050 0040 00000000 		.4byte	.LFB71
+ 4051 0044 3A000000 		.4byte	.LFE71
+ 4052 0048 00000000 		.4byte	.LFB72
+ 4053 004c 16000000 		.4byte	.LFE72
+ 4054 0050 00000000 		.4byte	.LFB73
+ 4055 0054 52000000 		.4byte	.LFE73
+ 4056 0058 00000000 		.4byte	.LFB74
+ 4057 005c 16000000 		.4byte	.LFE74
+ 4058 0060 00000000 		.4byte	.LFB75
+ 4059 0064 40000000 		.4byte	.LFE75
+ 4060 0068 00000000 		.4byte	.LFB76
+ 4061 006c 40000000 		.4byte	.LFE76
+ 4062 0070 00000000 		.4byte	.LFB77
+ 4063 0074 4A000000 		.4byte	.LFE77
+ 4064 0078 00000000 		.4byte	.LFB78
+ 4065 007c 4A000000 		.4byte	.LFE78
+ 4066 0080 00000000 		.4byte	0
+ 4067 0084 00000000 		.4byte	0
+ 4068              		.section	.debug_line,"",%progbits
+ 4069              	.Ldebug_line0:
+ 4070 0000 34030000 		.section	.debug_str,"MS",%progbits,1
+ 4070      02006701 
+ 4070      00000201 
+ 4070      FB0E0D00 
+ 4070      01010101 
+ 4071              	.LASF0:
+ 4072 0000 5F5F696E 		.ascii	"__int8_t\000"
+ 4072      74385F74 
+ 4072      00
+ 4073              	.LASF1:
+ 4074 0009 5F5F7569 		.ascii	"__uint8_t\000"
+ 4074      6E74385F 
+ 4074      7400
+ 4075              	.LASF7:
+ 4076 0013 5F5F696E 		.ascii	"__int32_t\000"
+ 4076      7433325F 
+ 4076      7400
+ 4077              	.LASF37:
+ 4078 001d 6D61736B 		.ascii	"mask\000"
+ 4078      00
+ 4079              	.LASF6:
+ 4080 0022 73686F72 		.ascii	"short unsigned int\000"
+ 4080      7420756E 
+ 4080      7369676E 
+ 4080      65642069 
+ 4080      6E7400
+ 4081              	.LASF49:
+ 4082 0035 4932435F 		.ascii	"I2C_MasterReadBuf\000"
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 81
+
+
+ 4082      4D617374 
+ 4082      65725265 
+ 4082      61644275 
+ 4082      6600
+ 4083              	.LASF13:
+ 4084 0047 696E7438 		.ascii	"int8_t\000"
+ 4084      5F7400
+ 4085              	.LASF18:
+ 4086 004e 666C6F61 		.ascii	"float\000"
+ 4086      7400
+ 4087              	.LASF25:
+ 4088 0054 64617461 		.ascii	"data\000"
+ 4088      00
+ 4089              	.LASF17:
+ 4090 0059 75696E74 		.ascii	"uint8\000"
+ 4090      3800
+ 4091              	.LASF43:
+ 4092 005f 49324364 		.ascii	"I2Cdev_writeWord\000"
+ 4092      65765F77 
+ 4092      72697465 
+ 4092      576F7264 
+ 4092      00
+ 4093              	.LASF3:
+ 4094 0070 756E7369 		.ascii	"unsigned char\000"
+ 4094      676E6564 
+ 4094      20636861 
+ 4094      7200
+ 4095              	.LASF48:
+ 4096 007e 4932435F 		.ascii	"I2C_MasterWriteBuf\000"
+ 4096      4D617374 
+ 4096      65725772 
+ 4096      69746542 
+ 4096      756600
+ 4097              	.LASF52:
+ 4098 0091 433A5C55 		.ascii	"C:\\Users\\satomin\\Documents\\PSoC Creator\\AI_min"
+ 4098      73657273 
+ 4098      5C736174 
+ 4098      6F6D696E 
+ 4098      5C446F63 
+ 4099 00bf 695F3230 		.ascii	"i_2016_9_1\\AI_mini_main.cydsn\000"
+ 4099      31365F39 
+ 4099      5F315C41 
+ 4099      495F6D69 
+ 4099      6E695F6D 
+ 4100              	.LASF55:
+ 4101 00dd 73747263 		.ascii	"strcpy\000"
+ 4101      707900
+ 4102              	.LASF23:
+ 4103 00e4 72656741 		.ascii	"regAddr\000"
+ 4103      64647200 
+ 4104              	.LASF9:
+ 4105 00ec 6C6F6E67 		.ascii	"long unsigned int\000"
+ 4105      20756E73 
+ 4105      69676E65 
+ 4105      6420696E 
+ 4105      7400
+ 4106              	.LASF35:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 82
+
+
+ 4107 00fe 49324364 		.ascii	"I2Cdev_readBits\000"
+ 4107      65765F72 
+ 4107      65616442 
+ 4107      69747300 
+ 4108              	.LASF41:
+ 4109 010e 49324364 		.ascii	"I2Cdev_writeByte\000"
+ 4109      65765F77 
+ 4109      72697465 
+ 4109      42797465 
+ 4109      00
+ 4110              	.LASF29:
+ 4111 011f 61727261 		.ascii	"array\000"
+ 4111      7900
+ 4112              	.LASF53:
+ 4113 0125 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 4113      52784275 
+ 4113      66666572 
+ 4113      00
+ 4114              	.LASF33:
+ 4115 0132 636F756E 		.ascii	"count\000"
+ 4115      7400
+ 4116              	.LASF19:
+ 4117 0138 646F7562 		.ascii	"double\000"
+ 4117      6C6500
+ 4118              	.LASF31:
+ 4119 013f 49324364 		.ascii	"I2Cdev_readBit\000"
+ 4119      65765F72 
+ 4119      65616442 
+ 4119      697400
+ 4120              	.LASF36:
+ 4121 014e 62697453 		.ascii	"bitStart\000"
+ 4121      74617274 
+ 4121      00
+ 4122              	.LASF38:
+ 4123 0157 49324364 		.ascii	"I2Cdev_readBitsW\000"
+ 4123      65765F72 
+ 4123      65616442 
+ 4123      69747357 
+ 4123      00
+ 4124              	.LASF28:
+ 4125 0168 49324364 		.ascii	"I2Cdev_readWords\000"
+ 4125      65765F72 
+ 4125      65616457 
+ 4125      6F726473 
+ 4125      00
+ 4126              	.LASF34:
+ 4127 0179 49324364 		.ascii	"I2Cdev_readBitW\000"
+ 4127      65765F72 
+ 4127      65616442 
+ 4127      69745700 
+ 4128              	.LASF47:
+ 4129 0189 49324364 		.ascii	"I2Cdev_writeBitsW\000"
+ 4129      65765F77 
+ 4129      72697465 
+ 4129      42697473 
+ 4129      5700
+ 4130              	.LASF44:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 83
+
+
+ 4131 019b 49324364 		.ascii	"I2Cdev_writeBit\000"
+ 4131      65765F77 
+ 4131      72697465 
+ 4131      42697400 
+ 4132              	.LASF42:
+ 4133 01ab 49324364 		.ascii	"I2Cdev_writeWords\000"
+ 4133      65765F77 
+ 4133      72697465 
+ 4133      576F7264 
+ 4133      7300
+ 4134              	.LASF12:
+ 4135 01bd 756E7369 		.ascii	"unsigned int\000"
+ 4135      676E6564 
+ 4135      20696E74 
+ 4135      00
+ 4136              	.LASF11:
+ 4137 01ca 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 4137      206C6F6E 
+ 4137      6720756E 
+ 4137      7369676E 
+ 4137      65642069 
+ 4138              	.LASF14:
+ 4139 01e1 75696E74 		.ascii	"uint8_t\000"
+ 4139      385F7400 
+ 4140              	.LASF45:
+ 4141 01e9 49324364 		.ascii	"I2Cdev_writeBitW\000"
+ 4141      65765F77 
+ 4141      72697465 
+ 4141      42697457 
+ 4141      00
+ 4142              	.LASF16:
+ 4143 01fa 696E7433 		.ascii	"int32_t\000"
+ 4143      325F7400 
+ 4144              	.LASF21:
+ 4145 0202 73697A65 		.ascii	"sizetype\000"
+ 4145      74797065 
+ 4145      00
+ 4146              	.LASF32:
+ 4147 020b 6269744E 		.ascii	"bitNum\000"
+ 4147      756D00
+ 4148              	.LASF10:
+ 4149 0212 6C6F6E67 		.ascii	"long long int\000"
+ 4149      206C6F6E 
+ 4149      6720696E 
+ 4149      7400
+ 4150              	.LASF26:
+ 4151 0220 49324364 		.ascii	"I2Cdev_readBytes\000"
+ 4151      65765F72 
+ 4151      65616442 
+ 4151      79746573 
+ 4151      00
+ 4152              	.LASF20:
+ 4153 0231 63686172 		.ascii	"char\000"
+ 4153      00
+ 4154              	.LASF54:
+ 4155 0236 4932435F 		.ascii	"I2C_MasterStatus\000"
+ 4155      4D617374 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 84
+
+
+ 4155      65725374 
+ 4155      61747573 
+ 4155      00
+ 4156              	.LASF39:
+ 4157 0247 49324364 		.ascii	"I2Cdev_writeBytes\000"
+ 4157      65765F77 
+ 4157      72697465 
+ 4157      42797465 
+ 4157      7300
+ 4158              	.LASF51:
+ 4159 0259 2E5C4932 		.ascii	".\\I2Cdev\\I2Cdev.c\000"
+ 4159      43646576 
+ 4159      5C493243 
+ 4159      6465762E 
+ 4159      6300
+ 4160              	.LASF4:
+ 4161 026b 73686F72 		.ascii	"short int\000"
+ 4161      7420696E 
+ 4161      7400
+ 4162              	.LASF22:
+ 4163 0275 64657641 		.ascii	"devAddr\000"
+ 4163      64647200 
+ 4164              	.LASF5:
+ 4165 027d 5F5F7569 		.ascii	"__uint16_t\000"
+ 4165      6E743136 
+ 4165      5F7400
+ 4166              	.LASF15:
+ 4167 0288 75696E74 		.ascii	"uint16_t\000"
+ 4167      31365F74 
+ 4167      00
+ 4168              	.LASF50:
+ 4169 0291 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 4169      4320342E 
+ 4169      392E3320 
+ 4169      32303135 
+ 4169      30333033 
+ 4170 02c4 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 4170      20726576 
+ 4170      6973696F 
+ 4170      6E203232 
+ 4170      31323230 
+ 4171 02f7 67202D73 		.ascii	"g -std=gnu99 -ffunction-sections -ffat-lto-objects\000"
+ 4171      74643D67 
+ 4171      6E753939 
+ 4171      202D6666 
+ 4171      756E6374 
+ 4172              	.LASF8:
+ 4173 032a 6C6F6E67 		.ascii	"long int\000"
+ 4173      20696E74 
+ 4173      00
+ 4174              	.LASF46:
+ 4175 0333 49324364 		.ascii	"I2Cdev_writeBits\000"
+ 4175      65765F77 
+ 4175      72697465 
+ 4175      42697473 
+ 4175      00
+ 4176              	.LASF30:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccpt0mD2.s 			page 85
+
+
+ 4177 0344 49324364 		.ascii	"I2Cdev_readWord\000"
+ 4177      65765F72 
+ 4177      65616457 
+ 4177      6F726400 
+ 4178              	.LASF2:
+ 4179 0354 7369676E 		.ascii	"signed char\000"
+ 4179      65642063 
+ 4179      68617200 
+ 4180              	.LASF40:
+ 4181 0360 5F426F6F 		.ascii	"_Bool\000"
+ 4181      6C00
+ 4182              	.LASF24:
+ 4183 0366 6C656E67 		.ascii	"length\000"
+ 4183      746800
+ 4184              	.LASF27:
+ 4185 036d 49324364 		.ascii	"I2Cdev_readByte\000"
+ 4185      65765F72 
+ 4185      65616442 
+ 4185      79746500 
+ 4186              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

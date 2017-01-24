@@ -1,0 +1,118 @@
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/CortexM3/ARM_GCC_493/Debug/main.o : C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_Bypass.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_Bypass_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_IRQ.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_theACLK.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_1.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_2.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_3.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyDmac.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyFlash.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyLib.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CySpc.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/I2C.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/I2C_PVT.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_1.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_1_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_2.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_2_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_H.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_H_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/LED.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/LED_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/PWM_motor.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Pin_2.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Pin_2_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/QuadDec_1.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/QuadDec_1_Cnt16.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SCL.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SCL_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SDA.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SDA_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SW.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SW_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/UART_1.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/UART_1_IntClock.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cm3.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cm3_psoc5.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cmFunc.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cmInstr.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyPm.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydevice.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydisabledsheets.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyfitter.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cypins.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cytypes.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_A.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_A_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_B.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_B_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_Z.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_Z_aliases.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/isr_flag.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/project.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/MPU6050/MPU6050.h C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/main.c MPU6050/../I2Cdev/I2Cdev.h 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_Bypass.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_Bypass_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_IRQ.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/ADC_SAR_Seq_theACLK.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_1.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_2.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Clock_3.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyDmac.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyFlash.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CyLib.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/CySpc.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/I2C.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/I2C_PVT.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_1.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_1_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_2.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_2_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_H.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/IN_H_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/LED.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/LED_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/PWM_motor.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Pin_2.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/Pin_2_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/QuadDec_1.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/QuadDec_1_Cnt16.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SCL.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SCL_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SDA.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SDA_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SW.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/SW_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/UART_1.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/UART_1_IntClock.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cm3.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cm3_psoc5.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cmFunc.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/core_cmInstr.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyPm.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydevice.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydevice_trm.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cydisabledsheets.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyfitter.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cypins.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/cytypes.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_A.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_A_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_B.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_B_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_Z.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/in_Z_aliases.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/isr_flag.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/Generated_Source/PSoC5/project.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/MPU6050/MPU6050.h : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/main.c : 
+
+C:/Users/satomin/Documents/PSoC\ Creator/AI_mini_2016_9_1/AI_mini_main.cydsn/CortexM3/ARM_GCC_493/Debug/I2Cdev/I2Cdev.h : 
+

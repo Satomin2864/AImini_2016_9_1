@@ -1,0 +1,2473 @@
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"cymetadata.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	cy_metadata
+  19              		.global	cy_meta_flashprotect
+  20              		.global	cy_meta_wonvl
+  21              		.global	cy_meta_custnvl
+  22              		.global	cy_meta_configecc
+  23              		.section	.cyconfigecc,"a",%progbits
+  24              		.align	2
+  25              		.type	cy_meta_configecc, %object
+  26              		.size	cy_meta_configecc, 1860
+  27              	cy_meta_configecc:
+  28 0000 06       		.byte	6
+  29 0001 52       		.byte	82
+  30 0002 00       		.byte	0
+  31 0003 40       		.byte	64
+  32 0004 01       		.byte	1
+  33 0005 5B       		.byte	91
+  34 0006 00       		.byte	0
+  35 0007 40       		.byte	64
+  36 0008 03       		.byte	3
+  37 0009 64       		.byte	100
+  38 000a 00       		.byte	0
+  39 000b 40       		.byte	64
+  40 000c 01       		.byte	1
+  41 000d 65       		.byte	101
+  42 000e 00       		.byte	0
+  43 000f 40       		.byte	64
+  44 0010 35       		.byte	53
+  45 0011 02       		.byte	2
+  46 0012 01       		.byte	1
+  47 0013 40       		.byte	64
+  48 0014 2F       		.byte	47
+  49 0015 03       		.byte	3
+  50 0016 01       		.byte	1
+  51 0017 40       		.byte	64
+  52 0018 5A       		.byte	90
+  53 0019 04       		.byte	4
+  54 001a 01       		.byte	1
+  55 001b 40       		.byte	64
+  56 001c 3C       		.byte	60
+  57 001d 05       		.byte	5
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 2
+
+
+  58 001e 01       		.byte	1
+  59 001f 40       		.byte	64
+  60 0020 66       		.byte	102
+  61 0021 06       		.byte	6
+  62 0022 01       		.byte	1
+  63 0023 40       		.byte	64
+  64 0024 3F       		.byte	63
+  65 0025 07       		.byte	7
+  66 0026 01       		.byte	1
+  67 0027 40       		.byte	64
+  68 0028 04       		.byte	4
+  69 0029 08       		.byte	8
+  70 002a 01       		.byte	1
+  71 002b 40       		.byte	64
+  72 002c 02       		.byte	2
+  73 002d 09       		.byte	9
+  74 002e 01       		.byte	1
+  75 002f 40       		.byte	64
+  76 0030 01       		.byte	1
+  77 0031 0D       		.byte	13
+  78 0032 01       		.byte	1
+  79 0033 40       		.byte	64
+  80 0034 4A       		.byte	74
+  81 0035 14       		.byte	20
+  82 0036 01       		.byte	1
+  83 0037 40       		.byte	64
+  84 0038 3F       		.byte	63
+  85 0039 15       		.byte	21
+  86 003a 01       		.byte	1
+  87 003b 40       		.byte	64
+  88 003c 65       		.byte	101
+  89 003d 16       		.byte	22
+  90 003e 01       		.byte	1
+  91 003f 40       		.byte	64
+  92 0040 47       		.byte	71
+  93 0041 17       		.byte	23
+  94 0042 01       		.byte	1
+  95 0043 40       		.byte	64
+  96 0044 01       		.byte	1
+  97 0045 19       		.byte	25
+  98 0046 01       		.byte	1
+  99 0047 40       		.byte	64
+ 100 0048 02       		.byte	2
+ 101 0049 1B       		.byte	27
+ 102 004a 01       		.byte	1
+ 103 004b 40       		.byte	64
+ 104 004c 03       		.byte	3
+ 105 004d 40       		.byte	64
+ 106 004e 01       		.byte	1
+ 107 004f 40       		.byte	64
+ 108 0050 05       		.byte	5
+ 109 0051 41       		.byte	65
+ 110 0052 01       		.byte	1
+ 111 0053 40       		.byte	64
+ 112 0054 0B       		.byte	11
+ 113 0055 42       		.byte	66
+ 114 0056 01       		.byte	1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 3
+
+
+ 115 0057 40       		.byte	64
+ 116 0058 04       		.byte	4
+ 117 0059 43       		.byte	67
+ 118 005a 01       		.byte	1
+ 119 005b 40       		.byte	64
+ 120 005c 09       		.byte	9
+ 121 005d 45       		.byte	69
+ 122 005e 01       		.byte	1
+ 123 005f 40       		.byte	64
+ 124 0060 05       		.byte	5
+ 125 0061 46       		.byte	70
+ 126 0062 01       		.byte	1
+ 127 0063 40       		.byte	64
+ 128 0064 07       		.byte	7
+ 129 0065 47       		.byte	71
+ 130 0066 01       		.byte	1
+ 131 0067 40       		.byte	64
+ 132 0068 06       		.byte	6
+ 133 0069 48       		.byte	72
+ 134 006a 01       		.byte	1
+ 135 006b 40       		.byte	64
+ 136 006c 0A       		.byte	10
+ 137 006d 49       		.byte	73
+ 138 006e 01       		.byte	1
+ 139 006f 40       		.byte	64
+ 140 0070 16       		.byte	22
+ 141 0071 4C       		.byte	76
+ 142 0072 01       		.byte	1
+ 143 0073 40       		.byte	64
+ 144 0074 06       		.byte	6
+ 145 0075 4D       		.byte	77
+ 146 0076 01       		.byte	1
+ 147 0077 40       		.byte	64
+ 148 0078 05       		.byte	5
+ 149 0079 50       		.byte	80
+ 150 007a 01       		.byte	1
+ 151 007b 40       		.byte	64
+ 152 007c 02       		.byte	2
+ 153 007d 51       		.byte	81
+ 154 007e 01       		.byte	1
+ 155 007f 40       		.byte	64
+ 156 0080 08       		.byte	8
+ 157 0081 10       		.byte	16
+ 158 0082 09       		.byte	9
+ 159 0083 10       		.byte	16
+ 160 0084 10       		.byte	16
+ 161 0085 01       		.byte	1
+ 162 0086 14       		.byte	20
+ 163 0087 0D       		.byte	13
+ 164 0088 60       		.byte	96
+ 165 0089 04       		.byte	4
+ 166 008a 61       		.byte	97
+ 167 008b 8C       		.byte	-116
+ 168 008c 2F       		.byte	47
+ 169 008d 84       		.byte	-124
+ 170 008e 82       		.byte	-126
+ 171 008f 0F       		.byte	15
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 4
+
+
+ 172 0090 83       		.byte	-125
+ 173 0091 6F       		.byte	111
+ 174 0092 85       		.byte	-123
+ 175 0093 0F       		.byte	15
+ 176 0094 87       		.byte	-121
+ 177 0095 0F       		.byte	15
+ 178 0096 05       		.byte	5
+ 179 0097 04       		.byte	4
+ 180 0098 09       		.byte	9
+ 181 0099 04       		.byte	4
+ 182 009a 0C       		.byte	12
+ 183 009b 02       		.byte	2
+ 184 009c 16       		.byte	22
+ 185 009d 01       		.byte	1
+ 186 009e 17       		.byte	23
+ 187 009f 04       		.byte	4
+ 188 00a0 18       		.byte	24
+ 189 00a1 01       		.byte	1
+ 190 00a2 1F       		.byte	31
+ 191 00a3 01       		.byte	1
+ 192 00a4 26       		.byte	38
+ 193 00a5 01       		.byte	1
+ 194 00a6 27       		.byte	39
+ 195 00a7 02       		.byte	2
+ 196 00a8 2E       		.byte	46
+ 197 00a9 02       		.byte	2
+ 198 00aa 30       		.byte	48
+ 199 00ab 01       		.byte	1
+ 200 00ac 31       		.byte	49
+ 201 00ad 01       		.byte	1
+ 202 00ae 35       		.byte	53
+ 203 00af 04       		.byte	4
+ 204 00b0 36       		.byte	54
+ 205 00b1 02       		.byte	2
+ 206 00b2 37       		.byte	55
+ 207 00b3 02       		.byte	2
+ 208 00b4 3E       		.byte	62
+ 209 00b5 41       		.byte	65
+ 210 00b6 3F       		.byte	63
+ 211 00b7 10       		.byte	16
+ 212 00b8 54       		.byte	84
+ 213 00b9 0F       		.byte	15
+ 214 00ba 58       		.byte	88
+ 215 00bb 04       		.byte	4
+ 216 00bc 59       		.byte	89
+ 217 00bd 04       		.byte	4
+ 218 00be 5B       		.byte	91
+ 219 00bf 04       		.byte	4
+ 220 00c0 5C       		.byte	92
+ 221 00c1 40       		.byte	64
+ 222 00c2 5D       		.byte	93
+ 223 00c3 40       		.byte	64
+ 224 00c4 5F       		.byte	95
+ 225 00c5 01       		.byte	1
+ 226 00c6 84       		.byte	-124
+ 227 00c7 02       		.byte	2
+ 228 00c8 85       		.byte	-123
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 5
+
+
+ 229 00c9 04       		.byte	4
+ 230 00ca 8A       		.byte	-118
+ 231 00cb 02       		.byte	2
+ 232 00cc 92       		.byte	-110
+ 233 00cd 04       		.byte	4
+ 234 00ce 94       		.byte	-108
+ 235 00cf 04       		.byte	4
+ 236 00d0 97       		.byte	-105
+ 237 00d1 02       		.byte	2
+ 238 00d2 9D       		.byte	-99
+ 239 00d3 04       		.byte	4
+ 240 00d4 9E       		.byte	-98
+ 241 00d5 01       		.byte	1
+ 242 00d6 A3       		.byte	-93
+ 243 00d7 01       		.byte	1
+ 244 00d8 A4       		.byte	-92
+ 245 00d9 01       		.byte	1
+ 246 00da A5       		.byte	-91
+ 247 00db 04       		.byte	4
+ 248 00dc AA       		.byte	-86
+ 249 00dd 04       		.byte	4
+ 250 00de B1       		.byte	-79
+ 251 00df 04       		.byte	4
+ 252 00e0 B2       		.byte	-78
+ 253 00e1 02       		.byte	2
+ 254 00e2 B3       		.byte	-77
+ 255 00e3 02       		.byte	2
+ 256 00e4 B4       		.byte	-76
+ 257 00e5 04       		.byte	4
+ 258 00e6 B5       		.byte	-75
+ 259 00e7 01       		.byte	1
+ 260 00e8 B6       		.byte	-74
+ 261 00e9 01       		.byte	1
+ 262 00ea B9       		.byte	-71
+ 263 00eb 02       		.byte	2
+ 264 00ec BE       		.byte	-66
+ 265 00ed 54       		.byte	84
+ 266 00ee BF       		.byte	-65
+ 267 00ef 01       		.byte	1
+ 268 00f0 D2       		.byte	-46
+ 269 00f1 80       		.byte	-128
+ 270 00f2 D4       		.byte	-44
+ 271 00f3 0F       		.byte	15
+ 272 00f4 D8       		.byte	-40
+ 273 00f5 04       		.byte	4
+ 274 00f6 D9       		.byte	-39
+ 275 00f7 04       		.byte	4
+ 276 00f8 DB       		.byte	-37
+ 277 00f9 04       		.byte	4
+ 278 00fa DC       		.byte	-36
+ 279 00fb 40       		.byte	64
+ 280 00fc DD       		.byte	-35
+ 281 00fd 40       		.byte	64
+ 282 00fe DF       		.byte	-33
+ 283 00ff 05       		.byte	5
+ 284 0100 00       		.byte	0
+ 285 0101 08       		.byte	8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 6
+
+
+ 286 0102 02       		.byte	2
+ 287 0103 04       		.byte	4
+ 288 0104 04       		.byte	4
+ 289 0105 40       		.byte	64
+ 290 0106 08       		.byte	8
+ 291 0107 40       		.byte	64
+ 292 0108 09       		.byte	9
+ 293 0109 08       		.byte	8
+ 294 010a 0A       		.byte	10
+ 295 010b 40       		.byte	64
+ 296 010c 0B       		.byte	11
+ 297 010d 02       		.byte	2
+ 298 010e 0F       		.byte	15
+ 299 010f 14       		.byte	20
+ 300 0110 12       		.byte	18
+ 301 0111 08       		.byte	8
+ 302 0112 13       		.byte	19
+ 303 0113 04       		.byte	4
+ 304 0114 17       		.byte	23
+ 305 0115 48       		.byte	72
+ 306 0116 18       		.byte	24
+ 307 0117 04       		.byte	4
+ 308 0118 19       		.byte	25
+ 309 0119 48       		.byte	72
+ 310 011a 1E       		.byte	30
+ 311 011b 81       		.byte	-127
+ 312 011c 21       		.byte	33
+ 313 011d 08       		.byte	8
+ 314 011e 22       		.byte	34
+ 315 011f 02       		.byte	2
+ 316 0120 23       		.byte	35
+ 317 0121 04       		.byte	4
+ 318 0122 24       		.byte	36
+ 319 0123 42       		.byte	66
+ 320 0124 26       		.byte	38
+ 321 0125 10       		.byte	16
+ 322 0126 28       		.byte	40
+ 323 0127 40       		.byte	64
+ 324 0128 2A       		.byte	42
+ 325 0129 04       		.byte	4
+ 326 012a 2F       		.byte	47
+ 327 012b 20       		.byte	32
+ 328 012c 32       		.byte	50
+ 329 012d 88       		.byte	-120
+ 330 012e 33       		.byte	51
+ 331 012f 40       		.byte	64
+ 332 0130 36       		.byte	54
+ 333 0131 80       		.byte	-128
+ 334 0132 37       		.byte	55
+ 335 0133 08       		.byte	8
+ 336 0134 39       		.byte	57
+ 337 0135 0C       		.byte	12
+ 338 0136 3F       		.byte	63
+ 339 0137 14       		.byte	20
+ 340 0138 59       		.byte	89
+ 341 0139 58       		.byte	88
+ 342 013a 5A       		.byte	90
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 7
+
+
+ 343 013b 01       		.byte	1
+ 344 013c 5C       		.byte	92
+ 345 013d 02       		.byte	2
+ 346 013e 5D       		.byte	93
+ 347 013f 04       		.byte	4
+ 348 0140 5E       		.byte	94
+ 349 0141 A0       		.byte	-96
+ 350 0142 61       		.byte	97
+ 351 0143 04       		.byte	4
+ 352 0144 62       		.byte	98
+ 353 0145 20       		.byte	32
+ 354 0146 72       		.byte	114
+ 355 0147 40       		.byte	64
+ 356 0148 79       		.byte	121
+ 357 0149 08       		.byte	8
+ 358 014a C0       		.byte	-64
+ 359 014b 86       		.byte	-122
+ 360 014c C2       		.byte	-62
+ 361 014d 6D       		.byte	109
+ 362 014e C4       		.byte	-60
+ 363 014f A6       		.byte	-90
+ 364 0150 CA       		.byte	-54
+ 365 0151 43       		.byte	67
+ 366 0152 CC       		.byte	-52
+ 367 0153 5A       		.byte	90
+ 368 0154 CE       		.byte	-50
+ 369 0155 62       		.byte	98
+ 370 0156 D6       		.byte	-42
+ 371 0157 FF       		.byte	-1
+ 372 0158 D8       		.byte	-40
+ 373 0159 06       		.byte	6
+ 374 015a DE       		.byte	-34
+ 375 015b 02       		.byte	2
+ 376 015c EA       		.byte	-22
+ 377 015d 40       		.byte	64
+ 378 015e 05       		.byte	5
+ 379 015f 06       		.byte	6
+ 380 0160 0C       		.byte	12
+ 381 0161 02       		.byte	2
+ 382 0162 11       		.byte	17
+ 383 0163 0A       		.byte	10
+ 384 0164 19       		.byte	25
+ 385 0165 0C       		.byte	12
+ 386 0166 21       		.byte	33
+ 387 0167 0C       		.byte	12
+ 388 0168 22       		.byte	34
+ 389 0169 03       		.byte	3
+ 390 016a 27       		.byte	39
+ 391 016b 01       		.byte	1
+ 392 016c 2E       		.byte	46
+ 393 016d 04       		.byte	4
+ 394 016e 30       		.byte	48
+ 395 016f 01       		.byte	1
+ 396 0170 32       		.byte	50
+ 397 0171 02       		.byte	2
+ 398 0172 33       		.byte	51
+ 399 0173 0E       		.byte	14
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 8
+
+
+ 400 0174 35       		.byte	53
+ 401 0175 01       		.byte	1
+ 402 0176 36       		.byte	54
+ 403 0177 04       		.byte	4
+ 404 0178 39       		.byte	57
+ 405 0179 08       		.byte	8
+ 406 017a 40       		.byte	64
+ 407 017b 10       		.byte	16
+ 408 017c 41       		.byte	65
+ 409 017d 04       		.byte	4
+ 410 017e 49       		.byte	73
+ 411 017f FF       		.byte	-1
+ 412 0180 4A       		.byte	74
+ 413 0181 FF       		.byte	-1
+ 414 0182 4B       		.byte	75
+ 415 0183 FF       		.byte	-1
+ 416 0184 4D       		.byte	77
+ 417 0185 A0       		.byte	-96
+ 418 0186 4F       		.byte	79
+ 419 0187 04       		.byte	4
+ 420 0188 50       		.byte	80
+ 421 0189 18       		.byte	24
+ 422 018a 52       		.byte	82
+ 423 018b 80       		.byte	-128
+ 424 018c 58       		.byte	88
+ 425 018d 04       		.byte	4
+ 426 018e 59       		.byte	89
+ 427 018f 04       		.byte	4
+ 428 0190 5A       		.byte	90
+ 429 0191 04       		.byte	4
+ 430 0192 5B       		.byte	91
+ 431 0193 04       		.byte	4
+ 432 0194 5C       		.byte	92
+ 433 0195 40       		.byte	64
+ 434 0196 5F       		.byte	95
+ 435 0197 01       		.byte	1
+ 436 0198 60       		.byte	96
+ 437 0199 40       		.byte	64
+ 438 019a 62       		.byte	98
+ 439 019b C0       		.byte	-64
+ 440 019c 64       		.byte	100
+ 441 019d 40       		.byte	64
+ 442 019e 65       		.byte	101
+ 443 019f 40       		.byte	64
+ 444 01a0 66       		.byte	102
+ 445 01a1 C0       		.byte	-64
+ 446 01a2 68       		.byte	104
+ 447 01a3 C0       		.byte	-64
+ 448 01a4 6A       		.byte	106
+ 449 01a5 C0       		.byte	-64
+ 450 01a6 6C       		.byte	108
+ 451 01a7 C0       		.byte	-64
+ 452 01a8 6E       		.byte	110
+ 453 01a9 C0       		.byte	-64
+ 454 01aa 80       		.byte	-128
+ 455 01ab 10       		.byte	16
+ 456 01ac 83       		.byte	-125
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 9
+
+
+ 457 01ad 01       		.byte	1
+ 458 01ae 8A       		.byte	-118
+ 459 01af 01       		.byte	1
+ 460 01b0 8B       		.byte	-117
+ 461 01b1 0C       		.byte	12
+ 462 01b2 8C       		.byte	-116
+ 463 01b3 02       		.byte	2
+ 464 01b4 94       		.byte	-108
+ 465 01b5 03       		.byte	3
+ 466 01b6 95       		.byte	-107
+ 467 01b7 02       		.byte	2
+ 468 01b8 99       		.byte	-103
+ 469 01b9 08       		.byte	8
+ 470 01ba 9E       		.byte	-98
+ 471 01bb 0C       		.byte	12
+ 472 01bc A2       		.byte	-94
+ 473 01bd 04       		.byte	4
+ 474 01be A3       		.byte	-93
+ 475 01bf 01       		.byte	1
+ 476 01c0 A6       		.byte	-90
+ 477 01c1 08       		.byte	8
+ 478 01c2 A8       		.byte	-88
+ 479 01c3 03       		.byte	3
+ 480 01c4 B0       		.byte	-80
+ 481 01c5 08       		.byte	8
+ 482 01c6 B1       		.byte	-79
+ 483 01c7 02       		.byte	2
+ 484 01c8 B2       		.byte	-78
+ 485 01c9 03       		.byte	3
+ 486 01ca B3       		.byte	-77
+ 487 01cb 04       		.byte	4
+ 488 01cc B4       		.byte	-76
+ 489 01cd 04       		.byte	4
+ 490 01ce B5       		.byte	-75
+ 491 01cf 01       		.byte	1
+ 492 01d0 B6       		.byte	-74
+ 493 01d1 10       		.byte	16
+ 494 01d2 B7       		.byte	-73
+ 495 01d3 08       		.byte	8
+ 496 01d4 B8       		.byte	-72
+ 497 01d5 08       		.byte	8
+ 498 01d6 BE       		.byte	-66
+ 499 01d7 54       		.byte	84
+ 500 01d8 BF       		.byte	-65
+ 501 01d9 01       		.byte	1
+ 502 01da C0       		.byte	-64
+ 503 01db 50       		.byte	80
+ 504 01dc C1       		.byte	-63
+ 505 01dd 04       		.byte	4
+ 506 01de C5       		.byte	-59
+ 507 01df D0       		.byte	-48
+ 508 01e0 C6       		.byte	-58
+ 509 01e1 12       		.byte	18
+ 510 01e2 C7       		.byte	-57
+ 511 01e3 50       		.byte	80
+ 512 01e4 C8       		.byte	-56
+ 513 01e5 2E       		.byte	46
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 10
+
+
+ 514 01e6 C9       		.byte	-55
+ 515 01e7 FF       		.byte	-1
+ 516 01e8 CA       		.byte	-54
+ 517 01e9 FF       		.byte	-1
+ 518 01ea CB       		.byte	-53
+ 519 01eb FF       		.byte	-1
+ 520 01ec CD       		.byte	-51
+ 521 01ed AF       		.byte	-81
+ 522 01ee CE       		.byte	-50
+ 523 01ef 0F       		.byte	15
+ 524 01f0 CF       		.byte	-49
+ 525 01f1 04       		.byte	4
+ 526 01f2 D0       		.byte	-48
+ 527 01f3 18       		.byte	24
+ 528 01f4 D4       		.byte	-44
+ 529 01f5 07       		.byte	7
+ 530 01f6 D8       		.byte	-40
+ 531 01f7 04       		.byte	4
+ 532 01f8 D9       		.byte	-39
+ 533 01f9 04       		.byte	4
+ 534 01fa DA       		.byte	-38
+ 535 01fb 04       		.byte	4
+ 536 01fc DB       		.byte	-37
+ 537 01fd 04       		.byte	4
+ 538 01fe DF       		.byte	-33
+ 539 01ff 01       		.byte	1
+ 540 0200 E0       		.byte	-32
+ 541 0201 40       		.byte	64
+ 542 0202 E2       		.byte	-30
+ 543 0203 C0       		.byte	-64
+ 544 0204 E4       		.byte	-28
+ 545 0205 40       		.byte	64
+ 546 0206 E5       		.byte	-27
+ 547 0207 40       		.byte	64
+ 548 0208 E6       		.byte	-26
+ 549 0209 C0       		.byte	-64
+ 550 020a E8       		.byte	-24
+ 551 020b C0       		.byte	-64
+ 552 020c EA       		.byte	-22
+ 553 020d C0       		.byte	-64
+ 554 020e EC       		.byte	-20
+ 555 020f C0       		.byte	-64
+ 556 0210 EE       		.byte	-18
+ 557 0211 C0       		.byte	-64
+ 558 0212 00       		.byte	0
+ 559 0213 40       		.byte	64
+ 560 0214 04       		.byte	4
+ 561 0215 80       		.byte	-128
+ 562 0216 05       		.byte	5
+ 563 0217 01       		.byte	1
+ 564 0218 06       		.byte	6
+ 565 0219 08       		.byte	8
+ 566 021a 08       		.byte	8
+ 567 021b 02       		.byte	2
+ 568 021c 09       		.byte	9
+ 569 021d 02       		.byte	2
+ 570 021e 0E       		.byte	14
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 11
+
+
+ 571 021f 21       		.byte	33
+ 572 0220 11       		.byte	17
+ 573 0221 02       		.byte	2
+ 574 0222 13       		.byte	19
+ 575 0223 40       		.byte	64
+ 576 0224 16       		.byte	22
+ 577 0225 A0       		.byte	-96
+ 578 0226 17       		.byte	23
+ 579 0227 20       		.byte	32
+ 580 0228 18       		.byte	24
+ 581 0229 40       		.byte	64
+ 582 022a 1A       		.byte	26
+ 583 022b 13       		.byte	19
+ 584 022c 1C       		.byte	28
+ 585 022d 02       		.byte	2
+ 586 022e 1D       		.byte	29
+ 587 022f 09       		.byte	9
+ 588 0230 1E       		.byte	30
+ 589 0231 08       		.byte	8
+ 590 0232 20       		.byte	32
+ 591 0233 08       		.byte	8
+ 592 0234 21       		.byte	33
+ 593 0235 04       		.byte	4
+ 594 0236 26       		.byte	38
+ 595 0237 40       		.byte	64
+ 596 0238 27       		.byte	39
+ 597 0239 54       		.byte	84
+ 598 023a 28       		.byte	40
+ 599 023b 40       		.byte	64
+ 600 023c 2A       		.byte	42
+ 601 023d 04       		.byte	4
+ 602 023e 2E       		.byte	46
+ 603 023f 02       		.byte	2
+ 604 0240 31       		.byte	49
+ 605 0241 12       		.byte	18
+ 606 0242 37       		.byte	55
+ 607 0243 14       		.byte	20
+ 608 0244 39       		.byte	57
+ 609 0245 08       		.byte	8
+ 610 0246 3E       		.byte	62
+ 611 0247 21       		.byte	33
+ 612 0248 40       		.byte	64
+ 613 0249 0C       		.byte	12
+ 614 024a 42       		.byte	66
+ 615 024b 81       		.byte	-127
+ 616 024c 46       		.byte	70
+ 617 024d 80       		.byte	-128
+ 618 024e 4D       		.byte	77
+ 619 024f 01       		.byte	1
+ 620 0250 4E       		.byte	78
+ 621 0251 01       		.byte	1
+ 622 0252 55       		.byte	85
+ 623 0253 01       		.byte	1
+ 624 0254 56       		.byte	86
+ 625 0255 A2       		.byte	-94
+ 626 0256 5D       		.byte	93
+ 627 0257 01       		.byte	1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 12
+
+
+ 628 0258 5E       		.byte	94
+ 629 0259 98       		.byte	-104
+ 630 025a 73       		.byte	115
+ 631 025b 40       		.byte	64
+ 632 025c 83       		.byte	-125
+ 633 025d 40       		.byte	64
+ 634 025e 90       		.byte	-112
+ 635 025f 06       		.byte	6
+ 636 0260 95       		.byte	-107
+ 637 0261 08       		.byte	8
+ 638 0262 97       		.byte	-105
+ 639 0263 12       		.byte	18
+ 640 0264 9C       		.byte	-100
+ 641 0265 02       		.byte	2
+ 642 0266 9D       		.byte	-99
+ 643 0267 04       		.byte	4
+ 644 0268 9E       		.byte	-98
+ 645 0269 04       		.byte	4
+ 646 026a 9F       		.byte	-97
+ 647 026b 08       		.byte	8
+ 648 026c A2       		.byte	-94
+ 649 026d 02       		.byte	2
+ 650 026e A4       		.byte	-92
+ 651 026f 04       		.byte	4
+ 652 0270 A6       		.byte	-90
+ 653 0271 A8       		.byte	-88
+ 654 0272 A9       		.byte	-87
+ 655 0273 10       		.byte	16
+ 656 0274 AA       		.byte	-86
+ 657 0275 80       		.byte	-128
+ 658 0276 AF       		.byte	-81
+ 659 0277 20       		.byte	32
+ 660 0278 C0       		.byte	-64
+ 661 0279 D1       		.byte	-47
+ 662 027a C2       		.byte	-62
+ 663 027b A0       		.byte	-96
+ 664 027c C4       		.byte	-60
+ 665 027d 79       		.byte	121
+ 666 027e CA       		.byte	-54
+ 667 027f 83       		.byte	-125
+ 668 0280 CC       		.byte	-52
+ 669 0281 65       		.byte	101
+ 670 0282 CE       		.byte	-50
+ 671 0283 A2       		.byte	-94
+ 672 0284 D0       		.byte	-48
+ 673 0285 89       		.byte	-119
+ 674 0286 D2       		.byte	-46
+ 675 0287 10       		.byte	16
+ 676 0288 D6       		.byte	-42
+ 677 0289 F0       		.byte	-16
+ 678 028a 00       		.byte	0
+ 679 028b 03       		.byte	3
+ 680 028c 01       		.byte	1
+ 681 028d 06       		.byte	6
+ 682 028e 02       		.byte	2
+ 683 028f 0C       		.byte	12
+ 684 0290 03       		.byte	3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 13
+
+
+ 685 0291 01       		.byte	1
+ 686 0292 07       		.byte	7
+ 687 0293 01       		.byte	1
+ 688 0294 08       		.byte	8
+ 689 0295 0C       		.byte	12
+ 690 0296 0A       		.byte	10
+ 691 0297 03       		.byte	3
+ 692 0298 0F       		.byte	15
+ 693 0299 06       		.byte	6
+ 694 029a 10       		.byte	16
+ 695 029b 0F       		.byte	15
+ 696 029c 17       		.byte	23
+ 697 029d 03       		.byte	3
+ 698 029e 18       		.byte	24
+ 699 029f 05       		.byte	5
+ 700 02a0 1A       		.byte	26
+ 701 02a1 0A       		.byte	10
+ 702 02a2 1B       		.byte	27
+ 703 02a3 05       		.byte	5
+ 704 02a4 1C       		.byte	28
+ 705 02a5 0A       		.byte	10
+ 706 02a6 1E       		.byte	30
+ 707 02a7 05       		.byte	5
+ 708 02a8 23       		.byte	35
+ 709 02a9 02       		.byte	2
+ 710 02aa 24       		.byte	36
+ 711 02ab 07       		.byte	7
+ 712 02ac 30       		.byte	48
+ 713 02ad 0F       		.byte	15
+ 714 02ae 33       		.byte	51
+ 715 02af 07       		.byte	7
+ 716 02b0 3B       		.byte	59
+ 717 02b1 08       		.byte	8
+ 718 02b2 40       		.byte	64
+ 719 02b3 25       		.byte	37
+ 720 02b4 41       		.byte	65
+ 721 02b5 06       		.byte	6
+ 722 02b6 49       		.byte	73
+ 723 02b7 FF       		.byte	-1
+ 724 02b8 4A       		.byte	74
+ 725 02b9 FF       		.byte	-1
+ 726 02ba 4B       		.byte	75
+ 727 02bb FF       		.byte	-1
+ 728 02bc 4D       		.byte	77
+ 729 02bd A0       		.byte	-96
+ 730 02be 4F       		.byte	79
+ 731 02bf 01       		.byte	1
+ 732 02c0 50       		.byte	80
+ 733 02c1 18       		.byte	24
+ 734 02c2 58       		.byte	88
+ 735 02c3 04       		.byte	4
+ 736 02c4 59       		.byte	89
+ 737 02c5 04       		.byte	4
+ 738 02c6 5A       		.byte	90
+ 739 02c7 04       		.byte	4
+ 740 02c8 5C       		.byte	92
+ 741 02c9 24       		.byte	36
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 14
+
+
+ 742 02ca 5D       		.byte	93
+ 743 02cb 04       		.byte	4
+ 744 02cc 5F       		.byte	95
+ 745 02cd 01       		.byte	1
+ 746 02ce 60       		.byte	96
+ 747 02cf 40       		.byte	64
+ 748 02d0 62       		.byte	98
+ 749 02d1 80       		.byte	-128
+ 750 02d2 64       		.byte	100
+ 751 02d3 40       		.byte	64
+ 752 02d4 65       		.byte	101
+ 753 02d5 40       		.byte	64
+ 754 02d6 66       		.byte	102
+ 755 02d7 80       		.byte	-128
+ 756 02d8 68       		.byte	104
+ 757 02d9 40       		.byte	64
+ 758 02da 6A       		.byte	106
+ 759 02db 80       		.byte	-128
+ 760 02dc 6C       		.byte	108
+ 761 02dd 40       		.byte	64
+ 762 02de 6D       		.byte	109
+ 763 02df 20       		.byte	32
+ 764 02e0 6E       		.byte	110
+ 765 02e1 80       		.byte	-128
+ 766 02e2 84       		.byte	-124
+ 767 02e3 40       		.byte	64
+ 768 02e4 8B       		.byte	-117
+ 769 02e5 02       		.byte	2
+ 770 02e6 8C       		.byte	-116
+ 771 02e7 10       		.byte	16
+ 772 02e8 8D       		.byte	-115
+ 773 02e9 08       		.byte	8
+ 774 02ea 91       		.byte	-111
+ 775 02eb 01       		.byte	1
+ 776 02ec 92       		.byte	-110
+ 777 02ed 03       		.byte	3
+ 778 02ee 98       		.byte	-104
+ 779 02ef 30       		.byte	48
+ 780 02f0 99       		.byte	-103
+ 781 02f1 01       		.byte	1
+ 782 02f2 9A       		.byte	-102
+ 783 02f3 0C       		.byte	12
+ 784 02f4 9C       		.byte	-100
+ 785 02f5 09       		.byte	9
+ 786 02f6 9D       		.byte	-99
+ 787 02f7 01       		.byte	1
+ 788 02f8 9E       		.byte	-98
+ 789 02f9 10       		.byte	16
+ 790 02fa A0       		.byte	-96
+ 791 02fb 1C       		.byte	28
+ 792 02fc A1       		.byte	-95
+ 793 02fd 01       		.byte	1
+ 794 02fe A2       		.byte	-94
+ 795 02ff 22       		.byte	34
+ 796 0300 A4       		.byte	-92
+ 797 0301 14       		.byte	20
+ 798 0302 A5       		.byte	-91
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 15
+
+
+ 799 0303 08       		.byte	8
+ 800 0304 A8       		.byte	-88
+ 801 0305 2C       		.byte	44
+ 802 0306 AA       		.byte	-86
+ 803 0307 11       		.byte	17
+ 804 0308 AB       		.byte	-85
+ 805 0309 01       		.byte	1
+ 806 030a AD       		.byte	-83
+ 807 030b 04       		.byte	4
+ 808 030c B0       		.byte	-80
+ 809 030d 1F       		.byte	31
+ 810 030e B1       		.byte	-79
+ 811 030f 04       		.byte	4
+ 812 0310 B3       		.byte	-77
+ 813 0311 03       		.byte	3
+ 814 0312 B5       		.byte	-75
+ 815 0313 08       		.byte	8
+ 816 0314 B6       		.byte	-74
+ 817 0315 60       		.byte	96
+ 818 0316 B8       		.byte	-72
+ 819 0317 80       		.byte	-128
+ 820 0318 B9       		.byte	-71
+ 821 0319 20       		.byte	32
+ 822 031a BF       		.byte	-65
+ 823 031b 01       		.byte	1
+ 824 031c C0       		.byte	-64
+ 825 031d 25       		.byte	37
+ 826 031e C1       		.byte	-63
+ 827 031f 06       		.byte	6
+ 828 0320 C5       		.byte	-59
+ 829 0321 4E       		.byte	78
+ 830 0322 C6       		.byte	-58
+ 831 0323 C2       		.byte	-62
+ 832 0324 C7       		.byte	-57
+ 833 0325 03       		.byte	3
+ 834 0326 C8       		.byte	-56
+ 835 0327 1F       		.byte	31
+ 836 0328 C9       		.byte	-55
+ 837 0329 FF       		.byte	-1
+ 838 032a CA       		.byte	-54
+ 839 032b FF       		.byte	-1
+ 840 032c CB       		.byte	-53
+ 841 032d FF       		.byte	-1
+ 842 032e CD       		.byte	-51
+ 843 032f AF       		.byte	-81
+ 844 0330 CE       		.byte	-50
+ 845 0331 07       		.byte	7
+ 846 0332 CF       		.byte	-49
+ 847 0333 01       		.byte	1
+ 848 0334 D0       		.byte	-48
+ 849 0335 18       		.byte	24
+ 850 0336 D8       		.byte	-40
+ 851 0337 04       		.byte	4
+ 852 0338 D9       		.byte	-39
+ 853 0339 04       		.byte	4
+ 854 033a DA       		.byte	-38
+ 855 033b 04       		.byte	4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 16
+
+
+ 856 033c DC       		.byte	-36
+ 857 033d 42       		.byte	66
+ 858 033e DD       		.byte	-35
+ 859 033f 04       		.byte	4
+ 860 0340 DF       		.byte	-33
+ 861 0341 01       		.byte	1
+ 862 0342 E0       		.byte	-32
+ 863 0343 40       		.byte	64
+ 864 0344 E2       		.byte	-30
+ 865 0345 80       		.byte	-128
+ 866 0346 E4       		.byte	-28
+ 867 0347 40       		.byte	64
+ 868 0348 E5       		.byte	-27
+ 869 0349 40       		.byte	64
+ 870 034a E6       		.byte	-26
+ 871 034b 80       		.byte	-128
+ 872 034c E8       		.byte	-24
+ 873 034d 40       		.byte	64
+ 874 034e EA       		.byte	-22
+ 875 034f 80       		.byte	-128
+ 876 0350 EC       		.byte	-20
+ 877 0351 40       		.byte	64
+ 878 0352 ED       		.byte	-19
+ 879 0353 20       		.byte	32
+ 880 0354 EE       		.byte	-18
+ 881 0355 80       		.byte	-128
+ 882 0356 00       		.byte	0
+ 883 0357 08       		.byte	8
+ 884 0358 02       		.byte	2
+ 885 0359 01       		.byte	1
+ 886 035a 05       		.byte	5
+ 887 035b 11       		.byte	17
+ 888 035c 08       		.byte	8
+ 889 035d 10       		.byte	16
+ 890 035e 0A       		.byte	10
+ 891 035f 41       		.byte	65
+ 892 0360 0C       		.byte	12
+ 893 0361 40       		.byte	64
+ 894 0362 0D       		.byte	13
+ 895 0363 02       		.byte	2
+ 896 0364 0F       		.byte	15
+ 897 0365 08       		.byte	8
+ 898 0366 11       		.byte	17
+ 899 0367 01       		.byte	1
+ 900 0368 12       		.byte	18
+ 901 0369 10       		.byte	16
+ 902 036a 13       		.byte	19
+ 903 036b 20       		.byte	32
+ 904 036c 15       		.byte	21
+ 905 036d 08       		.byte	8
+ 906 036e 1A       		.byte	26
+ 907 036f 41       		.byte	65
+ 908 0370 1B       		.byte	27
+ 909 0371 42       		.byte	66
+ 910 0372 1D       		.byte	29
+ 911 0373 02       		.byte	2
+ 912 0374 22       		.byte	34
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 17
+
+
+ 913 0375 09       		.byte	9
+ 914 0376 23       		.byte	35
+ 915 0377 08       		.byte	8
+ 916 0378 26       		.byte	38
+ 917 0379 04       		.byte	4
+ 918 037a 27       		.byte	39
+ 919 037b 20       		.byte	32
+ 920 037c 29       		.byte	41
+ 921 037d 01       		.byte	1
+ 922 037e 2A       		.byte	42
+ 923 037f 04       		.byte	4
+ 924 0380 2B       		.byte	43
+ 925 0381 8E       		.byte	-114
+ 926 0382 2E       		.byte	46
+ 927 0383 02       		.byte	2
+ 928 0384 30       		.byte	48
+ 929 0385 40       		.byte	64
+ 930 0386 31       		.byte	49
+ 931 0387 12       		.byte	18
+ 932 0388 34       		.byte	52
+ 933 0389 10       		.byte	16
+ 934 038a 36       		.byte	54
+ 935 038b 14       		.byte	20
+ 936 038c 39       		.byte	57
+ 937 038d A0       		.byte	-96
+ 938 038e 3D       		.byte	61
+ 939 038f 01       		.byte	1
+ 940 0390 3E       		.byte	62
+ 941 0391 08       		.byte	8
+ 942 0392 3F       		.byte	63
+ 943 0393 82       		.byte	-126
+ 944 0394 40       		.byte	64
+ 945 0395 08       		.byte	8
+ 946 0396 44       		.byte	68
+ 947 0397 08       		.byte	8
+ 948 0398 49       		.byte	73
+ 949 0399 04       		.byte	4
+ 950 039a 4A       		.byte	74
+ 951 039b 02       		.byte	2
+ 952 039c 4B       		.byte	75
+ 953 039d 12       		.byte	18
+ 954 039e 4E       		.byte	78
+ 955 039f 06       		.byte	6
+ 956 03a0 4F       		.byte	79
+ 957 03a1 10       		.byte	16
+ 958 03a2 51       		.byte	81
+ 959 03a3 40       		.byte	64
+ 960 03a4 52       		.byte	82
+ 961 03a5 A4       		.byte	-92
+ 962 03a6 8A       		.byte	-118
+ 963 03a7 01       		.byte	1
+ 964 03a8 90       		.byte	-112
+ 965 03a9 02       		.byte	2
+ 966 03aa 91       		.byte	-111
+ 967 03ab 08       		.byte	8
+ 968 03ac 94       		.byte	-108
+ 969 03ad 80       		.byte	-128
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 18
+
+
+ 970 03ae 97       		.byte	-105
+ 971 03af 12       		.byte	18
+ 972 03b0 98       		.byte	-104
+ 973 03b1 08       		.byte	8
+ 974 03b2 9C       		.byte	-100
+ 975 03b3 40       		.byte	64
+ 976 03b4 9D       		.byte	-99
+ 977 03b5 14       		.byte	20
+ 978 03b6 9E       		.byte	-98
+ 979 03b7 0C       		.byte	12
+ 980 03b8 9F       		.byte	-97
+ 981 03b9 28       		.byte	40
+ 982 03ba A1       		.byte	-95
+ 983 03bb 08       		.byte	8
+ 984 03bc A2       		.byte	-94
+ 985 03bd 02       		.byte	2
+ 986 03be A5       		.byte	-91
+ 987 03bf 02       		.byte	2
+ 988 03c0 A6       		.byte	-90
+ 989 03c1 B8       		.byte	-72
+ 990 03c2 AC       		.byte	-84
+ 991 03c3 01       		.byte	1
+ 992 03c4 C0       		.byte	-64
+ 993 03c5 55       		.byte	85
+ 994 03c6 C2       		.byte	-62
+ 995 03c7 DB       		.byte	-37
+ 996 03c8 C4       		.byte	-60
+ 997 03c9 2E       		.byte	46
+ 998 03ca CA       		.byte	-54
+ 999 03cb 8F       		.byte	-113
+ 1000 03cc CC       		.byte	-52
+ 1001 03cd 6D       		.byte	109
+ 1002 03ce CE       		.byte	-50
+ 1003 03cf DC       		.byte	-36
+ 1004 03d0 D0       		.byte	-48
+ 1005 03d1 24       		.byte	36
+ 1006 03d2 D2       		.byte	-46
+ 1007 03d3 3C       		.byte	60
+ 1008 03d4 39       		.byte	57
+ 1009 03d5 02       		.byte	2
+ 1010 03d6 3F       		.byte	63
+ 1011 03d7 01       		.byte	1
+ 1012 03d8 59       		.byte	89
+ 1013 03d9 04       		.byte	4
+ 1014 03da 5F       		.byte	95
+ 1015 03db 01       		.byte	1
+ 1016 03dc 24       		.byte	36
+ 1017 03dd 40       		.byte	64
+ 1018 03de E0       		.byte	-32
+ 1019 03df 20       		.byte	32
+ 1020 03e0 EA       		.byte	-22
+ 1021 03e1 40       		.byte	64
+ 1022 03e2 00       		.byte	0
+ 1023 03e3 01       		.byte	1
+ 1024 03e4 02       		.byte	2
+ 1025 03e5 02       		.byte	2
+ 1026 03e6 05       		.byte	5
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 19
+
+
+ 1027 03e7 73       		.byte	115
+ 1028 03e8 06       		.byte	6
+ 1029 03e9 04       		.byte	4
+ 1030 03ea 0A       		.byte	10
+ 1031 03eb 07       		.byte	7
+ 1032 03ec 10       		.byte	16
+ 1033 03ed 07       		.byte	7
+ 1034 03ee 11       		.byte	17
+ 1035 03ef FD       		.byte	-3
+ 1036 03f0 13       		.byte	19
+ 1037 03f1 02       		.byte	2
+ 1038 03f2 14       		.byte	20
+ 1039 03f3 04       		.byte	4
+ 1040 03f4 15       		.byte	21
+ 1041 03f5 30       		.byte	48
+ 1042 03f6 17       		.byte	23
+ 1043 03f7 C9       		.byte	-55
+ 1044 03f8 19       		.byte	25
+ 1045 03f9 CF       		.byte	-49
+ 1046 03fa 1B       		.byte	27
+ 1047 03fb 30       		.byte	48
+ 1048 03fc 1D       		.byte	29
+ 1049 03fd 9E       		.byte	-98
+ 1050 03fe 1F       		.byte	31
+ 1051 03ff 60       		.byte	96
+ 1052 0400 20       		.byte	32
+ 1053 0401 01       		.byte	1
+ 1054 0402 21       		.byte	33
+ 1055 0403 94       		.byte	-108
+ 1056 0404 22       		.byte	34
+ 1057 0405 02       		.byte	2
+ 1058 0406 23       		.byte	35
+ 1059 0407 60       		.byte	96
+ 1060 0408 26       		.byte	38
+ 1061 0409 08       		.byte	8
+ 1062 040a 28       		.byte	40
+ 1063 040b 07       		.byte	7
+ 1064 040c 2B       		.byte	43
+ 1065 040d 0F       		.byte	15
+ 1066 040e 34       		.byte	52
+ 1067 040f 0F       		.byte	15
+ 1068 0410 35       		.byte	53
+ 1069 0411 FF       		.byte	-1
+ 1070 0412 3F       		.byte	63
+ 1071 0413 10       		.byte	16
+ 1072 0414 58       		.byte	88
+ 1073 0415 04       		.byte	4
+ 1074 0416 59       		.byte	89
+ 1075 0417 04       		.byte	4
+ 1076 0418 5C       		.byte	92
+ 1077 0419 04       		.byte	4
+ 1078 041a 5F       		.byte	95
+ 1079 041b 01       		.byte	1
+ 1080 041c 81       		.byte	-127
+ 1081 041d 20       		.byte	32
+ 1082 041e 82       		.byte	-126
+ 1083 041f 80       		.byte	-128
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 20
+
+
+ 1084 0420 83       		.byte	-125
+ 1085 0421 04       		.byte	4
+ 1086 0422 84       		.byte	-124
+ 1087 0423 0C       		.byte	12
+ 1088 0424 86       		.byte	-122
+ 1089 0425 01       		.byte	1
+ 1090 0426 87       		.byte	-121
+ 1091 0427 40       		.byte	64
+ 1092 0428 88       		.byte	-120
+ 1093 0429 0C       		.byte	12
+ 1094 042a 8A       		.byte	-118
+ 1095 042b 02       		.byte	2
+ 1096 042c 8C       		.byte	-116
+ 1097 042d 0B       		.byte	11
+ 1098 042e 8E       		.byte	-114
+ 1099 042f 04       		.byte	4
+ 1100 0430 8F       		.byte	-113
+ 1101 0431 02       		.byte	2
+ 1102 0432 91       		.byte	-111
+ 1103 0433 2C       		.byte	44
+ 1104 0434 92       		.byte	-110
+ 1105 0435 10       		.byte	16
+ 1106 0436 93       		.byte	-109
+ 1107 0437 10       		.byte	16
+ 1108 0438 94       		.byte	-108
+ 1109 0439 08       		.byte	8
+ 1110 043a 95       		.byte	-107
+ 1111 043b 1C       		.byte	28
+ 1112 043c 96       		.byte	-106
+ 1113 043d 01       		.byte	1
+ 1114 043e 98       		.byte	-104
+ 1115 043f 20       		.byte	32
+ 1116 0440 9A       		.byte	-102
+ 1117 0441 40       		.byte	64
+ 1118 0442 9C       		.byte	-100
+ 1119 0443 40       		.byte	64
+ 1120 0444 9D       		.byte	-99
+ 1121 0445 30       		.byte	48
+ 1122 0446 9E       		.byte	-98
+ 1123 0447 2F       		.byte	47
+ 1124 0448 9F       		.byte	-97
+ 1125 0449 08       		.byte	8
+ 1126 044a A0       		.byte	-96
+ 1127 044b 20       		.byte	32
+ 1128 044c A2       		.byte	-94
+ 1129 044d 40       		.byte	64
+ 1130 044e A4       		.byte	-92
+ 1131 044f 07       		.byte	7
+ 1132 0450 A5       		.byte	-91
+ 1133 0451 30       		.byte	48
+ 1134 0452 A7       		.byte	-89
+ 1135 0453 04       		.byte	4
+ 1136 0454 A8       		.byte	-88
+ 1137 0455 20       		.byte	32
+ 1138 0456 AA       		.byte	-86
+ 1139 0457 40       		.byte	64
+ 1140 0458 AB       		.byte	-85
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 21
+
+
+ 1141 0459 3C       		.byte	60
+ 1142 045a AF       		.byte	-81
+ 1143 045b 01       		.byte	1
+ 1144 045c B0       		.byte	-80
+ 1145 045d 80       		.byte	-128
+ 1146 045e B1       		.byte	-79
+ 1147 045f 3C       		.byte	60
+ 1148 0460 B2       		.byte	-78
+ 1149 0461 10       		.byte	16
+ 1150 0462 B3       		.byte	-77
+ 1151 0463 02       		.byte	2
+ 1152 0464 B4       		.byte	-76
+ 1153 0465 0F       		.byte	15
+ 1154 0466 B5       		.byte	-75
+ 1155 0467 01       		.byte	1
+ 1156 0468 B6       		.byte	-74
+ 1157 0469 60       		.byte	96
+ 1158 046a B7       		.byte	-73
+ 1159 046b 40       		.byte	64
+ 1160 046c BA       		.byte	-70
+ 1161 046d 80       		.byte	-128
+ 1162 046e D8       		.byte	-40
+ 1163 046f 04       		.byte	4
+ 1164 0470 D9       		.byte	-39
+ 1165 0471 04       		.byte	4
+ 1166 0472 DC       		.byte	-36
+ 1167 0473 44       		.byte	68
+ 1168 0474 DF       		.byte	-33
+ 1169 0475 01       		.byte	1
+ 1170 0476 01       		.byte	1
+ 1171 0477 20       		.byte	32
+ 1172 0478 03       		.byte	3
+ 1173 0479 60       		.byte	96
+ 1174 047a 04       		.byte	4
+ 1175 047b 02       		.byte	2
+ 1176 047c 05       		.byte	5
+ 1177 047d 14       		.byte	20
+ 1178 047e 07       		.byte	7
+ 1179 047f 01       		.byte	1
+ 1180 0480 09       		.byte	9
+ 1181 0481 0A       		.byte	10
+ 1182 0482 0C       		.byte	12
+ 1183 0483 40       		.byte	64
+ 1184 0484 0D       		.byte	13
+ 1185 0485 08       		.byte	8
+ 1186 0486 0E       		.byte	14
+ 1187 0487 41       		.byte	65
+ 1188 0488 0F       		.byte	15
+ 1189 0489 08       		.byte	8
+ 1190 048a 10       		.byte	16
+ 1191 048b 44       		.byte	68
+ 1192 048c 13       		.byte	19
+ 1193 048d 08       		.byte	8
+ 1194 048e 15       		.byte	21
+ 1195 048f 08       		.byte	8
+ 1196 0490 17       		.byte	23
+ 1197 0491 22       		.byte	34
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 22
+
+
+ 1198 0492 19       		.byte	25
+ 1199 0493 20       		.byte	32
+ 1200 0494 1A       		.byte	26
+ 1201 0495 08       		.byte	8
+ 1202 0496 1C       		.byte	28
+ 1203 0497 10       		.byte	16
+ 1204 0498 1D       		.byte	29
+ 1205 0499 10       		.byte	16
+ 1206 049a 1E       		.byte	30
+ 1207 049b 41       		.byte	65
+ 1208 049c 1F       		.byte	31
+ 1209 049d A0       		.byte	-96
+ 1210 049e 23       		.byte	35
+ 1211 049f 08       		.byte	8
+ 1212 04a0 24       		.byte	36
+ 1213 04a1 04       		.byte	4
+ 1214 04a2 25       		.byte	37
+ 1215 04a3 40       		.byte	64
+ 1216 04a4 27       		.byte	39
+ 1217 04a5 62       		.byte	98
+ 1218 04a6 29       		.byte	41
+ 1219 04a7 20       		.byte	32
+ 1220 04a8 2B       		.byte	43
+ 1221 04a9 80       		.byte	-128
+ 1222 04aa 2E       		.byte	46
+ 1223 04ab 80       		.byte	-128
+ 1224 04ac 2F       		.byte	47
+ 1225 04ad 28       		.byte	40
+ 1226 04ae 31       		.byte	49
+ 1227 04af 1A       		.byte	26
+ 1228 04b0 33       		.byte	51
+ 1229 04b1 49       		.byte	73
+ 1230 04b2 34       		.byte	52
+ 1231 04b3 04       		.byte	4
+ 1232 04b4 37       		.byte	55
+ 1233 04b5 41       		.byte	65
+ 1234 04b6 39       		.byte	57
+ 1235 04b7 08       		.byte	8
+ 1236 04b8 3C       		.byte	60
+ 1237 04b9 04       		.byte	4
+ 1238 04ba 3D       		.byte	61
+ 1239 04bb 80       		.byte	-128
+ 1240 04bc 3E       		.byte	62
+ 1241 04bd 01       		.byte	1
+ 1242 04be 3F       		.byte	63
+ 1243 04bf 08       		.byte	8
+ 1244 04c0 78       		.byte	120
+ 1245 04c1 04       		.byte	4
+ 1246 04c2 79       		.byte	121
+ 1247 04c3 08       		.byte	8
+ 1248 04c4 86       		.byte	-122
+ 1249 04c5 80       		.byte	-128
+ 1250 04c6 8D       		.byte	-115
+ 1251 04c7 04       		.byte	4
+ 1252 04c8 8F       		.byte	-113
+ 1253 04c9 40       		.byte	64
+ 1254 04ca 90       		.byte	-112
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 23
+
+
+ 1255 04cb 02       		.byte	2
+ 1256 04cc 91       		.byte	-111
+ 1257 04cd 08       		.byte	8
+ 1258 04ce 94       		.byte	-108
+ 1259 04cf 10       		.byte	16
+ 1260 04d0 96       		.byte	-106
+ 1261 04d1 48       		.byte	72
+ 1262 04d2 9D       		.byte	-99
+ 1263 04d3 10       		.byte	16
+ 1264 04d4 9F       		.byte	-97
+ 1265 04d5 40       		.byte	64
+ 1266 04d6 A1       		.byte	-95
+ 1267 04d7 02       		.byte	2
+ 1268 04d8 A3       		.byte	-93
+ 1269 04d9 08       		.byte	8
+ 1270 04da A7       		.byte	-89
+ 1271 04db 80       		.byte	-128
+ 1272 04dc AC       		.byte	-84
+ 1273 04dd 80       		.byte	-128
+ 1274 04de AF       		.byte	-81
+ 1275 04df 10       		.byte	16
+ 1276 04e0 B1       		.byte	-79
+ 1277 04e1 04       		.byte	4
+ 1278 04e2 B3       		.byte	-77
+ 1279 04e3 08       		.byte	8
+ 1280 04e4 C0       		.byte	-64
+ 1281 04e5 FE       		.byte	-2
+ 1282 04e6 C2       		.byte	-62
+ 1283 04e7 FC       		.byte	-4
+ 1284 04e8 C4       		.byte	-60
+ 1285 04e9 7E       		.byte	126
+ 1286 04ea CA       		.byte	-54
+ 1287 04eb 75       		.byte	117
+ 1288 04ec CC       		.byte	-52
+ 1289 04ed DF       		.byte	-33
+ 1290 04ee CE       		.byte	-50
+ 1291 04ef D2       		.byte	-46
+ 1292 04f0 EA       		.byte	-22
+ 1293 04f1 01       		.byte	1
+ 1294 04f2 EC       		.byte	-20
+ 1295 04f3 20       		.byte	32
+ 1296 04f4 00       		.byte	0
+ 1297 04f5 01       		.byte	1
+ 1298 04f6 02       		.byte	2
+ 1299 04f7 02       		.byte	2
+ 1300 04f8 04       		.byte	4
+ 1301 04f9 04       		.byte	4
+ 1302 04fa 07       		.byte	7
+ 1303 04fb 05       		.byte	5
+ 1304 04fc 08       		.byte	8
+ 1305 04fd 01       		.byte	1
+ 1306 04fe 0A       		.byte	10
+ 1307 04ff 02       		.byte	2
+ 1308 0500 10       		.byte	16
+ 1309 0501 01       		.byte	1
+ 1310 0502 12       		.byte	18
+ 1311 0503 02       		.byte	2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 24
+
+
+ 1312 0504 14       		.byte	20
+ 1313 0505 04       		.byte	4
+ 1314 0506 15       		.byte	21
+ 1315 0507 03       		.byte	3
+ 1316 0508 17       		.byte	23
+ 1317 0509 0C       		.byte	12
+ 1318 050a 19       		.byte	25
+ 1319 050b 03       		.byte	3
+ 1320 050c 1A       		.byte	26
+ 1321 050d 04       		.byte	4
+ 1322 050e 1B       		.byte	27
+ 1323 050f 04       		.byte	4
+ 1324 0510 1E       		.byte	30
+ 1325 0511 04       		.byte	4
+ 1326 0512 23       		.byte	35
+ 1327 0513 08       		.byte	8
+ 1328 0514 24       		.byte	36
+ 1329 0515 02       		.byte	2
+ 1330 0516 25       		.byte	37
+ 1331 0517 03       		.byte	3
+ 1332 0518 26       		.byte	38
+ 1333 0519 01       		.byte	1
+ 1334 051a 27       		.byte	39
+ 1335 051b 04       		.byte	4
+ 1336 051c 2A       		.byte	42
+ 1337 051d 04       		.byte	4
+ 1338 051e 2D       		.byte	45
+ 1339 051f 0A       		.byte	10
+ 1340 0520 2F       		.byte	47
+ 1341 0521 04       		.byte	4
+ 1342 0522 32       		.byte	50
+ 1343 0523 03       		.byte	3
+ 1344 0524 34       		.byte	52
+ 1345 0525 04       		.byte	4
+ 1346 0526 35       		.byte	53
+ 1347 0527 0F       		.byte	15
+ 1348 0528 3A       		.byte	58
+ 1349 0529 08       		.byte	8
+ 1350 052a 3B       		.byte	59
+ 1351 052b 20       		.byte	32
+ 1352 052c 3E       		.byte	62
+ 1353 052d 10       		.byte	16
+ 1354 052e 40       		.byte	64
+ 1355 052f 03       		.byte	3
+ 1356 0530 47       		.byte	71
+ 1357 0531 40       		.byte	64
+ 1358 0532 49       		.byte	73
+ 1359 0533 FF       		.byte	-1
+ 1360 0534 4A       		.byte	74
+ 1361 0535 07       		.byte	7
+ 1362 0536 4B       		.byte	75
+ 1363 0537 FF       		.byte	-1
+ 1364 0538 4C       		.byte	76
+ 1365 0539 40       		.byte	64
+ 1366 053a 4D       		.byte	77
+ 1367 053b 20       		.byte	32
+ 1368 053c 4E       		.byte	78
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 25
+
+
+ 1369 053d F0       		.byte	-16
+ 1370 053e 4F       		.byte	79
+ 1371 053f 05       		.byte	5
+ 1372 0540 50       		.byte	80
+ 1373 0541 08       		.byte	8
+ 1374 0542 58       		.byte	88
+ 1375 0543 04       		.byte	4
+ 1376 0544 59       		.byte	89
+ 1377 0545 04       		.byte	4
+ 1378 0546 5A       		.byte	90
+ 1379 0547 04       		.byte	4
+ 1380 0548 5C       		.byte	92
+ 1381 0549 24       		.byte	36
+ 1382 054a 5D       		.byte	93
+ 1383 054b 02       		.byte	2
+ 1384 054c 5F       		.byte	95
+ 1385 054d 01       		.byte	1
+ 1386 054e 60       		.byte	96
+ 1387 054f 40       		.byte	64
+ 1388 0550 61       		.byte	97
+ 1389 0551 A8       		.byte	-88
+ 1390 0552 62       		.byte	98
+ 1391 0553 40       		.byte	64
+ 1392 0554 63       		.byte	99
+ 1393 0555 20       		.byte	32
+ 1394 0556 82       		.byte	-126
+ 1395 0557 10       		.byte	16
+ 1396 0558 85       		.byte	-123
+ 1397 0559 7F       		.byte	127
+ 1398 055a 86       		.byte	-122
+ 1399 055b 06       		.byte	6
+ 1400 055c 8C       		.byte	-116
+ 1401 055d 18       		.byte	24
+ 1402 055e 8E       		.byte	-114
+ 1403 055f 06       		.byte	6
+ 1404 0560 91       		.byte	-111
+ 1405 0561 FE       		.byte	-2
+ 1406 0562 93       		.byte	-109
+ 1407 0563 01       		.byte	1
+ 1408 0564 95       		.byte	-107
+ 1409 0565 96       		.byte	-106
+ 1410 0566 97       		.byte	-105
+ 1411 0567 68       		.byte	104
+ 1412 0568 99       		.byte	-103
+ 1413 0569 A3       		.byte	-93
+ 1414 056a 9B       		.byte	-101
+ 1415 056b 5C       		.byte	92
+ 1416 056c 9D       		.byte	-99
+ 1417 056d C5       		.byte	-59
+ 1418 056e 9E       		.byte	-98
+ 1419 056f 18       		.byte	24
+ 1420 0570 9F       		.byte	-97
+ 1421 0571 3A       		.byte	58
+ 1422 0572 A1       		.byte	-95
+ 1423 0573 0E       		.byte	14
+ 1424 0574 A3       		.byte	-93
+ 1425 0575 F0       		.byte	-16
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 26
+
+
+ 1426 0576 A4       		.byte	-92
+ 1427 0577 02       		.byte	2
+ 1428 0578 A6       		.byte	-90
+ 1429 0579 0C       		.byte	12
+ 1430 057a A8       		.byte	-88
+ 1431 057b 02       		.byte	2
+ 1432 057c AA       		.byte	-86
+ 1433 057d 1C       		.byte	28
+ 1434 057e AB       		.byte	-85
+ 1435 057f 01       		.byte	1
+ 1436 0580 AC       		.byte	-84
+ 1437 0581 01       		.byte	1
+ 1438 0582 B0       		.byte	-80
+ 1439 0583 1E       		.byte	30
+ 1440 0584 B4       		.byte	-76
+ 1441 0585 01       		.byte	1
+ 1442 0586 B5       		.byte	-75
+ 1443 0587 FF       		.byte	-1
+ 1444 0588 BA       		.byte	-70
+ 1445 0589 02       		.byte	2
+ 1446 058a BE       		.byte	-66
+ 1447 058b 10       		.byte	16
+ 1448 058c BF       		.byte	-65
+ 1449 058d 10       		.byte	16
+ 1450 058e C0       		.byte	-64
+ 1451 058f 32       		.byte	50
+ 1452 0590 C1       		.byte	-63
+ 1453 0591 06       		.byte	6
+ 1454 0592 C5       		.byte	-59
+ 1455 0593 0C       		.byte	12
+ 1456 0594 C6       		.byte	-58
+ 1457 0595 B0       		.byte	-80
+ 1458 0596 C7       		.byte	-57
+ 1459 0597 E0       		.byte	-32
+ 1460 0598 C8       		.byte	-56
+ 1461 0599 29       		.byte	41
+ 1462 059a C9       		.byte	-55
+ 1463 059b FF       		.byte	-1
+ 1464 059c CA       		.byte	-54
+ 1465 059d FF       		.byte	-1
+ 1466 059e CB       		.byte	-53
+ 1467 059f FF       		.byte	-1
+ 1468 05a0 CE       		.byte	-50
+ 1469 05a1 F0       		.byte	-16
+ 1470 05a2 CF       		.byte	-49
+ 1471 05a3 44       		.byte	68
+ 1472 05a4 D0       		.byte	-48
+ 1473 05a5 0C       		.byte	12
+ 1474 05a6 D4       		.byte	-44
+ 1475 05a7 01       		.byte	1
+ 1476 05a8 D6       		.byte	-42
+ 1477 05a9 04       		.byte	4
+ 1478 05aa D8       		.byte	-40
+ 1479 05ab 04       		.byte	4
+ 1480 05ac D9       		.byte	-39
+ 1481 05ad 04       		.byte	4
+ 1482 05ae DA       		.byte	-38
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 27
+
+
+ 1483 05af 04       		.byte	4
+ 1484 05b0 DB       		.byte	-37
+ 1485 05b1 04       		.byte	4
+ 1486 05b2 DC       		.byte	-36
+ 1487 05b3 02       		.byte	2
+ 1488 05b4 DD       		.byte	-35
+ 1489 05b5 22       		.byte	34
+ 1490 05b6 DF       		.byte	-33
+ 1491 05b7 01       		.byte	1
+ 1492 05b8 E6       		.byte	-26
+ 1493 05b9 C0       		.byte	-64
+ 1494 05ba EA       		.byte	-22
+ 1495 05bb 40       		.byte	64
+ 1496 05bc EB       		.byte	-21
+ 1497 05bd 02       		.byte	2
+ 1498 05be 00       		.byte	0
+ 1499 05bf 0A       		.byte	10
+ 1500 05c0 03       		.byte	3
+ 1501 05c1 02       		.byte	2
+ 1502 05c2 04       		.byte	4
+ 1503 05c3 12       		.byte	18
+ 1504 05c4 07       		.byte	7
+ 1505 05c5 20       		.byte	32
+ 1506 05c6 0A       		.byte	10
+ 1507 05c7 01       		.byte	1
+ 1508 05c8 0C       		.byte	12
+ 1509 05c9 20       		.byte	32
+ 1510 05ca 0E       		.byte	14
+ 1511 05cb 60       		.byte	96
+ 1512 05cc 0F       		.byte	15
+ 1513 05cd 02       		.byte	2
+ 1514 05ce 10       		.byte	16
+ 1515 05cf 03       		.byte	3
+ 1516 05d0 13       		.byte	19
+ 1517 05d1 28       		.byte	40
+ 1518 05d2 15       		.byte	21
+ 1519 05d3 04       		.byte	4
+ 1520 05d4 16       		.byte	22
+ 1521 05d5 08       		.byte	8
+ 1522 05d6 18       		.byte	24
+ 1523 05d7 80       		.byte	-128
+ 1524 05d8 1A       		.byte	26
+ 1525 05d9 04       		.byte	4
+ 1526 05da 1B       		.byte	27
+ 1527 05db 03       		.byte	3
+ 1528 05dc 1F       		.byte	31
+ 1529 05dd 18       		.byte	24
+ 1530 05de 21       		.byte	33
+ 1531 05df 10       		.byte	16
+ 1532 05e0 26       		.byte	38
+ 1533 05e1 10       		.byte	16
+ 1534 05e2 27       		.byte	39
+ 1535 05e3 0C       		.byte	12
+ 1536 05e4 28       		.byte	40
+ 1537 05e5 04       		.byte	4
+ 1538 05e6 2B       		.byte	43
+ 1539 05e7 80       		.byte	-128
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 28
+
+
+ 1540 05e8 2C       		.byte	44
+ 1541 05e9 30       		.byte	48
+ 1542 05ea 2E       		.byte	46
+ 1543 05eb 01       		.byte	1
+ 1544 05ec 2F       		.byte	47
+ 1545 05ed 02       		.byte	2
+ 1546 05ee 30       		.byte	48
+ 1547 05ef 40       		.byte	64
+ 1548 05f0 31       		.byte	49
+ 1549 05f1 12       		.byte	18
+ 1550 05f2 33       		.byte	51
+ 1551 05f3 48       		.byte	72
+ 1552 05f4 37       		.byte	55
+ 1553 05f5 24       		.byte	36
+ 1554 05f6 39       		.byte	57
+ 1555 05f7 08       		.byte	8
+ 1556 05f8 3C       		.byte	60
+ 1557 05f9 08       		.byte	8
+ 1558 05fa 42       		.byte	66
+ 1559 05fb 08       		.byte	8
+ 1560 05fc 43       		.byte	67
+ 1561 05fd 04       		.byte	4
+ 1562 05fe 45       		.byte	69
+ 1563 05ff 08       		.byte	8
+ 1564 0600 48       		.byte	72
+ 1565 0601 20       		.byte	32
+ 1566 0602 4A       		.byte	74
+ 1567 0603 04       		.byte	4
+ 1568 0604 50       		.byte	80
+ 1569 0605 02       		.byte	2
+ 1570 0606 52       		.byte	82
+ 1571 0607 10       		.byte	16
+ 1572 0608 54       		.byte	84
+ 1573 0609 05       		.byte	5
+ 1574 060a 56       		.byte	86
+ 1575 060b 0B       		.byte	11
+ 1576 060c 58       		.byte	88
+ 1577 060d 91       		.byte	-111
+ 1578 060e 5A       		.byte	90
+ 1579 060f 04       		.byte	4
+ 1580 0610 63       		.byte	99
+ 1581 0611 40       		.byte	64
+ 1582 0612 87       		.byte	-121
+ 1583 0613 40       		.byte	64
+ 1584 0614 90       		.byte	-112
+ 1585 0615 02       		.byte	2
+ 1586 0616 91       		.byte	-111
+ 1587 0617 08       		.byte	8
+ 1588 0618 92       		.byte	-110
+ 1589 0619 01       		.byte	1
+ 1590 061a 94       		.byte	-108
+ 1591 061b 80       		.byte	-128
+ 1592 061c 95       		.byte	-107
+ 1593 061d 20       		.byte	32
+ 1594 061e 96       		.byte	-106
+ 1595 061f 08       		.byte	8
+ 1596 0620 98       		.byte	-104
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 29
+
+
+ 1597 0621 04       		.byte	4
+ 1598 0622 9B       		.byte	-101
+ 1599 0623 20       		.byte	32
+ 1600 0624 9C       		.byte	-100
+ 1601 0625 40       		.byte	64
+ 1602 0626 9D       		.byte	-99
+ 1603 0627 10       		.byte	16
+ 1604 0628 9E       		.byte	-98
+ 1605 0629 1B       		.byte	27
+ 1606 062a A1       		.byte	-95
+ 1607 062b 0A       		.byte	10
+ 1608 062c A2       		.byte	-94
+ 1609 062d 04       		.byte	4
+ 1610 062e A4       		.byte	-92
+ 1611 062f 04       		.byte	4
+ 1612 0630 A6       		.byte	-90
+ 1613 0631 10       		.byte	16
+ 1614 0632 A7       		.byte	-89
+ 1615 0633 89       		.byte	-119
+ 1616 0634 AC       		.byte	-84
+ 1617 0635 04       		.byte	4
+ 1618 0636 AE       		.byte	-82
+ 1619 0637 08       		.byte	8
+ 1620 0638 C0       		.byte	-64
+ 1621 0639 7D       		.byte	125
+ 1622 063a C2       		.byte	-62
+ 1623 063b F1       		.byte	-15
+ 1624 063c C4       		.byte	-60
+ 1625 063d 67       		.byte	103
+ 1626 063e CA       		.byte	-54
+ 1627 063f D5       		.byte	-43
+ 1628 0640 CC       		.byte	-52
+ 1629 0641 6F       		.byte	111
+ 1630 0642 CE       		.byte	-50
+ 1631 0643 42       		.byte	66
+ 1632 0644 D0       		.byte	-48
+ 1633 0645 46       		.byte	70
+ 1634 0646 D2       		.byte	-46
+ 1635 0647 04       		.byte	4
+ 1636 0648 D6       		.byte	-42
+ 1637 0649 0F       		.byte	15
+ 1638 064a D8       		.byte	-40
+ 1639 064b 01       		.byte	1
+ 1640 064c B4       		.byte	-76
+ 1641 064d 40       		.byte	64
+ 1642 064e EA       		.byte	-22
+ 1643 064f 01       		.byte	1
+ 1644 0650 EC       		.byte	-20
+ 1645 0651 20       		.byte	32
+ 1646 0652 32       		.byte	50
+ 1647 0653 14       		.byte	20
+ 1648 0654 36       		.byte	54
+ 1649 0655 40       		.byte	64
+ 1650 0656 CC       		.byte	-52
+ 1651 0657 70       		.byte	112
+ 1652 0658 0B       		.byte	11
+ 1653 0659 08       		.byte	8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 30
+
+
+ 1654 065a 96       		.byte	-106
+ 1655 065b 08       		.byte	8
+ 1656 065c A6       		.byte	-90
+ 1657 065d 40       		.byte	64
+ 1658 065e B6       		.byte	-74
+ 1659 065f 10       		.byte	16
+ 1660 0660 C2       		.byte	-62
+ 1661 0661 40       		.byte	64
+ 1662 0662 3E       		.byte	62
+ 1663 0663 10       		.byte	16
+ 1664 0664 52       		.byte	82
+ 1665 0665 80       		.byte	-128
+ 1666 0666 57       		.byte	87
+ 1667 0667 10       		.byte	16
+ 1668 0668 83       		.byte	-125
+ 1669 0669 10       		.byte	16
+ 1670 066a 96       		.byte	-106
+ 1671 066b 08       		.byte	8
+ 1672 066c A6       		.byte	-90
+ 1673 066d 40       		.byte	64
+ 1674 066e AF       		.byte	-81
+ 1675 066f 04       		.byte	4
+ 1676 0670 CE       		.byte	-50
+ 1677 0671 20       		.byte	32
+ 1678 0672 D4       		.byte	-44
+ 1679 0673 60       		.byte	96
+ 1680 0674 E6       		.byte	-26
+ 1681 0675 80       		.byte	-128
+ 1682 0676 EC       		.byte	-20
+ 1683 0677 10       		.byte	16
+ 1684 0678 96       		.byte	-106
+ 1685 0679 18       		.byte	24
+ 1686 067a A6       		.byte	-90
+ 1687 067b 40       		.byte	64
+ 1688 067c AE       		.byte	-82
+ 1689 067d 80       		.byte	-128
+ 1690 067e EE       		.byte	-18
+ 1691 067f 10       		.byte	16
+ 1692 0680 01       		.byte	1
+ 1693 0681 01       		.byte	1
+ 1694 0682 04       		.byte	4
+ 1695 0683 10       		.byte	16
+ 1696 0684 51       		.byte	81
+ 1697 0685 04       		.byte	4
+ 1698 0686 54       		.byte	84
+ 1699 0687 20       		.byte	32
+ 1700 0688 A7       		.byte	-89
+ 1701 0689 20       		.byte	32
+ 1702 068a B7       		.byte	-73
+ 1703 068b 20       		.byte	32
+ 1704 068c C0       		.byte	-64
+ 1705 068d 09       		.byte	9
+ 1706 068e D4       		.byte	-44
+ 1707 068f 06       		.byte	6
+ 1708 0690 EA       		.byte	-22
+ 1709 0691 02       		.byte	2
+ 1710 0692 90       		.byte	-112
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 31
+
+
+ 1711 0693 10       		.byte	16
+ 1712 0694 91       		.byte	-111
+ 1713 0695 01       		.byte	1
+ 1714 0696 95       		.byte	-107
+ 1715 0697 08       		.byte	8
+ 1716 0698 A4       		.byte	-92
+ 1717 0699 20       		.byte	32
+ 1718 069a A7       		.byte	-89
+ 1719 069b 20       		.byte	32
+ 1720 069c 8B       		.byte	-117
+ 1721 069d 40       		.byte	64
+ 1722 069e 90       		.byte	-112
+ 1723 069f 10       		.byte	16
+ 1724 06a0 91       		.byte	-111
+ 1725 06a1 01       		.byte	1
+ 1726 06a2 95       		.byte	-107
+ 1727 06a3 08       		.byte	8
+ 1728 06a4 A4       		.byte	-92
+ 1729 06a5 20       		.byte	32
+ 1730 06a6 A7       		.byte	-89
+ 1731 06a7 20       		.byte	32
+ 1732 06a8 E0       		.byte	-32
+ 1733 06a9 04       		.byte	4
+ 1734 06aa 20       		.byte	32
+ 1735 06ab 80       		.byte	-128
+ 1736 06ac 86       		.byte	-122
+ 1737 06ad 40       		.byte	64
+ 1738 06ae 96       		.byte	-106
+ 1739 06af 18       		.byte	24
+ 1740 06b0 A6       		.byte	-90
+ 1741 06b1 40       		.byte	64
+ 1742 06b2 C8       		.byte	-56
+ 1743 06b3 40       		.byte	64
+ 1744 06b4 E6       		.byte	-26
+ 1745 06b5 40       		.byte	64
+ 1746 06b6 0B       		.byte	11
+ 1747 06b7 04       		.byte	4
+ 1748 06b8 1A       		.byte	26
+ 1749 06b9 08       		.byte	8
+ 1750 06ba 87       		.byte	-121
+ 1751 06bb 04       		.byte	4
+ 1752 06bc 96       		.byte	-106
+ 1753 06bd 08       		.byte	8
+ 1754 06be AA       		.byte	-86
+ 1755 06bf 10       		.byte	16
+ 1756 06c0 B0       		.byte	-80
+ 1757 06c1 40       		.byte	64
+ 1758 06c2 C2       		.byte	-62
+ 1759 06c3 40       		.byte	64
+ 1760 06c4 C6       		.byte	-58
+ 1761 06c5 40       		.byte	64
+ 1762 06c6 E0       		.byte	-32
+ 1763 06c7 40       		.byte	64
+ 1764 06c8 EA       		.byte	-22
+ 1765 06c9 80       		.byte	-128
+ 1766 06ca 10       		.byte	16
+ 1767 06cb 20       		.byte	32
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 32
+
+
+ 1768 06cc 13       		.byte	19
+ 1769 06cd 20       		.byte	32
+ 1770 06ce 15       		.byte	21
+ 1771 06cf 08       		.byte	8
+ 1772 06d0 1F       		.byte	31
+ 1773 06d1 20       		.byte	32
+ 1774 06d2 34       		.byte	52
+ 1775 06d3 01       		.byte	1
+ 1776 06d4 64       		.byte	100
+ 1777 06d5 20       		.byte	32
+ 1778 06d6 79       		.byte	121
+ 1779 06d7 01       		.byte	1
+ 1780 06d8 7C       		.byte	124
+ 1781 06d9 10       		.byte	16
+ 1782 06da 90       		.byte	-112
+ 1783 06db 10       		.byte	16
+ 1784 06dc 91       		.byte	-111
+ 1785 06dd 01       		.byte	1
+ 1786 06de 93       		.byte	-109
+ 1787 06df 40       		.byte	64
+ 1788 06e0 95       		.byte	-107
+ 1789 06e1 08       		.byte	8
+ 1790 06e2 98       		.byte	-104
+ 1791 06e3 20       		.byte	32
+ 1792 06e4 A4       		.byte	-92
+ 1793 06e5 20       		.byte	32
+ 1794 06e6 A7       		.byte	-89
+ 1795 06e7 20       		.byte	32
+ 1796 06e8 B4       		.byte	-76
+ 1797 06e9 20       		.byte	32
+ 1798 06ea C4       		.byte	-60
+ 1799 06eb 0E       		.byte	14
+ 1800 06ec C6       		.byte	-58
+ 1801 06ed 01       		.byte	1
+ 1802 06ee CC       		.byte	-52
+ 1803 06ef 01       		.byte	1
+ 1804 06f0 D8       		.byte	-40
+ 1805 06f1 01       		.byte	1
+ 1806 06f2 DE       		.byte	-34
+ 1807 06f3 03       		.byte	3
+ 1808 06f4 E8       		.byte	-24
+ 1809 06f5 02       		.byte	2
+ 1810 06f6 73       		.byte	115
+ 1811 06f7 40       		.byte	64
+ 1812 06f8 93       		.byte	-109
+ 1813 06f9 40       		.byte	64
+ 1814 06fa AB       		.byte	-85
+ 1815 06fb 20       		.byte	32
+ 1816 06fc B0       		.byte	-80
+ 1817 06fd 01       		.byte	1
+ 1818 06fe DC       		.byte	-36
+ 1819 06ff 01       		.byte	1
+ 1820 0700 EC       		.byte	-20
+ 1821 0701 04       		.byte	4
+ 1822 0702 00       		.byte	0
+ 1823 0703 15       		.byte	21
+ 1824 0704 08       		.byte	8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 33
+
+
+ 1825 0705 10       		.byte	16
+ 1826 0706 0A       		.byte	10
+ 1827 0707 15       		.byte	21
+ 1828 0708 10       		.byte	16
+ 1829 0709 14       		.byte	20
+ 1830 070a 1A       		.byte	26
+ 1831 070b 14       		.byte	20
+ 1832 070c 00       		.byte	0
+ 1833 070d 3F       		.byte	63
+ 1834 070e 03       		.byte	3
+ 1835 070f C0       		.byte	-64
+ 1836 0710 C0       		.byte	-64
+ 1837 0711 00       		.byte	0
+ 1838 0712 00       		.byte	0
+ 1839 0713 00       		.byte	0
+ 1840 0714 00       		.byte	0
+ 1841 0715 00       		.byte	0
+ 1842 0716 04       		.byte	4
+ 1843 0717 00       		.byte	0
+ 1844 0718 80       		.byte	-128
+ 1845 0719 00       		.byte	0
+ 1846 071a 00       		.byte	0
+ 1847 071b 8C       		.byte	-116
+ 1848 071c 8C       		.byte	-116
+ 1849 071d 00       		.byte	0
+ 1850 071e 8C       		.byte	-116
+ 1851 071f 00       		.byte	0
+ 1852 0720 00       		.byte	0
+ 1853 0721 00       		.byte	0
+ 1854 0722 00       		.byte	0
+ 1855 0723 00       		.byte	0
+ 1856 0724 10       		.byte	16
+ 1857 0725 00       		.byte	0
+ 1858 0726 00       		.byte	0
+ 1859 0727 10       		.byte	16
+ 1860 0728 10       		.byte	16
+ 1861 0729 00       		.byte	0
+ 1862 072a 10       		.byte	16
+ 1863 072b 00       		.byte	0
+ 1864 072c 00       		.byte	0
+ 1865 072d 00       		.byte	0
+ 1866 072e 00       		.byte	0
+ 1867 072f 00       		.byte	0
+ 1868 0730 0F       		.byte	15
+ 1869 0731 00       		.byte	0
+ 1870 0732 00       		.byte	0
+ 1871 0733 06       		.byte	6
+ 1872 0734 0B       		.byte	11
+ 1873 0735 00       		.byte	0
+ 1874 0736 09       		.byte	9
+ 1875 0737 00       		.byte	0
+ 1876 0738 40       		.byte	64
+ 1877 0739 00       		.byte	0
+ 1878 073a 00       		.byte	0
+ 1879 073b 00       		.byte	0
+ 1880 073c 40       		.byte	64
+ 1881 073d 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 34
+
+
+ 1882 073e 00       		.byte	0
+ 1883 073f 00       		.byte	0
+ 1884 0740 00       		.byte	0
+ 1885 0741 00       		.byte	0
+ 1886 0742 00       		.byte	0
+ 1887 0743 00       		.byte	0
+ 1888              		.section	.cywolatch,"a",%progbits
+ 1889              		.align	2
+ 1890              		.type	cy_meta_wonvl, %object
+ 1891              		.size	cy_meta_wonvl, 4
+ 1892              	cy_meta_wonvl:
+ 1893 0000 BC       		.byte	-68
+ 1894 0001 90       		.byte	-112
+ 1895 0002 AC       		.byte	-84
+ 1896 0003 AF       		.byte	-81
+ 1897              		.section	.cycustnvl,"a",%progbits
+ 1898              		.align	2
+ 1899              		.type	cy_meta_custnvl, %object
+ 1900              		.size	cy_meta_custnvl, 4
+ 1901              	cy_meta_custnvl:
+ 1902 0000 00       		.byte	0
+ 1903 0001 00       		.byte	0
+ 1904 0002 40       		.byte	64
+ 1905 0003 05       		.byte	5
+ 1906              		.section	.cymeta,"a",%progbits
+ 1907              		.align	2
+ 1908              		.type	cy_metadata, %object
+ 1909              		.size	cy_metadata, 12
+ 1910              	cy_metadata:
+ 1911 0000 00       		.byte	0
+ 1912 0001 01       		.byte	1
+ 1913 0002 2E       		.byte	46
+ 1914 0003 16       		.byte	22
+ 1915 0004 10       		.byte	16
+ 1916 0005 69       		.byte	105
+ 1917 0006 00       		.byte	0
+ 1918 0007 01       		.byte	1
+ 1919 0008 00       		.byte	0
+ 1920 0009 00       		.byte	0
+ 1921 000a 00       		.byte	0
+ 1922 000b 00       		.byte	0
+ 1923              		.section	.cyflashprotect,"a",%progbits
+ 1924              		.align	2
+ 1925              		.type	cy_meta_flashprotect, %object
+ 1926              		.size	cy_meta_flashprotect, 256
+ 1927              	cy_meta_flashprotect:
+ 1928 0000 00000000 		.space	256
+ 1928      00000000 
+ 1928      00000000 
+ 1928      00000000 
+ 1928      00000000 
+ 1929              		.text
+ 1930              	.Letext0:
+ 1931              		.file 1 ".\\Generated_Source\\PSoC5\\cymetadata.c"
+ 1932              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 1933              		.section	.debug_info,"",%progbits
+ 1934              	.Ldebug_info0:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 35
+
+
+ 1935 0000 3B010000 		.4byte	0x13b
+ 1936 0004 0400     		.2byte	0x4
+ 1937 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1938 000a 04       		.byte	0x4
+ 1939 000b 01       		.uleb128 0x1
+ 1940 000c 53010000 		.4byte	.LASF18
+ 1941 0010 01       		.byte	0x1
+ 1942 0011 00000000 		.4byte	.LASF19
+ 1943 0015 46000000 		.4byte	.LASF20
+ 1944 0019 00000000 		.4byte	.Ldebug_line0
+ 1945 001d 02       		.uleb128 0x2
+ 1946 001e 01       		.byte	0x1
+ 1947 001f 06       		.byte	0x6
+ 1948 0020 F5010000 		.4byte	.LASF0
+ 1949 0024 02       		.uleb128 0x2
+ 1950 0025 01       		.byte	0x1
+ 1951 0026 08       		.byte	0x8
+ 1952 0027 38000000 		.4byte	.LASF1
+ 1953 002b 02       		.uleb128 0x2
+ 1954 002c 02       		.byte	0x2
+ 1955 002d 05       		.byte	0x5
+ 1956 002e 43010000 		.4byte	.LASF2
+ 1957 0032 02       		.uleb128 0x2
+ 1958 0033 02       		.byte	0x2
+ 1959 0034 07       		.byte	0x7
+ 1960 0035 A4000000 		.4byte	.LASF3
+ 1961 0039 02       		.uleb128 0x2
+ 1962 003a 04       		.byte	0x4
+ 1963 003b 05       		.byte	0x5
+ 1964 003c EC010000 		.4byte	.LASF4
+ 1965 0040 02       		.uleb128 0x2
+ 1966 0041 04       		.byte	0x4
+ 1967 0042 07       		.byte	0x7
+ 1968 0043 92000000 		.4byte	.LASF5
+ 1969 0047 02       		.uleb128 0x2
+ 1970 0048 08       		.byte	0x8
+ 1971 0049 05       		.byte	0x5
+ 1972 004a 30010000 		.4byte	.LASF6
+ 1973 004e 02       		.uleb128 0x2
+ 1974 004f 08       		.byte	0x8
+ 1975 0050 07       		.byte	0x7
+ 1976 0051 ED000000 		.4byte	.LASF7
+ 1977 0055 03       		.uleb128 0x3
+ 1978 0056 04       		.byte	0x4
+ 1979 0057 05       		.byte	0x5
+ 1980 0058 696E7400 		.ascii	"int\000"
+ 1981 005c 02       		.uleb128 0x2
+ 1982 005d 04       		.byte	0x4
+ 1983 005e 07       		.byte	0x7
+ 1984 005f E0000000 		.4byte	.LASF8
+ 1985 0063 04       		.uleb128 0x4
+ 1986 0064 4D010000 		.4byte	.LASF21
+ 1987 0068 02       		.byte	0x2
+ 1988 0069 3801     		.2byte	0x138
+ 1989 006b 24000000 		.4byte	0x24
+ 1990 006f 02       		.uleb128 0x2
+ 1991 0070 04       		.byte	0x4
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 36
+
+
+ 1992 0071 04       		.byte	0x4
+ 1993 0072 32000000 		.4byte	.LASF9
+ 1994 0076 02       		.uleb128 0x2
+ 1995 0077 08       		.byte	0x8
+ 1996 0078 04       		.byte	0x4
+ 1997 0079 B7000000 		.4byte	.LASF10
+ 1998 007d 02       		.uleb128 0x2
+ 1999 007e 01       		.byte	0x1
+ 2000 007f 08       		.byte	0x8
+ 2001 0080 3E010000 		.4byte	.LASF11
+ 2002 0084 05       		.uleb128 0x5
+ 2003 0085 63000000 		.4byte	0x63
+ 2004 0089 95000000 		.4byte	0x95
+ 2005 008d 06       		.uleb128 0x6
+ 2006 008e 95000000 		.4byte	0x95
+ 2007 0092 4307     		.2byte	0x743
+ 2008 0094 00       		.byte	0
+ 2009 0095 02       		.uleb128 0x2
+ 2010 0096 04       		.byte	0x4
+ 2011 0097 07       		.byte	0x7
+ 2012 0098 27010000 		.4byte	.LASF12
+ 2013 009c 07       		.uleb128 0x7
+ 2014 009d CE000000 		.4byte	.LASF13
+ 2015 00a1 01       		.byte	0x1
+ 2016 00a2 1F       		.byte	0x1f
+ 2017 00a3 AD000000 		.4byte	0xad
+ 2018 00a7 05       		.uleb128 0x5
+ 2019 00a8 03       		.byte	0x3
+ 2020 00a9 00000000 		.4byte	cy_meta_configecc
+ 2021 00ad 08       		.uleb128 0x8
+ 2022 00ae 84000000 		.4byte	0x84
+ 2023 00b2 05       		.uleb128 0x5
+ 2024 00b3 63000000 		.4byte	0x63
+ 2025 00b7 C2000000 		.4byte	0xc2
+ 2026 00bb 09       		.uleb128 0x9
+ 2027 00bc 95000000 		.4byte	0x95
+ 2028 00c0 03       		.byte	0x3
+ 2029 00c1 00       		.byte	0
+ 2030 00c2 0A       		.uleb128 0xa
+ 2031 00c3 BE000000 		.4byte	.LASF14
+ 2032 00c7 01       		.byte	0x1
+ 2033 00c8 1501     		.2byte	0x115
+ 2034 00ca D4000000 		.4byte	0xd4
+ 2035 00ce 05       		.uleb128 0x5
+ 2036 00cf 03       		.byte	0x3
+ 2037 00d0 00000000 		.4byte	cy_meta_custnvl
+ 2038 00d4 08       		.uleb128 0x8
+ 2039 00d5 B2000000 		.4byte	0xb2
+ 2040 00d9 0A       		.uleb128 0xa
+ 2041 00da 19010000 		.4byte	.LASF15
+ 2042 00de 01       		.byte	0x1
+ 2043 00df 2301     		.2byte	0x123
+ 2044 00e1 EB000000 		.4byte	0xeb
+ 2045 00e5 05       		.uleb128 0x5
+ 2046 00e6 03       		.byte	0x3
+ 2047 00e7 00000000 		.4byte	cy_meta_wonvl
+ 2048 00eb 08       		.uleb128 0x8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 37
+
+
+ 2049 00ec B2000000 		.4byte	0xb2
+ 2050 00f0 05       		.uleb128 0x5
+ 2051 00f1 63000000 		.4byte	0x63
+ 2052 00f5 00010000 		.4byte	0x100
+ 2053 00f9 09       		.uleb128 0x9
+ 2054 00fa 95000000 		.4byte	0x95
+ 2055 00fe FF       		.byte	0xff
+ 2056 00ff 00       		.byte	0
+ 2057 0100 0A       		.uleb128 0xa
+ 2058 0101 04010000 		.4byte	.LASF16
+ 2059 0105 01       		.byte	0x1
+ 2060 0106 3101     		.2byte	0x131
+ 2061 0108 12010000 		.4byte	0x112
+ 2062 010c 05       		.uleb128 0x5
+ 2063 010d 03       		.byte	0x3
+ 2064 010e 00000000 		.4byte	cy_meta_flashprotect
+ 2065 0112 08       		.uleb128 0x8
+ 2066 0113 F0000000 		.4byte	0xf0
+ 2067 0117 05       		.uleb128 0x5
+ 2068 0118 63000000 		.4byte	0x63
+ 2069 011c 27010000 		.4byte	0x127
+ 2070 0120 09       		.uleb128 0x9
+ 2071 0121 95000000 		.4byte	0x95
+ 2072 0125 0B       		.byte	0xb
+ 2073 0126 00       		.byte	0
+ 2074 0127 0A       		.uleb128 0xa
+ 2075 0128 26000000 		.4byte	.LASF17
+ 2076 012c 01       		.byte	0x1
+ 2077 012d 5E01     		.2byte	0x15e
+ 2078 012f 39010000 		.4byte	0x139
+ 2079 0133 05       		.uleb128 0x5
+ 2080 0134 03       		.byte	0x3
+ 2081 0135 00000000 		.4byte	cy_metadata
+ 2082 0139 08       		.uleb128 0x8
+ 2083 013a 17010000 		.4byte	0x117
+ 2084 013e 00       		.byte	0
+ 2085              		.section	.debug_abbrev,"",%progbits
+ 2086              	.Ldebug_abbrev0:
+ 2087 0000 01       		.uleb128 0x1
+ 2088 0001 11       		.uleb128 0x11
+ 2089 0002 01       		.byte	0x1
+ 2090 0003 25       		.uleb128 0x25
+ 2091 0004 0E       		.uleb128 0xe
+ 2092 0005 13       		.uleb128 0x13
+ 2093 0006 0B       		.uleb128 0xb
+ 2094 0007 03       		.uleb128 0x3
+ 2095 0008 0E       		.uleb128 0xe
+ 2096 0009 1B       		.uleb128 0x1b
+ 2097 000a 0E       		.uleb128 0xe
+ 2098 000b 10       		.uleb128 0x10
+ 2099 000c 17       		.uleb128 0x17
+ 2100 000d 00       		.byte	0
+ 2101 000e 00       		.byte	0
+ 2102 000f 02       		.uleb128 0x2
+ 2103 0010 24       		.uleb128 0x24
+ 2104 0011 00       		.byte	0
+ 2105 0012 0B       		.uleb128 0xb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 38
+
+
+ 2106 0013 0B       		.uleb128 0xb
+ 2107 0014 3E       		.uleb128 0x3e
+ 2108 0015 0B       		.uleb128 0xb
+ 2109 0016 03       		.uleb128 0x3
+ 2110 0017 0E       		.uleb128 0xe
+ 2111 0018 00       		.byte	0
+ 2112 0019 00       		.byte	0
+ 2113 001a 03       		.uleb128 0x3
+ 2114 001b 24       		.uleb128 0x24
+ 2115 001c 00       		.byte	0
+ 2116 001d 0B       		.uleb128 0xb
+ 2117 001e 0B       		.uleb128 0xb
+ 2118 001f 3E       		.uleb128 0x3e
+ 2119 0020 0B       		.uleb128 0xb
+ 2120 0021 03       		.uleb128 0x3
+ 2121 0022 08       		.uleb128 0x8
+ 2122 0023 00       		.byte	0
+ 2123 0024 00       		.byte	0
+ 2124 0025 04       		.uleb128 0x4
+ 2125 0026 16       		.uleb128 0x16
+ 2126 0027 00       		.byte	0
+ 2127 0028 03       		.uleb128 0x3
+ 2128 0029 0E       		.uleb128 0xe
+ 2129 002a 3A       		.uleb128 0x3a
+ 2130 002b 0B       		.uleb128 0xb
+ 2131 002c 3B       		.uleb128 0x3b
+ 2132 002d 05       		.uleb128 0x5
+ 2133 002e 49       		.uleb128 0x49
+ 2134 002f 13       		.uleb128 0x13
+ 2135 0030 00       		.byte	0
+ 2136 0031 00       		.byte	0
+ 2137 0032 05       		.uleb128 0x5
+ 2138 0033 01       		.uleb128 0x1
+ 2139 0034 01       		.byte	0x1
+ 2140 0035 49       		.uleb128 0x49
+ 2141 0036 13       		.uleb128 0x13
+ 2142 0037 01       		.uleb128 0x1
+ 2143 0038 13       		.uleb128 0x13
+ 2144 0039 00       		.byte	0
+ 2145 003a 00       		.byte	0
+ 2146 003b 06       		.uleb128 0x6
+ 2147 003c 21       		.uleb128 0x21
+ 2148 003d 00       		.byte	0
+ 2149 003e 49       		.uleb128 0x49
+ 2150 003f 13       		.uleb128 0x13
+ 2151 0040 2F       		.uleb128 0x2f
+ 2152 0041 05       		.uleb128 0x5
+ 2153 0042 00       		.byte	0
+ 2154 0043 00       		.byte	0
+ 2155 0044 07       		.uleb128 0x7
+ 2156 0045 34       		.uleb128 0x34
+ 2157 0046 00       		.byte	0
+ 2158 0047 03       		.uleb128 0x3
+ 2159 0048 0E       		.uleb128 0xe
+ 2160 0049 3A       		.uleb128 0x3a
+ 2161 004a 0B       		.uleb128 0xb
+ 2162 004b 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 39
+
+
+ 2163 004c 0B       		.uleb128 0xb
+ 2164 004d 49       		.uleb128 0x49
+ 2165 004e 13       		.uleb128 0x13
+ 2166 004f 3F       		.uleb128 0x3f
+ 2167 0050 19       		.uleb128 0x19
+ 2168 0051 02       		.uleb128 0x2
+ 2169 0052 18       		.uleb128 0x18
+ 2170 0053 00       		.byte	0
+ 2171 0054 00       		.byte	0
+ 2172 0055 08       		.uleb128 0x8
+ 2173 0056 26       		.uleb128 0x26
+ 2174 0057 00       		.byte	0
+ 2175 0058 49       		.uleb128 0x49
+ 2176 0059 13       		.uleb128 0x13
+ 2177 005a 00       		.byte	0
+ 2178 005b 00       		.byte	0
+ 2179 005c 09       		.uleb128 0x9
+ 2180 005d 21       		.uleb128 0x21
+ 2181 005e 00       		.byte	0
+ 2182 005f 49       		.uleb128 0x49
+ 2183 0060 13       		.uleb128 0x13
+ 2184 0061 2F       		.uleb128 0x2f
+ 2185 0062 0B       		.uleb128 0xb
+ 2186 0063 00       		.byte	0
+ 2187 0064 00       		.byte	0
+ 2188 0065 0A       		.uleb128 0xa
+ 2189 0066 34       		.uleb128 0x34
+ 2190 0067 00       		.byte	0
+ 2191 0068 03       		.uleb128 0x3
+ 2192 0069 0E       		.uleb128 0xe
+ 2193 006a 3A       		.uleb128 0x3a
+ 2194 006b 0B       		.uleb128 0xb
+ 2195 006c 3B       		.uleb128 0x3b
+ 2196 006d 05       		.uleb128 0x5
+ 2197 006e 49       		.uleb128 0x49
+ 2198 006f 13       		.uleb128 0x13
+ 2199 0070 3F       		.uleb128 0x3f
+ 2200 0071 19       		.uleb128 0x19
+ 2201 0072 02       		.uleb128 0x2
+ 2202 0073 18       		.uleb128 0x18
+ 2203 0074 00       		.byte	0
+ 2204 0075 00       		.byte	0
+ 2205 0076 00       		.byte	0
+ 2206              		.section	.debug_aranges,"",%progbits
+ 2207 0000 14000000 		.4byte	0x14
+ 2208 0004 0200     		.2byte	0x2
+ 2209 0006 00000000 		.4byte	.Ldebug_info0
+ 2210 000a 04       		.byte	0x4
+ 2211 000b 00       		.byte	0
+ 2212 000c 0000     		.2byte	0
+ 2213 000e 0000     		.2byte	0
+ 2214 0010 00000000 		.4byte	0
+ 2215 0014 00000000 		.4byte	0
+ 2216              		.section	.debug_line,"",%progbits
+ 2217              	.Ldebug_line0:
+ 2218 0000 4F000000 		.section	.debug_str,"MS",%progbits,1
+ 2218      02004900 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 40
+
+
+ 2218      00000201 
+ 2218      FB0E0D00 
+ 2218      01010101 
+ 2219              	.LASF19:
+ 2220 0000 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\cymetadata.c\000"
+ 2220      6E657261 
+ 2220      7465645F 
+ 2220      536F7572 
+ 2220      63655C50 
+ 2221              	.LASF17:
+ 2222 0026 63795F6D 		.ascii	"cy_metadata\000"
+ 2222      65746164 
+ 2222      61746100 
+ 2223              	.LASF9:
+ 2224 0032 666C6F61 		.ascii	"float\000"
+ 2224      7400
+ 2225              	.LASF1:
+ 2226 0038 756E7369 		.ascii	"unsigned char\000"
+ 2226      676E6564 
+ 2226      20636861 
+ 2226      7200
+ 2227              	.LASF20:
+ 2228 0046 433A5C55 		.ascii	"C:\\Users\\satomin\\Documents\\PSoC Creator\\AI_min"
+ 2228      73657273 
+ 2228      5C736174 
+ 2228      6F6D696E 
+ 2228      5C446F63 
+ 2229 0074 695F3230 		.ascii	"i_2016_9_1\\AI_mini_main.cydsn\000"
+ 2229      31365F39 
+ 2229      5F315C41 
+ 2229      495F6D69 
+ 2229      6E695F6D 
+ 2230              	.LASF5:
+ 2231 0092 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2231      20756E73 
+ 2231      69676E65 
+ 2231      6420696E 
+ 2231      7400
+ 2232              	.LASF3:
+ 2233 00a4 73686F72 		.ascii	"short unsigned int\000"
+ 2233      7420756E 
+ 2233      7369676E 
+ 2233      65642069 
+ 2233      6E7400
+ 2234              	.LASF10:
+ 2235 00b7 646F7562 		.ascii	"double\000"
+ 2235      6C6500
+ 2236              	.LASF14:
+ 2237 00be 63795F6D 		.ascii	"cy_meta_custnvl\000"
+ 2237      6574615F 
+ 2237      63757374 
+ 2237      6E766C00 
+ 2238              	.LASF13:
+ 2239 00ce 63795F6D 		.ascii	"cy_meta_configecc\000"
+ 2239      6574615F 
+ 2239      636F6E66 
+ 2239      69676563 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 41
+
+
+ 2239      6300
+ 2240              	.LASF8:
+ 2241 00e0 756E7369 		.ascii	"unsigned int\000"
+ 2241      676E6564 
+ 2241      20696E74 
+ 2241      00
+ 2242              	.LASF7:
+ 2243 00ed 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2243      206C6F6E 
+ 2243      6720756E 
+ 2243      7369676E 
+ 2243      65642069 
+ 2244              	.LASF16:
+ 2245 0104 63795F6D 		.ascii	"cy_meta_flashprotect\000"
+ 2245      6574615F 
+ 2245      666C6173 
+ 2245      6870726F 
+ 2245      74656374 
+ 2246              	.LASF15:
+ 2247 0119 63795F6D 		.ascii	"cy_meta_wonvl\000"
+ 2247      6574615F 
+ 2247      776F6E76 
+ 2247      6C00
+ 2248              	.LASF12:
+ 2249 0127 73697A65 		.ascii	"sizetype\000"
+ 2249      74797065 
+ 2249      00
+ 2250              	.LASF6:
+ 2251 0130 6C6F6E67 		.ascii	"long long int\000"
+ 2251      206C6F6E 
+ 2251      6720696E 
+ 2251      7400
+ 2252              	.LASF11:
+ 2253 013e 63686172 		.ascii	"char\000"
+ 2253      00
+ 2254              	.LASF2:
+ 2255 0143 73686F72 		.ascii	"short int\000"
+ 2255      7420696E 
+ 2255      7400
+ 2256              	.LASF21:
+ 2257 014d 75696E74 		.ascii	"uint8\000"
+ 2257      3800
+ 2258              	.LASF18:
+ 2259 0153 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2259      4320342E 
+ 2259      392E3320 
+ 2259      32303135 
+ 2259      30333033 
+ 2260 0186 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 2260      20726576 
+ 2260      6973696F 
+ 2260      6E203232 
+ 2260      31323230 
+ 2261 01b9 67202D73 		.ascii	"g -std=gnu99 -ffunction-sections -ffat-lto-objects\000"
+ 2261      74643D67 
+ 2261      6E753939 
+ 2261      202D6666 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccC9sGH8.s 			page 42
+
+
+ 2261      756E6374 
+ 2262              	.LASF4:
+ 2263 01ec 6C6F6E67 		.ascii	"long int\000"
+ 2263      20696E74 
+ 2263      00
+ 2264              	.LASF0:
+ 2265 01f5 7369676E 		.ascii	"signed char\000"
+ 2265      65642063 
+ 2265      68617200 
+ 2266              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

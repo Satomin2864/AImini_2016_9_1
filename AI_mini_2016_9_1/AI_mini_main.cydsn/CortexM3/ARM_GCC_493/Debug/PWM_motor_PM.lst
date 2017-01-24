@@ -1,0 +1,1156 @@
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"PWM_motor_PM.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.PWM_motor_SaveConfig,"ax",%progbits
+  19              		.align	2
+  20              		.global	PWM_motor_SaveConfig
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	PWM_motor_SaveConfig, %function
+  24              	PWM_motor_SaveConfig:
+  25              	.LFB0:
+  26              		.file 1 ".\\Generated_Source\\PSoC5\\PWM_motor_PM.c"
+   1:.\Generated_Source\PSoC5/PWM_motor_PM.c **** /*******************************************************************************
+   2:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * File Name: PWM_motor_PM.c
+   3:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Version 3.30
+   4:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+   5:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Description:
+   6:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  This file provides the power management source code to API for the
+   7:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  PWM.
+   8:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+   9:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Note:
+  10:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  11:.\Generated_Source\PSoC5/PWM_motor_PM.c **** ********************************************************************************
+  12:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  13:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * the software package with which this file was provided.
+  16:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *******************************************************************************/
+  17:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  18:.\Generated_Source\PSoC5/PWM_motor_PM.c **** #include "PWM_motor.h"
+  19:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  20:.\Generated_Source\PSoC5/PWM_motor_PM.c **** static PWM_motor_backupStruct PWM_motor_backup;
+  21:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  22:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  23:.\Generated_Source\PSoC5/PWM_motor_PM.c **** /*******************************************************************************
+  24:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Function Name: PWM_motor_SaveConfig
+  25:.\Generated_Source\PSoC5/PWM_motor_PM.c **** ********************************************************************************
+  26:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  27:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Summary:
+  28:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  Saves the current user configuration of the component.
+  29:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  30:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Parameters:
+  31:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 2
+
+
+  32:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  33:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Return:
+  34:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+  35:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  36:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Global variables:
+  37:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  PWM_motor_backup:  Variables of this global structure are modified to
+  38:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  store the values of non retention configuration registers when Sleep() API is
+  39:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  called.
+  40:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  41:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *******************************************************************************/
+  42:.\Generated_Source\PSoC5/PWM_motor_PM.c **** void PWM_motor_SaveConfig(void) 
+  43:.\Generated_Source\PSoC5/PWM_motor_PM.c **** {
+  27              		.loc 1 43 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 4, -8
+  34              		.cfi_offset 14, -4
+  44:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  45:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     #if(!PWM_motor_UsingFixedFunction)
+  46:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if(!PWM_motor_PWMModeIsCenterAligned)
+  47:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.PWMPeriod = PWM_motor_ReadPeriod();
+  35              		.loc 1 47 0
+  36 0002 FFF7FEFF 		bl	PWM_motor_ReadPeriod
+  37              	.LVL0:
+  38 0006 064C     		ldr	r4, .L3
+  39 0008 A080     		strh	r0, [r4, #4]	@ movhi
+  48:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif /* (!PWM_motor_PWMModeIsCenterAligned) */
+  49:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         PWM_motor_backup.PWMUdb = PWM_motor_ReadCounter();
+  40              		.loc 1 49 0
+  41 000a FFF7FEFF 		bl	PWM_motor_ReadCounter
+  42              	.LVL1:
+  43 000e 6080     		strh	r0, [r4, #2]	@ movhi
+  50:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if (PWM_motor_UseStatus)
+  51:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.InterruptMaskValue = PWM_motor_STATUS_MASK;
+  44              		.loc 1 51 0
+  45 0010 044B     		ldr	r3, .L3+4
+  46 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  47 0014 A371     		strb	r3, [r4, #6]
+  52:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif /* (PWM_motor_UseStatus) */
+  53:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  54:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if(PWM_motor_DeadBandMode == PWM_motor__B_PWM__DBM_256_CLOCKS || \
+  55:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_DeadBandMode == PWM_motor__B_PWM__DBM_2_4_CLOCKS)
+  56:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.PWMdeadBandValue = PWM_motor_ReadDeadTime();
+  57:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif /*  deadband count is either 2-4 clocks or 256 clocks */
+  58:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  59:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if(PWM_motor_KillModeMinTime)
+  60:.\Generated_Source\PSoC5/PWM_motor_PM.c ****              PWM_motor_backup.PWMKillCounterPeriod = PWM_motor_ReadKillTime();
+  61:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif /* (PWM_motor_KillModeMinTime) */
+  62:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  63:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if(PWM_motor_UseControl)
+  64:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.PWMControlRegister = PWM_motor_ReadControlRegister();
+  48              		.loc 1 64 0
+  49 0016 FFF7FEFF 		bl	PWM_motor_ReadControlRegister
+  50              	.LVL2:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 3
+
+
+  51 001a E071     		strb	r0, [r4, #7]
+  52 001c 10BD     		pop	{r4, pc}
+  53              	.L4:
+  54 001e 00BF     		.align	2
+  55              	.L3:
+  56 0020 00000000 		.word	.LANCHOR0
+  57 0024 85640040 		.word	1073767557
+  58              		.cfi_endproc
+  59              	.LFE0:
+  60              		.size	PWM_motor_SaveConfig, .-PWM_motor_SaveConfig
+  61              		.section	.text.PWM_motor_RestoreConfig,"ax",%progbits
+  62              		.align	2
+  63              		.global	PWM_motor_RestoreConfig
+  64              		.thumb
+  65              		.thumb_func
+  66              		.type	PWM_motor_RestoreConfig, %function
+  67              	PWM_motor_RestoreConfig:
+  68              	.LFB1:
+  65:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif /* (PWM_motor_UseControl) */
+  66:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     #endif  /* (!PWM_motor_UsingFixedFunction) */
+  67:.\Generated_Source\PSoC5/PWM_motor_PM.c **** }
+  68:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  69:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  70:.\Generated_Source\PSoC5/PWM_motor_PM.c **** /*******************************************************************************
+  71:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Function Name: PWM_motor_RestoreConfig
+  72:.\Generated_Source\PSoC5/PWM_motor_PM.c **** ********************************************************************************
+  73:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  74:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Summary:
+  75:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  Restores the current user configuration of the component.
+  76:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  77:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Parameters:
+  78:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+  79:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  80:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Return:
+  81:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+  82:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  83:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Global variables:
+  84:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  PWM_motor_backup:  Variables of this global structure are used to
+  85:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  restore the values of non retention registers on wakeup from sleep mode.
+  86:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+  87:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *******************************************************************************/
+  88:.\Generated_Source\PSoC5/PWM_motor_PM.c **** void PWM_motor_RestoreConfig(void) 
+  89:.\Generated_Source\PSoC5/PWM_motor_PM.c **** {
+  69              		.loc 1 89 0
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73 0000 10B5     		push	{r4, lr}
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 14, -4
+  90:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #if(!PWM_motor_UsingFixedFunction)
+  91:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #if(!PWM_motor_PWMModeIsCenterAligned)
+  92:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_WritePeriod(PWM_motor_backup.PWMPeriod);
+  77              		.loc 1 92 0
+  78 0002 074C     		ldr	r4, .L7
+  79 0004 A088     		ldrh	r0, [r4, #4]
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 4
+
+
+  80 0006 FFF7FEFF 		bl	PWM_motor_WritePeriod
+  81              	.LVL3:
+  93:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #endif /* (!PWM_motor_PWMModeIsCenterAligned) */
+  94:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  95:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_WriteCounter(PWM_motor_backup.PWMUdb);
+  82              		.loc 1 95 0
+  83 000a 6088     		ldrh	r0, [r4, #2]
+  84 000c FFF7FEFF 		bl	PWM_motor_WriteCounter
+  85              	.LVL4:
+  96:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+  97:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #if (PWM_motor_UseStatus)
+  98:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_STATUS_MASK = PWM_motor_backup.InterruptMaskValue;
+  86              		.loc 1 98 0
+  87 0010 A279     		ldrb	r2, [r4, #6]	@ zero_extendqisi2
+  88 0012 044B     		ldr	r3, .L7+4
+  89 0014 1A70     		strb	r2, [r3]
+  99:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #endif /* (PWM_motor_UseStatus) */
+ 100:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 101:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #if(PWM_motor_DeadBandMode == PWM_motor__B_PWM__DBM_256_CLOCKS || \
+ 102:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_DeadBandMode == PWM_motor__B_PWM__DBM_2_4_CLOCKS)
+ 103:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_WriteDeadTime(PWM_motor_backup.PWMdeadBandValue);
+ 104:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #endif /* deadband count is either 2-4 clocks or 256 clocks */
+ 105:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 106:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #if(PWM_motor_KillModeMinTime)
+ 107:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_WriteKillTime(PWM_motor_backup.PWMKillCounterPeriod);
+ 108:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #endif /* (PWM_motor_KillModeMinTime) */
+ 109:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 110:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #if(PWM_motor_UseControl)
+ 111:.\Generated_Source\PSoC5/PWM_motor_PM.c ****                 PWM_motor_WriteControlRegister(PWM_motor_backup.PWMControlRegister);
+  90              		.loc 1 111 0
+  91 0016 E079     		ldrb	r0, [r4, #7]	@ zero_extendqisi2
+  92 0018 FFF7FEFF 		bl	PWM_motor_WriteControlRegister
+  93              	.LVL5:
+  94 001c 10BD     		pop	{r4, pc}
+  95              	.L8:
+  96 001e 00BF     		.align	2
+  97              	.L7:
+  98 0020 00000000 		.word	.LANCHOR0
+  99 0024 85640040 		.word	1073767557
+ 100              		.cfi_endproc
+ 101              	.LFE1:
+ 102              		.size	PWM_motor_RestoreConfig, .-PWM_motor_RestoreConfig
+ 103              		.section	.text.PWM_motor_Sleep,"ax",%progbits
+ 104              		.align	2
+ 105              		.global	PWM_motor_Sleep
+ 106              		.thumb
+ 107              		.thumb_func
+ 108              		.type	PWM_motor_Sleep, %function
+ 109              	PWM_motor_Sleep:
+ 110              	.LFB2:
+ 112:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             #endif /* (PWM_motor_UseControl) */
+ 113:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         #endif  /* (!PWM_motor_UsingFixedFunction) */
+ 114:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     }
+ 115:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 116:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 117:.\Generated_Source\PSoC5/PWM_motor_PM.c **** /*******************************************************************************
+ 118:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Function Name: PWM_motor_Sleep
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 5
+
+
+ 119:.\Generated_Source\PSoC5/PWM_motor_PM.c **** ********************************************************************************
+ 120:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 121:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Summary:
+ 122:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  Disables block's operation and saves the user configuration. Should be called
+ 123:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  just prior to entering sleep.
+ 124:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 125:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Parameters:
+ 126:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+ 127:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 128:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Return:
+ 129:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+ 130:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 131:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Global variables:
+ 132:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  PWM_motor_backup.PWMEnableState:  Is modified depending on the enable
+ 133:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  state of the block before entering sleep mode.
+ 134:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 135:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *******************************************************************************/
+ 136:.\Generated_Source\PSoC5/PWM_motor_PM.c **** void PWM_motor_Sleep(void) 
+ 137:.\Generated_Source\PSoC5/PWM_motor_PM.c **** {
+ 111              		.loc 1 137 0
+ 112              		.cfi_startproc
+ 113              		@ args = 0, pretend = 0, frame = 0
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115 0000 08B5     		push	{r3, lr}
+ 116              		.cfi_def_cfa_offset 8
+ 117              		.cfi_offset 3, -8
+ 118              		.cfi_offset 14, -4
+ 138:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     #if(PWM_motor_UseControl)
+ 139:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         if(PWM_motor_CTRL_ENABLE == (PWM_motor_CONTROL & PWM_motor_CTRL_ENABLE))
+ 119              		.loc 1 139 0
+ 120 0002 084B     		ldr	r3, .L13
+ 121 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 122 0006 13F0800F 		tst	r3, #128
+ 123 000a 03D0     		beq	.L10
+ 140:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         {
+ 141:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             /*Component is enabled */
+ 142:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.PWMEnableState = 1u;
+ 124              		.loc 1 142 0
+ 125 000c 0122     		movs	r2, #1
+ 126 000e 064B     		ldr	r3, .L13+4
+ 127 0010 1A70     		strb	r2, [r3]
+ 128 0012 02E0     		b	.L11
+ 129              	.L10:
+ 143:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         }
+ 144:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         else
+ 145:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         {
+ 146:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             /* Component is disabled */
+ 147:.\Generated_Source\PSoC5/PWM_motor_PM.c ****             PWM_motor_backup.PWMEnableState = 0u;
+ 130              		.loc 1 147 0
+ 131 0014 0022     		movs	r2, #0
+ 132 0016 044B     		ldr	r3, .L13+4
+ 133 0018 1A70     		strb	r2, [r3]
+ 134              	.L11:
+ 148:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         }
+ 149:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     #endif /* (PWM_motor_UseControl) */
+ 150:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 151:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     /* Stop component */
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 6
+
+
+ 152:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     PWM_motor_Stop();
+ 135              		.loc 1 152 0
+ 136 001a FFF7FEFF 		bl	PWM_motor_Stop
+ 137              	.LVL6:
+ 153:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 154:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     /* Save registers configuration */
+ 155:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     PWM_motor_SaveConfig();
+ 138              		.loc 1 155 0
+ 139 001e FFF7FEFF 		bl	PWM_motor_SaveConfig
+ 140              	.LVL7:
+ 141 0022 08BD     		pop	{r3, pc}
+ 142              	.L14:
+ 143              		.align	2
+ 144              	.L13:
+ 145 0024 74640040 		.word	1073767540
+ 146 0028 00000000 		.word	.LANCHOR0
+ 147              		.cfi_endproc
+ 148              	.LFE2:
+ 149              		.size	PWM_motor_Sleep, .-PWM_motor_Sleep
+ 150              		.section	.text.PWM_motor_Wakeup,"ax",%progbits
+ 151              		.align	2
+ 152              		.global	PWM_motor_Wakeup
+ 153              		.thumb
+ 154              		.thumb_func
+ 155              		.type	PWM_motor_Wakeup, %function
+ 156              	PWM_motor_Wakeup:
+ 157              	.LFB3:
+ 156:.\Generated_Source\PSoC5/PWM_motor_PM.c **** }
+ 157:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 158:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 159:.\Generated_Source\PSoC5/PWM_motor_PM.c **** /*******************************************************************************
+ 160:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Function Name: PWM_motor_Wakeup
+ 161:.\Generated_Source\PSoC5/PWM_motor_PM.c **** ********************************************************************************
+ 162:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 163:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Summary:
+ 164:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  Restores and enables the user configuration. Should be called just after
+ 165:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  awaking from sleep.
+ 166:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 167:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Parameters:
+ 168:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+ 169:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 170:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Return:
+ 171:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  None
+ 172:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 173:.\Generated_Source\PSoC5/PWM_motor_PM.c **** * Global variables:
+ 174:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  PWM_motor_backup.pwmEnable:  Is used to restore the enable state of
+ 175:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *  block on wakeup from sleep mode.
+ 176:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *
+ 177:.\Generated_Source\PSoC5/PWM_motor_PM.c **** *******************************************************************************/
+ 178:.\Generated_Source\PSoC5/PWM_motor_PM.c **** void PWM_motor_Wakeup(void) 
+ 179:.\Generated_Source\PSoC5/PWM_motor_PM.c **** {
+ 158              		.loc 1 179 0
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162 0000 08B5     		push	{r3, lr}
+ 163              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 7
+
+
+ 164              		.cfi_offset 3, -8
+ 165              		.cfi_offset 14, -4
+ 180:.\Generated_Source\PSoC5/PWM_motor_PM.c ****      /* Restore registers values */
+ 181:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     PWM_motor_RestoreConfig();
+ 166              		.loc 1 181 0
+ 167 0002 FFF7FEFF 		bl	PWM_motor_RestoreConfig
+ 168              	.LVL8:
+ 182:.\Generated_Source\PSoC5/PWM_motor_PM.c **** 
+ 183:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     if(PWM_motor_backup.PWMEnableState != 0u)
+ 169              		.loc 1 183 0
+ 170 0006 034B     		ldr	r3, .L18
+ 171 0008 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 172 000a 0BB1     		cbz	r3, .L15
+ 184:.\Generated_Source\PSoC5/PWM_motor_PM.c ****     {
+ 185:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         /* Enable component's operation */
+ 186:.\Generated_Source\PSoC5/PWM_motor_PM.c ****         PWM_motor_Enable();
+ 173              		.loc 1 186 0
+ 174 000c FFF7FEFF 		bl	PWM_motor_Enable
+ 175              	.LVL9:
+ 176              	.L15:
+ 177 0010 08BD     		pop	{r3, pc}
+ 178              	.L19:
+ 179 0012 00BF     		.align	2
+ 180              	.L18:
+ 181 0014 00000000 		.word	.LANCHOR0
+ 182              		.cfi_endproc
+ 183              	.LFE3:
+ 184              		.size	PWM_motor_Wakeup, .-PWM_motor_Wakeup
+ 185              		.bss
+ 186              		.align	2
+ 187              		.set	.LANCHOR0,. + 0
+ 188              		.type	PWM_motor_backup, %object
+ 189              		.size	PWM_motor_backup, 8
+ 190              	PWM_motor_backup:
+ 191 0000 00000000 		.space	8
+ 191      00000000 
+ 192              		.text
+ 193              	.Letext0:
+ 194              		.file 2 ".\\Generated_Source\\PSoC5\\cytypes.h"
+ 195              		.file 3 ".\\Generated_Source\\PSoC5\\PWM_motor.h"
+ 196              		.section	.debug_info,"",%progbits
+ 197              	.Ldebug_info0:
+ 198 0000 22020000 		.4byte	0x222
+ 199 0004 0400     		.2byte	0x4
+ 200 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 201 000a 04       		.byte	0x4
+ 202 000b 01       		.uleb128 0x1
+ 203 000c AC010000 		.4byte	.LASF34
+ 204 0010 01       		.byte	0x1
+ 205 0011 97020000 		.4byte	.LASF35
+ 206 0015 BF020000 		.4byte	.LASF36
+ 207 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 208 001d 00000000 		.4byte	0
+ 209 0021 00000000 		.4byte	.Ldebug_line0
+ 210 0025 02       		.uleb128 0x2
+ 211 0026 01       		.byte	0x1
+ 212 0027 06       		.byte	0x6
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 8
+
+
+ 213 0028 8B020000 		.4byte	.LASF0
+ 214 002c 02       		.uleb128 0x2
+ 215 002d 01       		.byte	0x1
+ 216 002e 08       		.byte	0x8
+ 217 002f A5000000 		.4byte	.LASF1
+ 218 0033 02       		.uleb128 0x2
+ 219 0034 02       		.byte	0x2
+ 220 0035 05       		.byte	0x5
+ 221 0036 8D010000 		.4byte	.LASF2
+ 222 003a 02       		.uleb128 0x2
+ 223 003b 02       		.byte	0x2
+ 224 003c 07       		.byte	0x7
+ 225 003d 36000000 		.4byte	.LASF3
+ 226 0041 02       		.uleb128 0x2
+ 227 0042 04       		.byte	0x4
+ 228 0043 05       		.byte	0x5
+ 229 0044 63020000 		.4byte	.LASF4
+ 230 0048 02       		.uleb128 0x2
+ 231 0049 04       		.byte	0x4
+ 232 004a 07       		.byte	0x7
+ 233 004b C2000000 		.4byte	.LASF5
+ 234 004f 02       		.uleb128 0x2
+ 235 0050 08       		.byte	0x8
+ 236 0051 05       		.byte	0x5
+ 237 0052 6B010000 		.4byte	.LASF6
+ 238 0056 02       		.uleb128 0x2
+ 239 0057 08       		.byte	0x8
+ 240 0058 07       		.byte	0x7
+ 241 0059 1E010000 		.4byte	.LASF7
+ 242 005d 03       		.uleb128 0x3
+ 243 005e 04       		.byte	0x4
+ 244 005f 05       		.byte	0x5
+ 245 0060 696E7400 		.ascii	"int\000"
+ 246 0064 02       		.uleb128 0x2
+ 247 0065 04       		.byte	0x4
+ 248 0066 07       		.byte	0x7
+ 249 0067 11010000 		.4byte	.LASF8
+ 250 006b 04       		.uleb128 0x4
+ 251 006c D4000000 		.4byte	.LASF9
+ 252 0070 02       		.byte	0x2
+ 253 0071 3801     		.2byte	0x138
+ 254 0073 2C000000 		.4byte	0x2c
+ 255 0077 04       		.uleb128 0x4
+ 256 0078 F4000000 		.4byte	.LASF10
+ 257 007c 02       		.byte	0x2
+ 258 007d 3901     		.2byte	0x139
+ 259 007f 3A000000 		.4byte	0x3a
+ 260 0083 02       		.uleb128 0x2
+ 261 0084 04       		.byte	0x4
+ 262 0085 04       		.byte	0x4
+ 263 0086 87000000 		.4byte	.LASF11
+ 264 008a 02       		.uleb128 0x2
+ 265 008b 08       		.byte	0x8
+ 266 008c 04       		.byte	0x4
+ 267 008d ED000000 		.4byte	.LASF12
+ 268 0091 02       		.uleb128 0x2
+ 269 0092 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 9
+
+
+ 270 0093 08       		.byte	0x8
+ 271 0094 79010000 		.4byte	.LASF13
+ 272 0098 04       		.uleb128 0x4
+ 273 0099 5D010000 		.4byte	.LASF14
+ 274 009d 02       		.byte	0x2
+ 275 009e E201     		.2byte	0x1e2
+ 276 00a0 A4000000 		.4byte	0xa4
+ 277 00a4 05       		.uleb128 0x5
+ 278 00a5 6B000000 		.4byte	0x6b
+ 279 00a9 02       		.uleb128 0x2
+ 280 00aa 04       		.byte	0x4
+ 281 00ab 07       		.byte	0x7
+ 282 00ac 62010000 		.4byte	.LASF15
+ 283 00b0 06       		.uleb128 0x6
+ 284 00b1 08       		.byte	0x8
+ 285 00b2 03       		.byte	0x3
+ 286 00b3 6B       		.byte	0x6b
+ 287 00b4 F5000000 		.4byte	0xf5
+ 288 00b8 07       		.uleb128 0x7
+ 289 00b9 B3000000 		.4byte	.LASF16
+ 290 00bd 03       		.byte	0x3
+ 291 00be 6E       		.byte	0x6e
+ 292 00bf 6B000000 		.4byte	0x6b
+ 293 00c3 00       		.byte	0
+ 294 00c4 07       		.uleb128 0x7
+ 295 00c5 15000000 		.4byte	.LASF17
+ 296 00c9 03       		.byte	0x3
+ 297 00ca 71       		.byte	0x71
+ 298 00cb 77000000 		.4byte	0x77
+ 299 00cf 02       		.byte	0x2
+ 300 00d0 07       		.uleb128 0x7
+ 301 00d1 1C000000 		.4byte	.LASF18
+ 302 00d5 03       		.byte	0x3
+ 303 00d6 73       		.byte	0x73
+ 304 00d7 77000000 		.4byte	0x77
+ 305 00db 04       		.byte	0x4
+ 306 00dc 07       		.uleb128 0x7
+ 307 00dd 0B030000 		.4byte	.LASF19
+ 308 00e1 03       		.byte	0x3
+ 309 00e2 76       		.byte	0x76
+ 310 00e3 6B000000 		.4byte	0x6b
+ 311 00e7 06       		.byte	0x6
+ 312 00e8 07       		.uleb128 0x7
+ 313 00e9 DA000000 		.4byte	.LASF20
+ 314 00ed 03       		.byte	0x3
+ 315 00ee 86       		.byte	0x86
+ 316 00ef 6B000000 		.4byte	0x6b
+ 317 00f3 07       		.byte	0x7
+ 318 00f4 00       		.byte	0
+ 319 00f5 08       		.uleb128 0x8
+ 320 00f6 35010000 		.4byte	.LASF21
+ 321 00fa 03       		.byte	0x3
+ 322 00fb 8B       		.byte	0x8b
+ 323 00fc B0000000 		.4byte	0xb0
+ 324 0100 09       		.uleb128 0x9
+ 325 0101 97010000 		.4byte	.LASF22
+ 326 0105 01       		.byte	0x1
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 10
+
+
+ 327 0106 2A       		.byte	0x2a
+ 328 0107 00000000 		.4byte	.LFB0
+ 329 010b 28000000 		.4byte	.LFE0-.LFB0
+ 330 010f 01       		.uleb128 0x1
+ 331 0110 9C       		.byte	0x9c
+ 332 0111 31010000 		.4byte	0x131
+ 333 0115 0A       		.uleb128 0xa
+ 334 0116 06000000 		.4byte	.LVL0
+ 335 011a C3010000 		.4byte	0x1c3
+ 336 011e 0A       		.uleb128 0xa
+ 337 011f 0E000000 		.4byte	.LVL1
+ 338 0123 CE010000 		.4byte	0x1ce
+ 339 0127 0A       		.uleb128 0xa
+ 340 0128 1A000000 		.4byte	.LVL2
+ 341 012c D9010000 		.4byte	0x1d9
+ 342 0130 00       		.byte	0
+ 343 0131 09       		.uleb128 0x9
+ 344 0132 8D000000 		.4byte	.LASF23
+ 345 0136 01       		.byte	0x1
+ 346 0137 58       		.byte	0x58
+ 347 0138 00000000 		.4byte	.LFB1
+ 348 013c 28000000 		.4byte	.LFE1-.LFB1
+ 349 0140 01       		.uleb128 0x1
+ 350 0141 9C       		.byte	0x9c
+ 351 0142 62010000 		.4byte	0x162
+ 352 0146 0A       		.uleb128 0xa
+ 353 0147 0A000000 		.4byte	.LVL3
+ 354 014b E4010000 		.4byte	0x1e4
+ 355 014f 0A       		.uleb128 0xa
+ 356 0150 10000000 		.4byte	.LVL4
+ 357 0154 F5010000 		.4byte	0x1f5
+ 358 0158 0A       		.uleb128 0xa
+ 359 0159 1C000000 		.4byte	.LVL5
+ 360 015d 06020000 		.4byte	0x206
+ 361 0161 00       		.byte	0
+ 362 0162 09       		.uleb128 0x9
+ 363 0163 26000000 		.4byte	.LASF24
+ 364 0167 01       		.byte	0x1
+ 365 0168 88       		.byte	0x88
+ 366 0169 00000000 		.4byte	.LFB2
+ 367 016d 2C000000 		.4byte	.LFE2-.LFB2
+ 368 0171 01       		.uleb128 0x1
+ 369 0172 9C       		.byte	0x9c
+ 370 0173 8A010000 		.4byte	0x18a
+ 371 0177 0A       		.uleb128 0xa
+ 372 0178 1E000000 		.4byte	.LVL6
+ 373 017c 17020000 		.4byte	0x217
+ 374 0180 0A       		.uleb128 0xa
+ 375 0181 22000000 		.4byte	.LVL7
+ 376 0185 00010000 		.4byte	0x100
+ 377 0189 00       		.byte	0
+ 378 018a 09       		.uleb128 0x9
+ 379 018b 60000000 		.4byte	.LASF25
+ 380 018f 01       		.byte	0x1
+ 381 0190 B2       		.byte	0xb2
+ 382 0191 00000000 		.4byte	.LFB3
+ 383 0195 18000000 		.4byte	.LFE3-.LFB3
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 11
+
+
+ 384 0199 01       		.uleb128 0x1
+ 385 019a 9C       		.byte	0x9c
+ 386 019b B2010000 		.4byte	0x1b2
+ 387 019f 0A       		.uleb128 0xa
+ 388 01a0 06000000 		.4byte	.LVL8
+ 389 01a4 31010000 		.4byte	0x131
+ 390 01a8 0A       		.uleb128 0xa
+ 391 01a9 10000000 		.4byte	.LVL9
+ 392 01ad 1E020000 		.4byte	0x21e
+ 393 01b1 00       		.byte	0
+ 394 01b2 0B       		.uleb128 0xb
+ 395 01b3 1E030000 		.4byte	.LASF37
+ 396 01b7 01       		.byte	0x1
+ 397 01b8 14       		.byte	0x14
+ 398 01b9 F5000000 		.4byte	0xf5
+ 399 01bd 05       		.uleb128 0x5
+ 400 01be 03       		.byte	0x3
+ 401 01bf 00000000 		.4byte	PWM_motor_backup
+ 402 01c3 0C       		.uleb128 0xc
+ 403 01c4 00000000 		.4byte	.LASF26
+ 404 01c8 03       		.byte	0x3
+ 405 01c9 C0       		.byte	0xc0
+ 406 01ca 77000000 		.4byte	0x77
+ 407 01ce 0C       		.uleb128 0xc
+ 408 01cf 71000000 		.4byte	.LASF27
+ 409 01d3 03       		.byte	0x3
+ 410 01d4 B3       		.byte	0xb3
+ 411 01d5 77000000 		.4byte	0x77
+ 412 01d9 0C       		.uleb128 0xc
+ 413 01da 45020000 		.4byte	.LASF28
+ 414 01de 03       		.byte	0x3
+ 415 01df 9D       		.byte	0x9d
+ 416 01e0 6B000000 		.4byte	0x6b
+ 417 01e4 0D       		.uleb128 0xd
+ 418 01e5 FB000000 		.4byte	.LASF29
+ 419 01e9 03       		.byte	0x3
+ 420 01ea BE       		.byte	0xbe
+ 421 01eb F5010000 		.4byte	0x1f5
+ 422 01ef 0E       		.uleb128 0xe
+ 423 01f0 77000000 		.4byte	0x77
+ 424 01f4 00       		.byte	0
+ 425 01f5 0D       		.uleb128 0xd
+ 426 01f6 49000000 		.4byte	.LASF30
+ 427 01fa 03       		.byte	0x3
+ 428 01fb BA       		.byte	0xba
+ 429 01fc 06020000 		.4byte	0x206
+ 430 0200 0E       		.uleb128 0xe
+ 431 0201 77000000 		.4byte	0x77
+ 432 0205 00       		.byte	0
+ 433 0206 0D       		.uleb128 0xd
+ 434 0207 6C020000 		.4byte	.LASF31
+ 435 020b 03       		.byte	0x3
+ 436 020c 9E       		.byte	0x9e
+ 437 020d 17020000 		.4byte	0x217
+ 438 0211 0E       		.uleb128 0xe
+ 439 0212 6B000000 		.4byte	0x6b
+ 440 0216 00       		.byte	0
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 12
+
+
+ 441 0217 0F       		.uleb128 0xf
+ 442 0218 7E010000 		.4byte	.LASF32
+ 443 021c 03       		.byte	0x3
+ 444 021d 93       		.byte	0x93
+ 445 021e 0F       		.uleb128 0xf
+ 446 021f 4C010000 		.4byte	.LASF33
+ 447 0223 03       		.byte	0x3
+ 448 0224 DB       		.byte	0xdb
+ 449 0225 00       		.byte	0
+ 450              		.section	.debug_abbrev,"",%progbits
+ 451              	.Ldebug_abbrev0:
+ 452 0000 01       		.uleb128 0x1
+ 453 0001 11       		.uleb128 0x11
+ 454 0002 01       		.byte	0x1
+ 455 0003 25       		.uleb128 0x25
+ 456 0004 0E       		.uleb128 0xe
+ 457 0005 13       		.uleb128 0x13
+ 458 0006 0B       		.uleb128 0xb
+ 459 0007 03       		.uleb128 0x3
+ 460 0008 0E       		.uleb128 0xe
+ 461 0009 1B       		.uleb128 0x1b
+ 462 000a 0E       		.uleb128 0xe
+ 463 000b 55       		.uleb128 0x55
+ 464 000c 17       		.uleb128 0x17
+ 465 000d 11       		.uleb128 0x11
+ 466 000e 01       		.uleb128 0x1
+ 467 000f 10       		.uleb128 0x10
+ 468 0010 17       		.uleb128 0x17
+ 469 0011 00       		.byte	0
+ 470 0012 00       		.byte	0
+ 471 0013 02       		.uleb128 0x2
+ 472 0014 24       		.uleb128 0x24
+ 473 0015 00       		.byte	0
+ 474 0016 0B       		.uleb128 0xb
+ 475 0017 0B       		.uleb128 0xb
+ 476 0018 3E       		.uleb128 0x3e
+ 477 0019 0B       		.uleb128 0xb
+ 478 001a 03       		.uleb128 0x3
+ 479 001b 0E       		.uleb128 0xe
+ 480 001c 00       		.byte	0
+ 481 001d 00       		.byte	0
+ 482 001e 03       		.uleb128 0x3
+ 483 001f 24       		.uleb128 0x24
+ 484 0020 00       		.byte	0
+ 485 0021 0B       		.uleb128 0xb
+ 486 0022 0B       		.uleb128 0xb
+ 487 0023 3E       		.uleb128 0x3e
+ 488 0024 0B       		.uleb128 0xb
+ 489 0025 03       		.uleb128 0x3
+ 490 0026 08       		.uleb128 0x8
+ 491 0027 00       		.byte	0
+ 492 0028 00       		.byte	0
+ 493 0029 04       		.uleb128 0x4
+ 494 002a 16       		.uleb128 0x16
+ 495 002b 00       		.byte	0
+ 496 002c 03       		.uleb128 0x3
+ 497 002d 0E       		.uleb128 0xe
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 13
+
+
+ 498 002e 3A       		.uleb128 0x3a
+ 499 002f 0B       		.uleb128 0xb
+ 500 0030 3B       		.uleb128 0x3b
+ 501 0031 05       		.uleb128 0x5
+ 502 0032 49       		.uleb128 0x49
+ 503 0033 13       		.uleb128 0x13
+ 504 0034 00       		.byte	0
+ 505 0035 00       		.byte	0
+ 506 0036 05       		.uleb128 0x5
+ 507 0037 35       		.uleb128 0x35
+ 508 0038 00       		.byte	0
+ 509 0039 49       		.uleb128 0x49
+ 510 003a 13       		.uleb128 0x13
+ 511 003b 00       		.byte	0
+ 512 003c 00       		.byte	0
+ 513 003d 06       		.uleb128 0x6
+ 514 003e 13       		.uleb128 0x13
+ 515 003f 01       		.byte	0x1
+ 516 0040 0B       		.uleb128 0xb
+ 517 0041 0B       		.uleb128 0xb
+ 518 0042 3A       		.uleb128 0x3a
+ 519 0043 0B       		.uleb128 0xb
+ 520 0044 3B       		.uleb128 0x3b
+ 521 0045 0B       		.uleb128 0xb
+ 522 0046 01       		.uleb128 0x1
+ 523 0047 13       		.uleb128 0x13
+ 524 0048 00       		.byte	0
+ 525 0049 00       		.byte	0
+ 526 004a 07       		.uleb128 0x7
+ 527 004b 0D       		.uleb128 0xd
+ 528 004c 00       		.byte	0
+ 529 004d 03       		.uleb128 0x3
+ 530 004e 0E       		.uleb128 0xe
+ 531 004f 3A       		.uleb128 0x3a
+ 532 0050 0B       		.uleb128 0xb
+ 533 0051 3B       		.uleb128 0x3b
+ 534 0052 0B       		.uleb128 0xb
+ 535 0053 49       		.uleb128 0x49
+ 536 0054 13       		.uleb128 0x13
+ 537 0055 38       		.uleb128 0x38
+ 538 0056 0B       		.uleb128 0xb
+ 539 0057 00       		.byte	0
+ 540 0058 00       		.byte	0
+ 541 0059 08       		.uleb128 0x8
+ 542 005a 16       		.uleb128 0x16
+ 543 005b 00       		.byte	0
+ 544 005c 03       		.uleb128 0x3
+ 545 005d 0E       		.uleb128 0xe
+ 546 005e 3A       		.uleb128 0x3a
+ 547 005f 0B       		.uleb128 0xb
+ 548 0060 3B       		.uleb128 0x3b
+ 549 0061 0B       		.uleb128 0xb
+ 550 0062 49       		.uleb128 0x49
+ 551 0063 13       		.uleb128 0x13
+ 552 0064 00       		.byte	0
+ 553 0065 00       		.byte	0
+ 554 0066 09       		.uleb128 0x9
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 14
+
+
+ 555 0067 2E       		.uleb128 0x2e
+ 556 0068 01       		.byte	0x1
+ 557 0069 3F       		.uleb128 0x3f
+ 558 006a 19       		.uleb128 0x19
+ 559 006b 03       		.uleb128 0x3
+ 560 006c 0E       		.uleb128 0xe
+ 561 006d 3A       		.uleb128 0x3a
+ 562 006e 0B       		.uleb128 0xb
+ 563 006f 3B       		.uleb128 0x3b
+ 564 0070 0B       		.uleb128 0xb
+ 565 0071 27       		.uleb128 0x27
+ 566 0072 19       		.uleb128 0x19
+ 567 0073 11       		.uleb128 0x11
+ 568 0074 01       		.uleb128 0x1
+ 569 0075 12       		.uleb128 0x12
+ 570 0076 06       		.uleb128 0x6
+ 571 0077 40       		.uleb128 0x40
+ 572 0078 18       		.uleb128 0x18
+ 573 0079 9742     		.uleb128 0x2117
+ 574 007b 19       		.uleb128 0x19
+ 575 007c 01       		.uleb128 0x1
+ 576 007d 13       		.uleb128 0x13
+ 577 007e 00       		.byte	0
+ 578 007f 00       		.byte	0
+ 579 0080 0A       		.uleb128 0xa
+ 580 0081 898201   		.uleb128 0x4109
+ 581 0084 00       		.byte	0
+ 582 0085 11       		.uleb128 0x11
+ 583 0086 01       		.uleb128 0x1
+ 584 0087 31       		.uleb128 0x31
+ 585 0088 13       		.uleb128 0x13
+ 586 0089 00       		.byte	0
+ 587 008a 00       		.byte	0
+ 588 008b 0B       		.uleb128 0xb
+ 589 008c 34       		.uleb128 0x34
+ 590 008d 00       		.byte	0
+ 591 008e 03       		.uleb128 0x3
+ 592 008f 0E       		.uleb128 0xe
+ 593 0090 3A       		.uleb128 0x3a
+ 594 0091 0B       		.uleb128 0xb
+ 595 0092 3B       		.uleb128 0x3b
+ 596 0093 0B       		.uleb128 0xb
+ 597 0094 49       		.uleb128 0x49
+ 598 0095 13       		.uleb128 0x13
+ 599 0096 02       		.uleb128 0x2
+ 600 0097 18       		.uleb128 0x18
+ 601 0098 00       		.byte	0
+ 602 0099 00       		.byte	0
+ 603 009a 0C       		.uleb128 0xc
+ 604 009b 2E       		.uleb128 0x2e
+ 605 009c 00       		.byte	0
+ 606 009d 3F       		.uleb128 0x3f
+ 607 009e 19       		.uleb128 0x19
+ 608 009f 03       		.uleb128 0x3
+ 609 00a0 0E       		.uleb128 0xe
+ 610 00a1 3A       		.uleb128 0x3a
+ 611 00a2 0B       		.uleb128 0xb
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 15
+
+
+ 612 00a3 3B       		.uleb128 0x3b
+ 613 00a4 0B       		.uleb128 0xb
+ 614 00a5 27       		.uleb128 0x27
+ 615 00a6 19       		.uleb128 0x19
+ 616 00a7 49       		.uleb128 0x49
+ 617 00a8 13       		.uleb128 0x13
+ 618 00a9 3C       		.uleb128 0x3c
+ 619 00aa 19       		.uleb128 0x19
+ 620 00ab 00       		.byte	0
+ 621 00ac 00       		.byte	0
+ 622 00ad 0D       		.uleb128 0xd
+ 623 00ae 2E       		.uleb128 0x2e
+ 624 00af 01       		.byte	0x1
+ 625 00b0 3F       		.uleb128 0x3f
+ 626 00b1 19       		.uleb128 0x19
+ 627 00b2 03       		.uleb128 0x3
+ 628 00b3 0E       		.uleb128 0xe
+ 629 00b4 3A       		.uleb128 0x3a
+ 630 00b5 0B       		.uleb128 0xb
+ 631 00b6 3B       		.uleb128 0x3b
+ 632 00b7 0B       		.uleb128 0xb
+ 633 00b8 27       		.uleb128 0x27
+ 634 00b9 19       		.uleb128 0x19
+ 635 00ba 3C       		.uleb128 0x3c
+ 636 00bb 19       		.uleb128 0x19
+ 637 00bc 01       		.uleb128 0x1
+ 638 00bd 13       		.uleb128 0x13
+ 639 00be 00       		.byte	0
+ 640 00bf 00       		.byte	0
+ 641 00c0 0E       		.uleb128 0xe
+ 642 00c1 05       		.uleb128 0x5
+ 643 00c2 00       		.byte	0
+ 644 00c3 49       		.uleb128 0x49
+ 645 00c4 13       		.uleb128 0x13
+ 646 00c5 00       		.byte	0
+ 647 00c6 00       		.byte	0
+ 648 00c7 0F       		.uleb128 0xf
+ 649 00c8 2E       		.uleb128 0x2e
+ 650 00c9 00       		.byte	0
+ 651 00ca 3F       		.uleb128 0x3f
+ 652 00cb 19       		.uleb128 0x19
+ 653 00cc 03       		.uleb128 0x3
+ 654 00cd 0E       		.uleb128 0xe
+ 655 00ce 3A       		.uleb128 0x3a
+ 656 00cf 0B       		.uleb128 0xb
+ 657 00d0 3B       		.uleb128 0x3b
+ 658 00d1 0B       		.uleb128 0xb
+ 659 00d2 27       		.uleb128 0x27
+ 660 00d3 19       		.uleb128 0x19
+ 661 00d4 3C       		.uleb128 0x3c
+ 662 00d5 19       		.uleb128 0x19
+ 663 00d6 00       		.byte	0
+ 664 00d7 00       		.byte	0
+ 665 00d8 00       		.byte	0
+ 666              		.section	.debug_aranges,"",%progbits
+ 667 0000 34000000 		.4byte	0x34
+ 668 0004 0200     		.2byte	0x2
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 16
+
+
+ 669 0006 00000000 		.4byte	.Ldebug_info0
+ 670 000a 04       		.byte	0x4
+ 671 000b 00       		.byte	0
+ 672 000c 0000     		.2byte	0
+ 673 000e 0000     		.2byte	0
+ 674 0010 00000000 		.4byte	.LFB0
+ 675 0014 28000000 		.4byte	.LFE0-.LFB0
+ 676 0018 00000000 		.4byte	.LFB1
+ 677 001c 28000000 		.4byte	.LFE1-.LFB1
+ 678 0020 00000000 		.4byte	.LFB2
+ 679 0024 2C000000 		.4byte	.LFE2-.LFB2
+ 680 0028 00000000 		.4byte	.LFB3
+ 681 002c 18000000 		.4byte	.LFE3-.LFB3
+ 682 0030 00000000 		.4byte	0
+ 683 0034 00000000 		.4byte	0
+ 684              		.section	.debug_ranges,"",%progbits
+ 685              	.Ldebug_ranges0:
+ 686 0000 00000000 		.4byte	.LFB0
+ 687 0004 28000000 		.4byte	.LFE0
+ 688 0008 00000000 		.4byte	.LFB1
+ 689 000c 28000000 		.4byte	.LFE1
+ 690 0010 00000000 		.4byte	.LFB2
+ 691 0014 2C000000 		.4byte	.LFE2
+ 692 0018 00000000 		.4byte	.LFB3
+ 693 001c 18000000 		.4byte	.LFE3
+ 694 0020 00000000 		.4byte	0
+ 695 0024 00000000 		.4byte	0
+ 696              		.section	.debug_line,"",%progbits
+ 697              	.Ldebug_line0:
+ 698 0000 B3000000 		.section	.debug_str,"MS",%progbits,1
+ 698      02005A00 
+ 698      00000201 
+ 698      FB0E0D00 
+ 698      01010101 
+ 699              	.LASF26:
+ 700 0000 50574D5F 		.ascii	"PWM_motor_ReadPeriod\000"
+ 700      6D6F746F 
+ 700      725F5265 
+ 700      61645065 
+ 700      72696F64 
+ 701              	.LASF17:
+ 702 0015 50574D55 		.ascii	"PWMUdb\000"
+ 702      646200
+ 703              	.LASF18:
+ 704 001c 50574D50 		.ascii	"PWMPeriod\000"
+ 704      6572696F 
+ 704      6400
+ 705              	.LASF24:
+ 706 0026 50574D5F 		.ascii	"PWM_motor_Sleep\000"
+ 706      6D6F746F 
+ 706      725F536C 
+ 706      65657000 
+ 707              	.LASF3:
+ 708 0036 73686F72 		.ascii	"short unsigned int\000"
+ 708      7420756E 
+ 708      7369676E 
+ 708      65642069 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 17
+
+
+ 708      6E7400
+ 709              	.LASF30:
+ 710 0049 50574D5F 		.ascii	"PWM_motor_WriteCounter\000"
+ 710      6D6F746F 
+ 710      725F5772 
+ 710      69746543 
+ 710      6F756E74 
+ 711              	.LASF25:
+ 712 0060 50574D5F 		.ascii	"PWM_motor_Wakeup\000"
+ 712      6D6F746F 
+ 712      725F5761 
+ 712      6B657570 
+ 712      00
+ 713              	.LASF27:
+ 714 0071 50574D5F 		.ascii	"PWM_motor_ReadCounter\000"
+ 714      6D6F746F 
+ 714      725F5265 
+ 714      6164436F 
+ 714      756E7465 
+ 715              	.LASF11:
+ 716 0087 666C6F61 		.ascii	"float\000"
+ 716      7400
+ 717              	.LASF23:
+ 718 008d 50574D5F 		.ascii	"PWM_motor_RestoreConfig\000"
+ 718      6D6F746F 
+ 718      725F5265 
+ 718      73746F72 
+ 718      65436F6E 
+ 719              	.LASF1:
+ 720 00a5 756E7369 		.ascii	"unsigned char\000"
+ 720      676E6564 
+ 720      20636861 
+ 720      7200
+ 721              	.LASF16:
+ 722 00b3 50574D45 		.ascii	"PWMEnableState\000"
+ 722      6E61626C 
+ 722      65537461 
+ 722      746500
+ 723              	.LASF5:
+ 724 00c2 6C6F6E67 		.ascii	"long unsigned int\000"
+ 724      20756E73 
+ 724      69676E65 
+ 724      6420696E 
+ 724      7400
+ 725              	.LASF9:
+ 726 00d4 75696E74 		.ascii	"uint8\000"
+ 726      3800
+ 727              	.LASF20:
+ 728 00da 50574D43 		.ascii	"PWMControlRegister\000"
+ 728      6F6E7472 
+ 728      6F6C5265 
+ 728      67697374 
+ 728      657200
+ 729              	.LASF12:
+ 730 00ed 646F7562 		.ascii	"double\000"
+ 730      6C6500
+ 731              	.LASF10:
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 18
+
+
+ 732 00f4 75696E74 		.ascii	"uint16\000"
+ 732      313600
+ 733              	.LASF29:
+ 734 00fb 50574D5F 		.ascii	"PWM_motor_WritePeriod\000"
+ 734      6D6F746F 
+ 734      725F5772 
+ 734      69746550 
+ 734      6572696F 
+ 735              	.LASF8:
+ 736 0111 756E7369 		.ascii	"unsigned int\000"
+ 736      676E6564 
+ 736      20696E74 
+ 736      00
+ 737              	.LASF7:
+ 738 011e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 738      206C6F6E 
+ 738      6720756E 
+ 738      7369676E 
+ 738      65642069 
+ 739              	.LASF21:
+ 740 0135 50574D5F 		.ascii	"PWM_motor_backupStruct\000"
+ 740      6D6F746F 
+ 740      725F6261 
+ 740      636B7570 
+ 740      53747275 
+ 741              	.LASF33:
+ 742 014c 50574D5F 		.ascii	"PWM_motor_Enable\000"
+ 742      6D6F746F 
+ 742      725F456E 
+ 742      61626C65 
+ 742      00
+ 743              	.LASF14:
+ 744 015d 72656738 		.ascii	"reg8\000"
+ 744      00
+ 745              	.LASF15:
+ 746 0162 73697A65 		.ascii	"sizetype\000"
+ 746      74797065 
+ 746      00
+ 747              	.LASF6:
+ 748 016b 6C6F6E67 		.ascii	"long long int\000"
+ 748      206C6F6E 
+ 748      6720696E 
+ 748      7400
+ 749              	.LASF13:
+ 750 0179 63686172 		.ascii	"char\000"
+ 750      00
+ 751              	.LASF32:
+ 752 017e 50574D5F 		.ascii	"PWM_motor_Stop\000"
+ 752      6D6F746F 
+ 752      725F5374 
+ 752      6F7000
+ 753              	.LASF2:
+ 754 018d 73686F72 		.ascii	"short int\000"
+ 754      7420696E 
+ 754      7400
+ 755              	.LASF22:
+ 756 0197 50574D5F 		.ascii	"PWM_motor_SaveConfig\000"
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 19
+
+
+ 756      6D6F746F 
+ 756      725F5361 
+ 756      7665436F 
+ 756      6E666967 
+ 757              	.LASF34:
+ 758 01ac 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 758      4320342E 
+ 758      392E3320 
+ 758      32303135 
+ 758      30333033 
+ 759 01df 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 759      20726576 
+ 759      6973696F 
+ 759      6E203232 
+ 759      31323230 
+ 760 0212 67202D73 		.ascii	"g -std=gnu99 -ffunction-sections -ffat-lto-objects\000"
+ 760      74643D67 
+ 760      6E753939 
+ 760      202D6666 
+ 760      756E6374 
+ 761              	.LASF28:
+ 762 0245 50574D5F 		.ascii	"PWM_motor_ReadControlRegister\000"
+ 762      6D6F746F 
+ 762      725F5265 
+ 762      6164436F 
+ 762      6E74726F 
+ 763              	.LASF4:
+ 764 0263 6C6F6E67 		.ascii	"long int\000"
+ 764      20696E74 
+ 764      00
+ 765              	.LASF31:
+ 766 026c 50574D5F 		.ascii	"PWM_motor_WriteControlRegister\000"
+ 766      6D6F746F 
+ 766      725F5772 
+ 766      69746543 
+ 766      6F6E7472 
+ 767              	.LASF0:
+ 768 028b 7369676E 		.ascii	"signed char\000"
+ 768      65642063 
+ 768      68617200 
+ 769              	.LASF35:
+ 770 0297 2E5C4765 		.ascii	".\\Generated_Source\\PSoC5\\PWM_motor_PM.c\000"
+ 770      6E657261 
+ 770      7465645F 
+ 770      536F7572 
+ 770      63655C50 
+ 771              	.LASF36:
+ 772 02bf 433A5C55 		.ascii	"C:\\Users\\satomin\\Documents\\PSoC Creator\\AI_min"
+ 772      73657273 
+ 772      5C736174 
+ 772      6F6D696E 
+ 772      5C446F63 
+ 773 02ed 695F3230 		.ascii	"i_2016_9_1\\AI_mini_main.cydsn\000"
+ 773      31365F39 
+ 773      5F315C41 
+ 773      495F6D69 
+ 773      6E695F6D 
+ARM GAS  C:\Users\satomin\AppData\Local\Temp\ccgnqA4k.s 			page 20
+
+
+ 774              	.LASF19:
+ 775 030b 496E7465 		.ascii	"InterruptMaskValue\000"
+ 775      72727570 
+ 775      744D6173 
+ 775      6B56616C 
+ 775      756500
+ 776              	.LASF37:
+ 777 031e 50574D5F 		.ascii	"PWM_motor_backup\000"
+ 777      6D6F746F 
+ 777      725F6261 
+ 777      636B7570 
+ 777      00
+ 778              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
